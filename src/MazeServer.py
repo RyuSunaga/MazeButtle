@@ -10,7 +10,7 @@ from config import RIGHT,LEFT,UP,DOWN,ATTACK
 
 # file名　　　　　　　　全て小文字でなるべく短く　       myfile
 # クラス名　　　　　　　最初大文字、大文字区切り　　　   ThisIsMyClass
-# 関数名、メッソド名　　全小文字、アンダースコア区切り   this_is_my_func
+# 関数名、メソッド名　　全小文字、アンダースコア区切り   this_is_my_func
 # 変数名　　　　　　　　全小文字、アンダースコア区切り   this_is_my_val
 # 定数名                全大文字、アンダースコア区切り　 THIS_IS_MY_CONST
 
