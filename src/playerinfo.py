@@ -11,9 +11,8 @@ class PlayerInfo(object):
         self.posi_ = [None,None]
         self.power_ = 1
         self.speed_ = 1
-        #最後に行ったコマンドを格納する変数
-        self.last_command = None
-        
+        #次に行うコマンドを保持する、処理を行ったらNoneに戻す
+        self.next_command = None
 
     ##########################################プレイヤー情報を設定するための関数##############################################
     def set_id(self, id):

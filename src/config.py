@@ -68,7 +68,13 @@ RIGHT  = (1,0)
 LEFT   = (-1,0)
 UP     = (0,1)
 DOWN   = (0,-1)
-ATTACK = (0,0)
+
+#ごめん、攻撃方向も入れるべきだった
+RIGHT_ATTACK = (1,0)
+LEFT_ATTACK = (-1,0)
+UP_ATTACK = (0,1)
+DOWN_ATTACK = (0,-1)
+
 
 
 #class command(object):
