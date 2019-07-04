@@ -1,8 +1,14 @@
 #this file is server file
-from config import NOJIMA_MAZE,GAIA_MAZE,SUNAGA_MAZE
+from config import MAZE_LIST
 from config import W
 from config import X,Y
 from config import RIGHT,LEFT,UP,DOWN,ATTACK
+from config import HOST, PORT, BACKLOG, BUFSIZE
+from playerinfo import PlayerInfo 
+import random
+import socket
+import time
+
 
 ##############################################################################################################
 
@@ -50,42 +56,203 @@ class GameManager(object):
     """
     
     def __init__(self):
-        pass
+        self.id_list = []
+        self.id_player_info = {}
+        self.ip_name_list = []
+        self.player_info_maneger = PlayerInfoManager()
+        return self
+
+    def maze_decision(self):
+        """
+            ゲームで使用する迷路を決定する関数、現在はランダムで選択しているが
+            時間に余裕があればプレイヤーの選択で決定してもいいかも。 by sunaga
+        """
+        self.maze_ = MAZE_LIST[random.randint(0,2)]
+        print("迷路決定完了")
+        for l in self.maze_:
+            print(l)
+
+        return self
+
 
     def preparation_game(self):
-        pass
+        """
+            ゲーム参加者待ちのサーバー処理参加プレイヤーの名前とipアドレスを受け取り
+            それらを使い参加プレイヤーの情報を生成する
+            そして参加プレイヤーにゲームで使用する迷路を決定して決定した迷路と各プレイヤーの情報を
+            送信する。
+            
+        """
+        #参加申請を受け取り self.ip_nameを設定する
+        get_participation_command()
+
+        #迷路を決定
+        self.maze_decision()
+        
+        
+
+        return self
 
     def get_participation_command(self):
-        pass
+        '''
+            プレイヤーのゲーム参加コマンドを受け取り
+            各プレイヤーのipと名格をマッピングした辞書を返す。
+        '''
+        print("通信開始(しない)")
+         ###############################################################未完成####################################################
+        #サーバー処理
+        #try:
+        #    sock.bind((HOST,PORT))
+        #    sock.listen(BACKLOG)
+    
+        #ループは時間と参加人数で制限を書ける
+        #start_time_sec = time.time()
+        #member_num = 0
+        #id = 1
+
+        #while(passed_time_sec < 180 or member_num < 3):
+
+            #conn, address = sock.accept()
+            #try:
+                #application  = conn.recv(BUFSIZE)
+                #msg = b_msg.decode('utf-8')
+                #print(msg)
+                
+                #受け取ったメッセージの内容をみて処理を行う、この時点ではPlayerInfoを返さない
+                
+                
+            #finally:
+                #conn.close()
+
+            
+            #end_time_sec = time.time()
+            
+            #paseed_time_sec = end_time_sec - start_time_sec
+        
+        ###############################################################未完成####################################################
+        print("通信終了(してない)")
+
+        #通信を行わないテスト用の値を用意 通信
+        self.ip_name = {'127.0.0.1':"sawada",'127.0.0.1':"sunaga",'127.0.0.1':"nojima"}
+        print("参加プレイヤー")
+        for name in self.ip_name.values():
+            print(name)
+
+        return
+
+    
+    def create_player_info(self,ip_name):
+        '''
+            ゲーム開始準備中にプレイヤーから受け取ったipと名前の辞書を受け取り、idと初期座標を設定して
+            プレイヤー情報を生成する。
+        '''
+        
+        #参加プレイヤーのidのリストを生成
+        self.id_list = [id+1 for id in range(len(self.ip_name))]
+
+        #参加プレイヤーの名前のリストを生成
+        player_name = self.ip_name.values()
+
+        #迷路の端の座標を設定
+        x_min = 0, 
+        y_min = 0,
+        x_max = len(self.maze_[0]) -1
+        y_max = len(self.maze_) -1
+        maze_edge = random.shuffle([[x_min,y_min],[x_min,y_max],[x_max,y_min],[x_max,y_max]])
+
+        #参加人数分のプレイヤーの位置座標を生成
+        player_posi = [maze_edge[i] for i in range(len(self.ip_name))]
+
+        
+        #参加プレイヤーの情報を生成
+        self.player_info_maneger.init_player_info(self.id_list, player_name, player_posi)
+
+        print("プレイヤー情報生成完了")
+
+
+        return self
+
 
     def get_command(self):
         pass
 
-    def up_data_player_info(self):
-        pass
 
-    def pass_player_info(self):
+
+    def pass_info(self):
         pass
 
     def main(self):
         pass
         
-
+    
 
 class PlayerInfoManager(object):
     """
-    GameManagerクラスでプレイヤーの情報を管理するクラス
+    GameManagerクラスでPlayerInfoを管理するクラス
     参加プレイヤーの人数分,PlayerInfoクラスをインスタンス変数としてもつ。
     """
 
-    def __init__(self,id_list, name_list ,posi_list):
+    def __init__(self):
+        #各参加者のPlayerInfoクラスを格納
         self.player_info_list = []
+        self.id_list = []
+        return self
 
-        #参加プレイヤー分のPlayerInfoクラスを生成
-        for id in range(len(id_list)):
-            player_info_list.append(PlayerInfo(id_list[id],name_list[id],posi_list[id]))
+    def init_player_info(self,id_list, name_list, posi_list):
+        '''
+        ゲームで最初にプレイヤーの情報を生成するときに使う
+        参加プレイヤー待ちで取得しname,id情報を持つPlayerInfoクラスを生成する
+        ipアドレスはプレイヤーの情報ではなくクライアントの情報なのでPlayerInfoクラスでは保持しない
+        '''
 
+        self.id_list = id_list
 
+        for id, name, posi in zip(id_list, name_list, posi_list):
+            player_info = PlayerInfo()
+            player_info.set_id(id)
+            player_info.set_name(name)
+            player_info[id].set_posi(posi)
+            self.player_info_list.append(player_info)
+
+        return self
+
+    def get_all_player_info(self):
+        '''
+            登録されたPlayerInfoクラスを全てリストの形式で取得する
+            何も登録されてない場合はNoneを返す。
+        '''
+        return player_info_list
+
+    def get_player_info(self,id):
+        '''
+            指定されたidを持つPlayerInfoを取得する
+            指定したidをもつプレイヤーが存在しない場合はNoneを返す
+        '''
+        for player_info in self.player_info_list:
+            if(id == player_info.get_id()):
+                return player_info
+        
+        return None
+
+    def show_all_player_info(self):
+        '''
+           登録されているすべてのプレイヤーの情報を表示する
+        '''
+        for player_info in player_info_list:
+            player_info.show_info()
+
+    def show_player_info(self,id):
+        '''
+            指定されたidを持つプレイヤーの情報を表示する
+        '''
+        for player_info in self.player_info_list:
+            if(id == player_info.get_id()):
+                player_info.show_info()
+                return 
+        
+        print("id = " + str(id) + "のプレイヤーは存在ししません。")
+
+    
     def up_data_player_info(self):
         """
             プレイヤーの情報を変更する
@@ -95,14 +262,3 @@ class PlayerInfoManager(object):
         pass
    
 
-class PlayerInfo(object):
-    """
-        プレイヤーの情報を保持するためのクラス
-    """
-    def __init__(self,id,name,posi):
-        self.id_ = id
-        self.name_ = name
-        self.hp = 100
-        self.posi = posi
-        self.power = 1
-        self.spee = 1

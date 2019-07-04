@@ -2,9 +2,10 @@
 #### 定義します。値を使いたくなったらimportをして使うようにしてください。 by sunaga
 
 
-
-
-
+HOST = '127.0.0.1'
+PORT = 50000
+BACKLOG = 10
+BUFSIZE = 4096
 
 #壁は定数を用意する　－＞　見やすくなるから
 #通路も定数を用意したかったがよい変数名がなかったのでとりあえず保留 by sunaga
@@ -51,6 +52,9 @@ SUNAGA_MAZE = [
                 [0,0,W,0,W,0,0,0,0,0]
                ]
 
+#みんなで作った迷路を格納します
+MAZE_LIST = [NOJIMA_MAZE, GAIA_MAZE, SUNAGA_MAZE]
+
 #座標は定数にして扱った方がミスが減るので固定しておく。
 #例　posi = [2,3]
 # x = posi[0], y = posi[1] より
@@ -67,21 +71,21 @@ DOWN   = (0,-1)
 ATTACK = (0,0)
 
 
-class command(object):
-    """
-    プレイヤーからの操作となる関数を持つクラス
-    1.十字方向に移動する操作、move_command()
-    2.攻撃を行う関数、attack_command()
-    """
-
-    def move_command(self):
-        RIGHT = (1, 0)
-        LEFT = (-1, 0)
-        UP = (0, 1)
-        DOWN = (0, -1)
-
-    def attack_command(self):
-        ATTACK
+#class command(object):
+#    """
+#    プレイヤーからの操作となる関数を持つクラス
+#    1.十字方向に移動する操作、move_command()
+#    2.攻撃を行う関数、attack_command()
+#    """
+#
+#    def move_command(self):
+#        RIGHT = (1, 0)
+#        LEFT = (-1, 0)
+#        UP = (0, 1)
+#        DOWN = (0, -1)
+#
+#    def attack_command(self):
+#        ATTACK
 
 
 
