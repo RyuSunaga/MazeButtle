@@ -41,7 +41,7 @@ class GamePlayer(object):
         self.place=place
         self.attack=attack
         self.speed=speed
-        
+
 
 
 class Field(object):
@@ -53,4 +53,29 @@ class Field(object):
 
     def __init__(self):
         pass
-        
+
+
+import socket,select
+import threading
+
+class Socket(object):
+
+    '''
+    サーバと通信を行うクラス
+    '''
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    def listen(self,sock,HOST,PORT,BUFSIZE):
+        try:
+            sock.connect((HOST, PORT))
+            while True:
+                r_ready_sockets,w_ready_sockets,e_ready_sockets=select.select([sock],[],[])
+                try:
+                    recev_msg=sock.recv(BUFSIZE).decode()
+                except:
+                    break
+        except Exception as e:
+            print(e)
+        finally:
+            sock.close()
+            print("サーバとの接続が切断されました")
