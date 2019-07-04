@@ -16,4 +16,7 @@ def test1():
 
     gm.player_info_maneger.show_all_player_info()
 
+    gm.player_info_maneger.show_player_info(1)
+
+
 test1()

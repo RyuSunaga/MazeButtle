@@ -11,6 +11,8 @@ class PlayerInfo(object):
         self.posi_ = [None,None]
         self.power_ = 1
         self.speed_ = 1
+        #最後に行ったコマンドを格納する変数
+        self.last_command = None
         
 
     ##########################################プレイヤー情報を設定するための関数##############################################
@@ -31,12 +33,15 @@ class PlayerInfo(object):
         
 
     def set_power(self, power):
-        self.power = power
+        self.power_ = power
         
 
     def set_speed(self, speed):
-        self.speed = speed
+        self.speed_ = speed
         
+    def set_command(self,command):
+        #configファイルにあるコマンドの形で受け取る
+        self.last_command_ = command
 
     ##########################################ここまでプレイヤー情報を設定するための関数##############################################
 
@@ -61,6 +66,8 @@ class PlayerInfo(object):
     def get_speed(self):
         return self.speed_
 
+    def get_coomand(self):
+        return self.last_command_
     ##########################################ここまでプレイヤー情報を設定するための関数##############################################
         
     def show_info(self):

@@ -5,6 +5,7 @@ from config import X,Y
 from config import RIGHT,LEFT,UP,DOWN,ATTACK
 from config import HOST, PORT, BACKLOG, BUFSIZE
 from playerinfo import PlayerInfo 
+from packet import Packet
 import random
 import socket
 import time
