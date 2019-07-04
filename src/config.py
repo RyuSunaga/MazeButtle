@@ -67,21 +67,21 @@ DOWN   = (0,-1)
 ATTACK = (0,0)
 
 
-class command(object):
-    """
-    プレイヤーからの操作となる関数を持つクラス
-    1.十字方向に移動する操作、move_command()
-    2.攻撃を行う関数、attack_command()
-    """
-
-    def move_command(self):
-        RIGHT = (1, 0)
-        LEFT = (-1, 0)
-        UP = (0, 1)
-        DOWN = (0, -1)
-
-    def attack_command(self):
-        ATTACK
+#class command(object):
+#    """
+#    プレイヤーからの操作となる関数を持つクラス
+#    1.十字方向に移動する操作、move_command()
+#    2.攻撃を行う関数、attack_command()
+#    """
+#
+#    def move_command(self):
+#        RIGHT = (1, 0)
+#        LEFT = (-1, 0)
+#        UP = (0, 1)
+#        DOWN = (0, -1)
+#
+#    def attack_command(self):
+#        ATTACK
 
 
 
