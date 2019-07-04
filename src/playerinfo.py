@@ -8,36 +8,35 @@ class PlayerInfo(object):
         self.id_ = None
         self.name_ = None
         self.hp_ = 10
-        self.posi_ = None
+        self.posi_ = [None,None]
         self.power_ = 1
         self.speed_ = 1
-        return self
+        
 
     ##########################################プレイヤー情報を設定するための関数##############################################
     def set_id(self, id):
         self.id_ = id
-        return self
 
     def set_name(self, name):
         self.name_ = name
-        return self
+        
 
     def set_hp(self,hp):
         self.hp = hp
-        return self
+        
 
     def set_posi(self,posi):
-        self.posi[X] = posi[X]
-        self.posi[Y] = posi[Y]
-        return self
+        self.posi_[X] = posi[X]
+        self.posi_[Y] = posi[Y]
+        
 
     def set_power(self, power):
         self.power = power
-        return self
+        
 
     def set_speed(self, speed):
         self.speed = speed
-        return self
+        
 
     ##########################################ここまでプレイヤー情報を設定するための関数##############################################
 
