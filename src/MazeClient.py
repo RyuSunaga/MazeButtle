@@ -26,7 +26,7 @@ class Socket(object):
     サーバと通信を行うクラス
     '''
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    HOST = '10.65.162.219'
+    HOST = '127.0.0.1'
     PORT = 50000
     BUFSIZE = 4096
 
@@ -65,7 +65,7 @@ class Socket(object):
 
 class Player():
     def __init__(self):
-        self.id=pi.playerinfo.set_id(id)
+        self.id=pi.PlayerInfo().set_id()
         self.infolist = pi.PlayerInfo()
 
     def UpdatePlayer(self,new_info):
