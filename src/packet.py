@@ -1,8 +1,11 @@
-from playerinfo import PlayerInfo
-from iteminfo import Bullet
+from info import PlayerInfo
+from info import BulletInfo
 
 #クライアントとサーバー間で扱うデータ群をまとめるクラス
 #info関連のクラスをインスタンス変数として持つ
+#余裕があったら色々新しい迷路上のオブジェクトを追加しよう。 by sunaga
+
+
 class Packet(object):
 
     def __init__(self):
@@ -18,19 +21,21 @@ class Packet(object):
     def __del__(self):
         print("パケットクラスが破棄されます")
 
-    #下の関数はこのクラスの目的として不適切かもしれない->情報管理クラスをつくる?
+    def set_player_info(self, id, player_info):
+        '''
+            player_infoオブジェクトをインスタンス変数に格納する。
 
-    #def update_player_info_list(self, id, player_info):
-    #   '''
-    #        指定したidのplayer_infoを更新する
-    #        更新できたならばTrue
-    #        そうでないならばFalseを返す
-    #    '''
-    #    for i in range(len(self.player_info_list_)):
-    #        if(self.player_info_list_[i].get_id == id):
-    #            self.player_info_list_[i] = player_info
-    #            return True
+        '''
 
-    #    return False
+    def get_player_info(self,id):
+        '''
+            idと一致するPlayerInfoオブジェクトを取得する
+            一致するidのオブジェクトが存在しなかった場合Noneを返す
+        '''
+        for player_info in self.player_info_list_:
+            if(id == player_info.get_id()):
+                return player_info
 
-    #def update_bullet_info_list(self):
+        return None
+
+   
