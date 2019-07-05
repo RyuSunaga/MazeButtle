@@ -76,22 +76,20 @@ UP_ATTACK = (0,1)
 DOWN_ATTACK = (0,-1)
 
 
-
-#class command(object):
-#    """
-#    プレイヤーからの操作となる関数を持つクラス
-#    1.十字方向に移動する操作、move_command()
-#    2.攻撃を行う関数、attack_command()
-#    """
-#
-#    def move_command(self):
-#        RIGHT = (1, 0)
-#        LEFT = (-1, 0)
-#        UP = (0, 1)
-#        DOWN = (0, -1)
-#
-#    def attack_command(self):
-#        ATTACK
+def get_direct_str(COMMAND):
+    '''
+        与えられたコマンドに対応する方向を文字列で返す
+    '''
+    if(COMMAND == (1,0)):
+        return "RIGHT"
+    elif(COMMAND == (-1,0)):
+        return "LEFT"
+    elif(COMMAND == (0,1)):
+        return "UP"
+    elif(COMMAND == (0,-1)):
+        return "DOWN"
+    else:
+        return None
 
 
 

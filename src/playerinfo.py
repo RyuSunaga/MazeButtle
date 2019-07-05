@@ -20,21 +20,17 @@ class PlayerInfo(object):
 
     def set_name(self, name):
         self.name_ = name
-        
-
+       
     def set_hp(self,hp):
         self.hp = hp
         
-
     def set_posi(self,posi):
         self.posi_[X] = posi[X]
         self.posi_[Y] = posi[Y]
         
-
     def set_power(self, power):
         self.power_ = power
         
-
     def set_speed(self, speed):
         self.speed_ = speed
         
@@ -74,12 +70,11 @@ class PlayerInfo(object):
             playerの情報をすべて表示する関数
         '''
         print("--------------------------------------------------------------")
-        print("ID:",self.get_id())
-        print("Name:",self.get_name())
-        print("HP:",self.get_hp())
-        print("(X, Y):",self.get_posi())
-        print("Power:",self.get_power())
-        print("Speed:",self.get_speed())
+        print("Player Infomation")
+        print("ID:",self.id_)
+        print("Name:",self.name_)
+        print("HP:",self.hp_)
+        print("(X, Y):",self.posi_)
+        print("Power:",self.power_)
+        print("Speed:",self.speed_)
         print("--------------------------------------------------------------")
-
-        return
