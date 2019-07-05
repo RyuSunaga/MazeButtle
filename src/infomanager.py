@@ -1,5 +1,4 @@
 #サーバー側でゲーム上の情報をまとめて管理するために使うクラスを定義する
-
 from config import X, Y
 from config import RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, DOWN_ATTACK
 from config import get_direct_str
