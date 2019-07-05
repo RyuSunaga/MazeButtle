@@ -1,5 +1,4 @@
 #ゲーム全体を管理するクラス
-#this file is server file
 from config import MAZE_LIST
 from config import W
 from config import X,Y
@@ -77,35 +76,7 @@ class GameManager(object):
         print("サーバー処理中(してない)")
          ###############################################################未完成####################################################
         #サーバー処理
-        #try:
-        #    sock.bind((HOST,PORT))
-        #    sock.listen(BACKLOG)
-    
-        #ループは時間と参加人数で制限を書ける
-        #start_time_sec = time.time()
-        #member_num = 0
-        #id = 1
-
-        #while(passed_time_sec < 180 or member_num < 3):
-
-            #conn, address = sock.accept()
-            #try:
-                #application  = conn.recv(BUFSIZE)
-                #msg = b_msg.decode('utf-8')
-                #print(msg)
-                
-                #受け取ったメッセージの内容をみて処理を行う、この時点ではPlayerInfoを返さない
-                
-                
-            #finally:
-                #conn.close()
-
-            
-            #end_time_sec = time.time()
-            
-            #paseed_time_sec = end_time_sec - start_time_sec
-        
-        ###############################################################未完成####################################################
+         ###############################################################未完成####################################################
         print("通信終了(してない)")
 
         #通信を行わないテスト用の値を用意 通信
