@@ -1,5 +1,4 @@
-from info import PlayerInfo
-from info import BulletInfo
+from info import ObjectInfo, PlayerInfo, BulletInfo, ItemInfo
 
 #クライアントとサーバー間で扱うデータ群をまとめるクラス
 #info関連のクラスをインスタンス変数として持つ

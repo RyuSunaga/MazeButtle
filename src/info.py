@@ -2,6 +2,7 @@
 from config import X, Y
 from config import RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, DOWN_ATTACK
 from config import get_direct_str
+from config import PLAYER_INFO, BULLET_INFO, ITEM_INFO
 
 #################################     メモ     #######################################################
 
@@ -15,12 +16,41 @@ from config import get_direct_str
 
 
 
-class PlayerInfo(object):
+class ObjectInfo(object):
+    '''
+        迷路上のオブジェクトの情報クラスの親クラス。
+        今のところ用意するオブジェクトはPlayerとItemとBullet
+    '''
+    def __init__(self, id):
+        #オブジェクト毎に一意のidを設定する。
+        self.id_ = id
+        self.object_type_ = OBJECT_INFO
+
+    def set_id(self, id):
+        self.id_ = id
+
+    def get_id(self, id):
+        return self.id_
+
+    def get_type(self):
+        return self.object_type_
+
+    def show_info(self):
+        print("--------------------------------------------------------------")
+        print("ObjectType",self.object_type_)
+        print("--------------------------------------------------------------")
+
+        
+
+class PlayerInfo(ObjectInfo):
     """
+        ObjectInfoの子クラス
         プレイヤーの情報を扱うためのクラス
     """
-    def __init__(self):
-        self.id_ = None
+    def __init__(self,id, name, posi):
+        super().__init__(id)
+
+        self.object_type_ = PLAYER_INFO
         self.name_ = None
         self.hp_ = 10
         self.posi_ = [None,None]
@@ -30,8 +60,7 @@ class PlayerInfo(object):
         self.next_command = None
 
     ##########################################プレイヤー情報を設定するための関数##############################################
-    def set_id(self, id):
-        self.id_ = id
+ 
 
     def set_name(self, name):
         self.name_ = name
@@ -58,8 +87,6 @@ class PlayerInfo(object):
     
     ##########################################プレイヤー情報を取得するための関数##############################################
 
-    def get_id(self):
-        return self.id_
 
     def get_name(self):
         return self.name_
@@ -85,7 +112,7 @@ class PlayerInfo(object):
             playerの情報をすべて表示する関数
         '''
         print("--------------------------------------------------------------")
-        print("Player Infomation")
+        print("ObjectType",self.type_)
         print("ID:",self.id_)
         print("Name:",self.name_)
         print("HP:",self.hp_)
@@ -110,18 +137,22 @@ class PlayerInfo(object):
         print(self.name_ + "の情報を変更しました")
 
 
-class BulletInfo(object):
+class BulletInfo(ObjectInfo):
     """
         弾丸オブジェクト
         打ったプレイヤーのid,座標、飛んでいく方向,攻撃力,速さの情報を保持する
         今のところ弾丸はプレイヤーのspeedと同じ
     """
 
-    def __init__(self,player_info, extra_info = None):
+    def __init__(self,id, player_info, extra_info = None):
         """
             extre_infoは弾丸に情報をつけ足すとき使う。
             いまは実装の予定なし。
         """
+        super().__init__(id)
+
+        self.object_type_ = BULLET_INFO
+
         #プレイヤーの位置情報を取得
         player_posi = player_info().get_posi()
         #コマンドが飛んでいく方向をベクトルで表している
@@ -171,7 +202,7 @@ class BulletInfo(object):
         '''
 
         print("--------------------------------------------------------------")
-        print("Bullet Infomation")
+        print("ObjectType",self.type_)
         print("Parent ID:",self.parent_id_)
         print("Posi:(X, Y):",self.get_posi())
         print("Direct:",get_direct_str(self.set_direct))
@@ -186,3 +217,17 @@ class BulletInfo(object):
         
         self.posi_ = [self.posi_[X] + self.get_direct_[X], self.posi_[Y] + self.direct_[Y]]
         print("Parent ID " + str(self.parent_id_) + "の弾丸の座標の更新に成功しました。")
+
+
+
+
+class ItemInfo(ObjectInfo):
+    '''
+        迷路上のアイテムの親クラス
+    '''
+    def __init__(self):
+        self.object_type_ = ITEM_INFO
+        self.item_type_ = None
+
+    def get_item_type(self):
+        return self.item_type_
