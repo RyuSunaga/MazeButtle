@@ -1,7 +1,12 @@
 #サーバー側でゲーム上の情報をまとめて管理するために使うクラスを定義する
 #今のところ管理する情報はPlayer、Bullet、Mazeの3つの情報
+import config
 from config import X, Y
-from config import RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, DOWN_ATTACK
+from config import MOVE, ATTACK
+from config import RIGHT, LEFT, UP, DOWN
+from config import RIGHT_MOVE, LEFT_MOVE, UP_MOVE, DOWN_MOVE
+from config import RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, DOWN_ATTACKN
+from config import CREATE_BULLET
 from config import get_direct_str
 from config import OBJECT_INFO,PLAYER_INFO,BULLET_INFO, ITEM_INFO
 from config import OBJECT_INFO_MANAGER, PLAYER_INFO_MANAGER, BULLET_INFO_MANAGER, ITEM_INFO_MANAGER
@@ -48,6 +53,16 @@ class ObjectInfoManager(object):
         '''
         for object_info in self.object_info_list_:
             object_info.show_info()
+
+    def delete_object_info(self, id):
+        '''
+            指定したidのオブジェクトを破棄する
+        '''
+        for i in range(len(self.object_info_list_)):
+            if(self.object_info_list_[i].get_id() == id):
+                del self.object_info_list_[i]
+                return True
+        return False
 
 
 class PlayerInfoManager(ObjectInfoManager):
@@ -108,6 +123,7 @@ class PlayerInfoManager(ObjectInfoManager):
                 return player_info
         
         return None
+
    
     def show_player_info(self,id):
         '''
@@ -120,7 +136,12 @@ class PlayerInfoManager(ObjectInfoManager):
        
         print("id = " + str(id) + "のプレイヤーは存在ししません。")
 
+    def set_next_command(self,id,command):
+        '''
+            指定したidと一致するプレイヤーオブジェクトに次に実行するコマンドを設定する。
+        '''
     
+    ###############################################################################この関数使いたくない
     def update_player_info(self, player_info):
         """
             プレイヤーの情報を変更する
@@ -133,6 +154,7 @@ class PlayerInfoManager(ObjectInfoManager):
                 self.player_info_list[i].update_player_info(player_info)
                 return True
         return False
+    ###############################################################################この関数使いたくない
 
    
 
@@ -174,16 +196,6 @@ class BulletInfoManager(ObjectInfoManager):
         for bullet in self.object_info_list_:
             bullet.update_posi()
 
-    def delete_bullet(self,id):
-        '''
-            指定したidのbulletを破棄する。
-        '''
-        for i in range(len(self.object_info_list_)):
-            if(self.object_info_list_[i].get_id() == id):
-                del self.object_info_list_[i]
-                return
-        print("id "+str(id)+"のオブジェクトの破棄に失敗しました")
-        return 
 
 
 class ItemInfoManager(ObjectInfoManager):

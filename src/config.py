@@ -63,17 +63,34 @@ X = 0
 Y = 1
 
 
-# Playerが選択するコマンド一覧
+############################# 方向定義 ##########################
 RIGHT  = (1,0)
 LEFT   = (-1,0)
 UP     = (0,1)
 DOWN   = (0,-1)
+############################# 方向定義 ##########################
 
-#ごめん、攻撃方向も入れるべきだった
-RIGHT_ATTACK = (1,0)
-LEFT_ATTACK = (-1,0)
-UP_ATTACK = (0,1)
-DOWN_ATTACK = (0,-1)
+
+
+
+# Playerが選択するコマンド一覧
+
+RIGHT_MOVE = "RIGHT_MOVE"
+LEFT_MOVE = "LEFT_MOVE"
+UP_MOVE = "UP_MOVE"
+DOWN_MOVE = "DOWN_MOVE"
+
+RIGHT_ATTACK = "RIGHT_ATTACK"
+LEFT_ATTACK = "LEFT_ATTACK"
+UP_ATTACK = "UP_ATTACK"
+DOWN_ATTACK = "DOWN_ATTACK"
+############################################
+
+
+
+#プレイヤーからgamemanagerに送りBulletInfoオブジェクトを作成してもらう
+CREATE_BULLET = "CREATE_BULLET"
+##############################################
 
 
 def get_direct_str(COMMAND):

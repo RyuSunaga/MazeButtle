@@ -1,11 +1,12 @@
 #this file is server file
+import infomanager
 from config import MAZE_LIST
 from config import W
 from config import X,Y
 from config import RIGHT,LEFT,UP,DOWN,ATTACK
 from config import HOST, PORT, BACKLOG, BUFSIZE
 from info import PlayerInfo
-from manager import PlayerInfoManager
+from infomanager import PlayerInfoManager
 from packet import Packet
 import random
 import socket
