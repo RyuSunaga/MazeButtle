@@ -61,11 +61,12 @@ class PlayerInfo(ObjectInfo):
         ObjectInfoの子クラス
         プレイヤーの情報を扱うためのクラス
     """
-    def __init__(self,id, name, posi):
+    def __init__(self,id, name,color, posi):
         super().__init__(id)
 
         self.object_type_ = PLAYER_INFO
         self.name_ = None
+        self.color_ = color
         self.hp_ = 10
         self.posi_ = [None,None]
         self.power_ = 1
@@ -82,6 +83,9 @@ class PlayerInfo(ObjectInfo):
 
     def set_name(self, name):
         self.name_ = name
+
+    def set_color(self,color):
+        self.color_ = color
        
     def set_hp(self,hp):
         self.hp_ = hp
@@ -137,6 +141,9 @@ class PlayerInfo(ObjectInfo):
     def get_name(self):
         return self.name_
 
+    def get_color(self):
+        return self.color_
+
     def get_hp(self):
         return self.hp_
 
@@ -168,6 +175,7 @@ class PlayerInfo(ObjectInfo):
         print("ObjectType",self.type_)
         print("ID:",self.id_)
         print("Name:",self.name_)
+        print("Color:",self.color_)
         print("HP:",self.hp_)
         print("(X, Y):",self.posi_)
         print("Power:",self.power_)
@@ -229,6 +237,7 @@ class PlayerInfo(ObjectInfo):
       
         self.id_ = player_info.get_id()
         self.name_ = player_info.get_name()
+        self.color_ = player_info.get_color()
         self.hp_ = player_info.get_hp()
         self.posi_ = player_info.get_posi() 
         self.speed_ = player_info.get_speed()

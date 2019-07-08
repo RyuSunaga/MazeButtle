@@ -25,7 +25,18 @@ class ObjectInfoManager(object):
         self.info_type_ = OBJECT_INFO
         self.object_info_list_ = []
 
-    def set_info(self, object_info):
+    def get_manager_type(self):
+        return self.manager_type_
+
+    def show_manager_info(self):
+        '''
+            マネージャーオブジェクトの情報を表示する。
+        '''
+        print("ManagerType:",self.manager_type_)
+        print("InfoType:",self.info_type_)
+        print("KeepObjectInfoNum",len(self.object_info_list_))
+
+    def set_object_info(self, object_info):
         '''
             対応する情報を持つクラスを格納する関数
         '''
@@ -38,21 +49,45 @@ class ObjectInfoManager(object):
             return True
 
 
-    def get_all_objectinfo(self):
+    def get_all_object_info(self):
         '''
             保持しているオブジェクトを全て返す。
         '''
         return self.object_info_list_
 
-    def get_type(self):
-        return self.manager_type_
+    def get_object_info(self,id):
+        '''
+            指定されたidを持つオブジェクトを取得する。
+        '''
+        for object_info in self.object_info_list_:
+            if(object_info.get_id() == id):
+                return object_info
+        return None
 
-    def show_all_info(self):
+    def get_object_info_index(self,id):
+        '''
+            指定されたidを持つオブジェクトのindexを返す
+            なかったら-1を返す。
+        '''
+        for i in range(len(self.object_info_list_)):
+            if(self.object_info_list_[i].get_id() == id):
+                return i
+        return -1
+
+
+    def show_all_object_info(self):
         '''
             格納されているすべてのObjectInfo型のObjectの情報を全て表示する。
         '''
         for object_info in self.object_info_list_:
             object_info.show_info()
+
+    def show_objetct_info(self,id):
+        '''
+            指定されたidを持つオブジェクトの情報を表示する。
+        '''
+        self.get_object_info().show_info()
+
 
     def delete_object_info(self, id):
         '''
@@ -78,7 +113,7 @@ class PlayerInfoManager(ObjectInfoManager):
         self.is_create_player_info = False
 
 
-    def init_player_info(self,id_list, name_list, posi_list):
+    def init_player_info(self,id_list, name_list, color_list, posi_list):
         '''
         ゲームで最初にプレイヤーの情報を生成するときに使う
         参加プレイヤー待ちで取得しname,id情報を持つPlayerInfoクラスを生成する
@@ -94,47 +129,24 @@ class PlayerInfoManager(ObjectInfoManager):
         self.id_list = id_list
 
         #プレイヤー情報を生成
-        for id, name, posi in zip(id_list, name_list, posi_list):
-            self.create_player_info(id, nama, posi)
+        for id, name, color, posi in zip(id_list, name_list, color_list, posi_list):
+            self.create_player_info(id, nama,color, posi)
 
         #フラグ変更
         self.is_create_player_info = True
         print("プレイヤー情報を生成しました。")
         return
     
-    def create_player_info(id, name, posi):
+    def create_player_info(id, name,color, posi):
         '''
             PlayerInfoオブジェクトを生成する。
         '''
-        player_info = PlayerInfo(id, name, posi)
+        player_info = PlayerInfo(id, name,color, posi)
         player_info.set_id(id)
         player_info.set_name(name)
+        player_info.set_color(color)
         player_info.set_posi(posi)
         self.set_info(player_info)
-
-
-    def get_player_info(self,id):
-        '''
-            指定されたidを持つPlayerInfoを取得する
-            指定したidをもつプレイヤーが存在しない場合はNoneを返す
-        '''
-        for player_info in self.object_info_list_:
-            if(player_info.get_id() == id):
-                return player_info
-        
-        return None
-
-   
-    def show_player_info(self,id):
-        '''
-            指定されたidを持つプレイヤーの情報を表示する
-        '''
-        for player_info in self.object_info_list_:
-            if(player_info.get_id() == id):
-                player_info.show_info()
-                return 
-       
-        print("id = " + str(id) + "のプレイヤーは存在ししません。")
 
     def set_next_command(self,id,command):
         '''
@@ -165,28 +177,28 @@ class BulletInfoManager(ObjectInfoManager):
     def __init__(self):
         self.manager_type_ = BULLET_INFO_MANAGER
 
-    def get_bullet_info(self, id):
+    def get_bullet_info(self, parent_id):
         '''
             指定したidの親を持つBulletオブジェクトを格納したリストを返す
         '''
         bullet_info_list = []
         for bullet_info in self.object_info_list_:
-            if(bullet_info.get_parent_id() == id):
+            if(bullet_info.get_parent_id() == parent_id):
                 bullet_info_list.append(bullet_info)
         return bullet_info_list
 
-    def show_bullet_info(self, id):
+    def show_bullet_info(self, parent_id):
         '''
-            指定したidのBulletInfoオブジェクトの情報を全て表示する。    
+            指定したidの親を持つBulletInfoオブジェクトの情報を全て表示する。    
         '''
-        for bullet_info in self.object_info_list_:
+        for bullet_info in self.get_bullet_info(parent_id):
             bullet_info.show_info()
 
     def create_bullet_info(self,id, player_info):
         '''
             新しいBulletオブジェクトを生成する。
         '''
-        bullet = BulletInfo(player_info)
+        bullet = BulletInfo(id,player_info)
         self.set_info(bullet)
 
     def move_all_bullet(self):
