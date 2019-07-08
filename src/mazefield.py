@@ -1,7 +1,6 @@
 
 #this is GUI file
 import tkinter as tk
-from MazeServer import GameManager 
 from config import MAZE_LIST
 
 def create_line(canvas,x,y,d,l):
@@ -14,24 +13,28 @@ def create_line(canvas,x,y,d,l):
 
 def create_maze(maze):
     canvas=tk.Canvas(master=root,bg="white",height=60*len(maze),width=60*len(maze[0]))
-    canvas1=tk.Canvas(master=root,bg="white",height=80,width=480)
+    canvas1=tk.Canvas(master=root,bg="white",height=80,width=250)
+    
 
-
-    canvas2=tk.Canvas(master=root,bg="white",height=80,width=320)
-    canvas2.grid(row=1,padx=1,pady=1,sticky=tk.E)
+    label1=tk.Label(master=root,text="Turn1",font=("メイリオ","44"),bg="#cccccc")
+    label1.place(relx=0.45,rely=0.89,relwidth=0.5,relheight=0.1)
     canvas1.grid(row=1,padx=1,pady=1,sticky=tk.W)
     canvas.grid(row=0,padx=2,pady=2)
-
-    count1=0
+    
+    canvas1.create_rectangle(10,10,40,70,fill="red")
+    canvas1.create_rectangle(60,10,90,70,fill="red")
+    canvas1.create_rectangle(110,10,140,70,fill="red")
+    canvas1.create_rectangle(160,10,190,70,fill="red")
+    canvas1.create_rectangle(210,10,240,70,fill="red")
+    wid=0
     for i in maze:
-        count=0
+        hei=0
         for j in i:
             if j==1:
-                canvas.create_rectangle(count*60,count1*60,(count+1)*60,(count1+1)*60,fill="black")
-            count+=1
-        count1+=1
+                canvas.create_rectangle(hei*60,wid*60,(hei+1)*60,(wid+1)*60,fill="black")
+            hei+=1
+        wid+=1
          
-
 
 
 root=tk.Tk()
