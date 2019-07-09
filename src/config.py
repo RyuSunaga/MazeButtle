@@ -11,7 +11,10 @@ BUFSIZE = 4096
 #通路も定数を用意したかったがよい変数名がなかったのでとりあえず保留 by sunaga
 #壁
 W = 1 
-
+#弾丸
+B = 2
+#プレイヤー
+P = 3 
 
 #### 迷路を定義->みんなでひとつずつ迷路を定義してくれ by sunaga
 #### 1が壁 0が通路　
@@ -116,8 +119,6 @@ OBJECT_INFO = "ObjectInfo"
 PLAYER_INFO = "PlayerInfo"
 BULLET_INFO = "BulletInfo"
 ITEM_INFO = "ItemInfo"
-
-
 ########################################################################迷路上のオブジェクトの定数設定######################################
 
 
@@ -127,9 +128,25 @@ OBJECT_INFO_MANAGER = "ObjectInfoManager"
 PLAYER_INFO_MANAGER = "PlayerInfoManager"
 BULLET_INFO_MANAGER = "BulletInfoManager"
 ITEM_INFO_MANAGER = "ItemInfoManager"
-
-
 ########################################################################オブジェクト管理の定数設定######################################
+
+
+########################################################################パケットオブジェクトの定数設定######################################
+PACKET = "PACKET"
+SERVER_TO_CLIENT_PACKET = "SERVER_TO_CLIENT_PACKET"
+CLIENT_TO_SERVER_PACKET = "CLIENT_TO_SERVER_PACKET"
+########################################################################パケットオブジェクトの定数設定######################################
+
+
+
+
+
+
+
+
+
+
+
 
 
 

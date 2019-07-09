@@ -1,6 +1,6 @@
 #迷路上のオブジェクトを定義する＋クラス
 import config
-
+import config
 from config import X, Y
 from config import RIGHT, LEFT, UP, DOWN
 from config import MOVE, ATTACK
@@ -27,9 +27,10 @@ class ObjectInfo(object):
         迷路上のオブジェクトの情報クラスの親クラス。
         今のところ用意するオブジェクトはPlayerとItemとBullet
     '''
-    def __init__(self, id):
+    def __init__(self, id, posi):
         #オブジェクト毎に一意のidを設定する。
         self.id_ = id
+        self.posi_ = [posi[X],posi[Y]]
         self.object_type_ = OBJECT_INFO
 
     def __del__(self):
@@ -43,8 +44,15 @@ class ObjectInfo(object):
     def set_id(self, id):
         self.id_ = id
 
+    def set_posi(self,posi):
+        self.posi_[X] = posi[X]
+        self.posi_[Y] = posi[Y]
+
     def get_id(self):
         return self.id_
+
+    def get_posi(self):
+        return self.posi_
 
     def get_type(self):
         return self.object_type_
@@ -62,13 +70,13 @@ class PlayerInfo(ObjectInfo):
         プレイヤーの情報を扱うためのクラス
     """
     def __init__(self,id, name,color, posi):
-        super().__init__(id)
+        super().__init__(id, posi)
 
         self.object_type_ = PLAYER_INFO
         self.name_ = None
         self.color_ = color
         self.hp_ = 10
-        self.posi_ = [None,None]
+        #self.posi_ = [None,None]
         self.power_ = 1
         self.speed_ = 1
         #次に行うコマンドを保持する、処理を行ったらNoneに戻す
@@ -89,10 +97,6 @@ class PlayerInfo(ObjectInfo):
        
     def set_hp(self,hp):
         self.hp_ = hp
-        
-    def set_posi(self,posi):
-        self.posi_[X] = posi[X]
-        self.posi_[Y] = posi[Y]
         
     def set_power(self, power):
         self.power_ = power
@@ -146,9 +150,6 @@ class PlayerInfo(ObjectInfo):
 
     def get_hp(self):
         return self.hp_
-
-    def get_posi(self):
-        return self.posi_
 
     def get_power(self):
         return self.power_
@@ -260,15 +261,13 @@ class BulletInfo(ObjectInfo):
             extre_infoは弾丸に情報をつけ足すとき使う。
             いまは実装の予定なし。
         """
-        super().__init__(id)
+        super().__init__(id,[0,0])
 
         self.object_type_ = BULLET_INFO
-
         #プレイヤーの位置情報を取得
         player_posi = player_info().get_posi()
         #コマンドが飛んでいく方向をベクトルで表している
         self.direct_ = player_info().get_command()
-        
         self.parent_id_ = player_info.get_id()
         self.posi_ = [player_posi[X]+direct[X], player_posi[Y]+direct[Y]]
         self.power_ = player_info.get_power()
@@ -279,9 +278,6 @@ class BulletInfo(ObjectInfo):
 
     def set_parent_id(self, parent_id):
         self.parent_id_ = parent_id
-
-    def set_posi(self, posi):
-        self.posi_ = posi
 
     def set_direct(self, direct):
         self.direct_ = direct
@@ -294,9 +290,6 @@ class BulletInfo(ObjectInfo):
 
     def get_parent_id(self):
         return self.parent_id_
-
-    def get_posi(self):
-        return self.posi_ 
 
     def get_direct(self):
         return self.direct_

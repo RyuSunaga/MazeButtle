@@ -1,4 +1,5 @@
 from info import ObjectInfo, PlayerInfo, BulletInfo, ItemInfo
+from gameinfo import GameInfo
 from info import PACKET, SERVER_TO_CLIENT_PACKET, CLIENT_TO_SERVER_PACKET
 
 #クライアントとサーバー間で扱うデータ群をまとめるクラス
@@ -38,10 +39,13 @@ class ServerToClientPacket(Packet):
         self.packet_type_ = SERVER_TO_CLIENT_PACKET
         
         #maze_infoにGUIに必要な情報をすべて保持させるのがシンプルでいいかも
-        self.maze_info_ = None
+        self.game_info_ = None
+
+    def set_game_info(self,game_info):
+        self.game_info_ = game_info
        
-    def get_maze_info(self):
-        return self.maze_info_
+    def get_game_info(self):
+        return self.game_info_
 
     def __del__(self):
         print(self.packet_type_ + "が破棄されます")

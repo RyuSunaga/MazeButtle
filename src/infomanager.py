@@ -55,7 +55,7 @@ class ObjectInfoManager(object):
         '''
         return self.object_info_list_
 
-    def get_object_info(self,id):
+    def get_object_info_id(self,id):
         '''
             指定されたidを持つオブジェクトを取得する。
         '''
@@ -63,6 +63,16 @@ class ObjectInfoManager(object):
             if(object_info.get_id() == id):
                 return object_info
         return None
+
+    def get_object_info_posi(self,posi):
+        '''
+            指定されたposiを持つオブジェクトを取得する。
+        '''
+        for object_info in self.object_info_list_:
+            if(object_info.get_posi() == posi):
+                return object_info
+        return None
+    
 
     def get_object_info_index(self,id):
         '''
