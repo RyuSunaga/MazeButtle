@@ -78,12 +78,17 @@ DOWN   = (0,-1)
 
 # Playerが選択するコマンド一覧
 
+#参加コマンド
+JOIN = "JOIN"
+
+#行動コマンド
 MOVE = "MOVE"
 RIGHT_MOVE = "RIGHT_MOVE"
 LEFT_MOVE = "LEFT_MOVE"
 UP_MOVE = "UP_MOVE"
 DOWN_MOVE = "DOWN_MOVE"
 
+#攻撃コマンド
 ATTACK = "ATTACK"
 RIGHT_ATTACK = "RIGHT_ATTACK"
 LEFT_ATTACK = "LEFT_ATTACK"

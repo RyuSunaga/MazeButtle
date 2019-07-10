@@ -1,5 +1,6 @@
 #ゲーム全体を管理するクラス
 from config import MAZE_LIST
+import packet
 from config import W
 from config import X,Y
 from config import RIGHT,LEFT,UP,DOWN,ATTACK
@@ -26,25 +27,13 @@ class GameManager(object):
     
     def __init__(self):
         self.id_list = []
+        #ipが同じ可能性があるのでリストに格納する
         self.ip_name_list = []
+        #プレイヤーの色を設定する変数、tkinter　で描画できる形で扱う
+        self.color_ = [ 'red', 'green', 'blue','yellow']
         self.player_info_maneger = PlayerInfoManager()
         print("ゲーム開始準備　開始")
         
-
-    def maze_decision(self):
-        """
-            ゲームで使用する迷路を決定する関数、現在はランダムで選択しているが
-            時間に余裕があればプレイヤーの選択で決定してもいいかも。 by sunaga
-        """
-
-        #self.maze_ = MAZE_LIST[random.randint(0,2)]
-        self.maze_ = MAZE_LIST[0]
-
-        print("迷路決定完了")
-        for l in self.maze_:
-            print(l)
-
-        return self
 
 
     def preparation_game(self):
@@ -69,7 +58,7 @@ class GameManager(object):
     def get_participation_command(self):
         '''
             プレイヤーのゲーム参加コマンドを受け取り
-            各プレイヤーのipと名格をマッピングした辞書を返す。
+            各プレイヤーのipと名格をマッピングした辞書を返す。--------------------これサーバー側の処理じゃない?
         '''
         print("通信開始(しない)")
 
@@ -102,6 +91,10 @@ class GameManager(object):
         #参加プレイヤーの名前のリストを生成
         name_list = [ip_name[1] for ip_name in self.ip_name_list]
         print(name_list)
+
+        #参加プレイヤーの色を設定
+
+
         #迷路の端の座標を設定
         x_min = 0 
         y_min = 0
@@ -115,7 +108,7 @@ class GameManager(object):
         print(player_posi)
         
         #参加プレイヤーの情報を生成
-        self.player_info_maneger.init_player_info(self.id_list, name_list, player_posi)
+        self.player_info_maneger.init_player_info(self.id_list, name_list,color_list, player_posi)
 
         print("プレイヤー情報生成完了")
 

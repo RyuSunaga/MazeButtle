@@ -147,7 +147,7 @@ class PlayerInfoManager(ObjectInfoManager):
         print("プレイヤー情報を生成しました。")
         return
     
-    def create_player_info(id, name,color, posi):
+    def create_player_info(id, name, color, posi):
         '''
             PlayerInfoオブジェクトを生成する。
         '''
