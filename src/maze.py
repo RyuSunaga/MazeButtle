@@ -4,7 +4,7 @@ from config import W,B,P,I
 from config import MOVE, ATTACK
 from config import RIGHT, LEFT, UP, DOWN
 from config import RIGHT_MOVE, LEFT_MOVE, UP_MOVE, DOWN_MOVE
-from config import RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, DOWN_ATTACKN
+from config import RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, DOWN_ATTACK
 from config import CREATE_BULLET
 from config import get_direct_str
 from config import OBJECT_INFO,PLAYER_INFO,BULLET_INFO, ITEM_INFO
@@ -20,7 +20,7 @@ class Maze(object):
         目的は
             ガイアの作った迷路を描画するクラスで描画しやすい情報を渡すこと
     '''
-    
+
     def __init__(self):
         self.is_decision = False
         self.player_info_list_ = []
@@ -57,7 +57,7 @@ class Maze(object):
         '''
         if(self.is_decision_maze):
                 #迷路の端の座標を設定
-                x_min = 0 
+                x_min = 0
                 y_min = 0
                 x_max = len(self.maze_[0]) -1
                 y_max = len(self.maze_) - 1
@@ -102,8 +102,8 @@ class Maze(object):
             if(player_info.get_posi() == player_posi):
                 return player_info
         return None
-    
-    
+
+
     def get_bullet_info(self,bullet_posi):
         '''
            迷路上の弾丸の座標から一致するBulletInfoオブジェクトを返す
@@ -122,8 +122,8 @@ class Maze(object):
                 return item_info
         return None
     ############################################################################################設計ミスかな...................これってマネージャーの仕事だよね  今回は許して by sunaga
-   
-        
+
+
 
 
 

@@ -3,7 +3,7 @@ import info
 from config import PACKET_TYPE, NEXT_COMMAND, PLAYER_ID
 from info import ObjectInfo, PlayerInfo, BulletInfo, ItemInfo
 from gameinfo import GameInfo
-from info import PACKET, SERVER_TO_CLIENT_PACKET, CLIENT_TO_SERVER_PACKET
+from config import PACKET, SERVER_TO_CLIENT_PACKET, CLIENT_TO_SERVER_PACKET
 #クライアントとサーバー間で扱うデータ群をまとめるクラス
 #info関連のクラスをインスタンス変数として持つ
 #余裕があったら色々新しい迷路上のオブジェクトを追加しよう。 by sunaga
@@ -41,7 +41,7 @@ class Packet(object):
     def __del__(self):
         print(self.packet_type_ + "が破棄されます")
 
-    
+
 class ServerToClientPacket(Packet):
     '''
         サーバー側からクライアント側に渡すパケット
@@ -49,13 +49,13 @@ class ServerToClientPacket(Packet):
     '''
     def __init__(self):
         self.packet_type_ = SERVER_TO_CLIENT_PACKET
-        
+
         #maze_infoにGUIに必要な情報をすべて保持させるのがシンプルでいいかも
         self.game_info_ = None
 
     def set_game_info(self,game_info):
         self.game_info_ = game_info
-       
+
     def get_game_info(self):
         return self.game_info_
 
@@ -68,8 +68,8 @@ class ServerToClientPacket(Packet):
             形式はjsonをイメージ(辞書みたいな形)
             dictを文字列に変えて返す
         '''
-        
-        pass 
+
+        pass
 
 
 
@@ -81,15 +81,15 @@ class ClientToServerPacket(Packet):
 
     def __init__(self):
         self.packet_type_ = CLIENT_TO_SERVER_PACKET
-        
+
         #プレイヤーが次に行うコマンドを保持するインスタンス変数　－＞　超重要
         self.next_command_ = None
 
         #クライアントが担当しているプレイヤーのidを保持するインスタンス変数 -> これがないと設定されたコマンドが誰の行動かわからなくなる。
         self.player_id_ = None
 
-        self.dict_client_to_server_data = {PACKET_TYPE:None, 
-                                           NEXT_COMMAND:None, 
+        self.dict_client_to_server_data = {PACKET_TYPE:None,
+                                           NEXT_COMMAND:None,
                                            PLAYER_ID:None}
         self.str_client_to_server_data = None
 
@@ -107,7 +107,7 @@ class ClientToServerPacket(Packet):
 
     def __del__(self):
         print(self.packet_type_ + "が破棄されます")
-  
+
     def info_to_dict(self):
         '''
             設定してあるインスタンス変数からソケット通信で送受信可能な形式に変更する。
@@ -118,11 +118,12 @@ class ClientToServerPacket(Packet):
         self.dict_client_to_server_data[PACKET_TYPE] = self.packet_type_
         self.dict_client_to_server_data[NEXT_COMMAND] = self.next_command_
         self.dict_client_to_server_data[PLAYER_ID] = self.player_id_
-        self.dict_str_client_to_server_data = str(self.dict_client_to_server_data)        
+        self.str_client_to_server_data = str(self.dict_client_to_server_data)
         print("サーバー側に送る情報を生成しました。")
-         
-    def get_dict_data(self):
-        return self.dict_client_to_server_data
+
+    def get_str_data(self):
+        self.info_to_dict()
+        return self.str_client_to_server_data
 
 
 
