@@ -5,9 +5,11 @@ from config import W
 from config import X,Y
 from config import RIGHT,LEFT,UP,DOWN,ATTACK
 from config import HOST, PORT, BACKLOG, BUFSIZE
-from info import PlayerInfo
-from infomanager import PlayerInfoManager
+from config import COLORS
+from info import PlayerInfo, BulletInfo, ItemInfo
+from infomanager import PlayerInfoManager, BulletInfoManager, ItemInfoManager
 from packet import Packet
+from mazemanager import Maze
 import random
 import socket
 import time
@@ -29,32 +31,18 @@ class GameManager(object):
         self.id_list = []
         #ipが同じ可能性があるのでリストに格納する
         self.ip_name_list = []
-        #プレイヤーの色を設定する変数、tkinter　で描画できる形で扱う
-        self.color_ = [ 'red', 'green', 'blue','yellow']
+        self.maze_object = Maze()
         self.player_info_maneger = PlayerInfoManager()
         print("ゲーム開始準備　開始")
+       
         
+    def get_maze_object(self):
+        '''
+            get_maze()と区別がつけにくいから、オブジェクトの場合はget_maze_object()とする。
+        '''
+        return self.maze_object
 
-
-    def preparation_game(self):
-        """
-            ゲーム参加者待ちのサーバー処理参加プレイヤーの名前とipアドレスを受け取り
-            それらを使い参加プレイヤーの情報を生成する
-            そして参加プレイヤーにゲームで使用する迷路を決定して決定した迷路と各プレイヤーの情報を
-            送信する。
-            
-        """
-        #参加申請を受け取り self.ip_nameを設定する
-        self.get_participation_command()
-
-        #迷路を決定
-        self.maze_decision()
-        
-        #プレイヤー情報を生成
-        self.create_player_info()
-
-        return self
-
+    
     def get_participation_command(self):
         '''
             プレイヤーのゲーム参加コマンドを受け取り
@@ -91,35 +79,49 @@ class GameManager(object):
         #参加プレイヤーの名前のリストを生成
         name_list = [ip_name[1] for ip_name in self.ip_name_list]
         print(name_list)
-
-        #参加プレイヤーの色を設定
-
+       
+        #参加プレイヤーの色を決定
+        player_color = [COLORS[i] for i in range(len(self.ip_name_list))]
+        print(player_color)
 
         #迷路の端の座標を設定
-        x_min = 0 
-        y_min = 0
-        x_max = len(self.maze_[0]) -1
-        y_max = len(self.maze_) - 1
-        maze_edge = [[x_min,y_min],[x_min,y_max],[x_max,y_min],[x_max,y_max]]
+        maze_edge = self.maze_object.get_edge_posi()
         print(maze_edge)
-       
+
         #参加人数分のプレイヤーの位置座標を生成
         player_posi = [maze_edge[i] for i in range(len(self.ip_name_list))]
         print(player_posi)
         
         #参加プレイヤーの情報を生成
-        self.player_info_maneger.init_player_info(self.id_list, name_list,color_list, player_posi)
+        self.player_info_maneger.init_player_info(self.id_list, name_list,player_color, player_posi)
 
         print("プレイヤー情報生成完了")
 
-
         return 
+
+    
+    def preparation_game(self):
+        """
+            ゲーム参加者待ちのサーバー処理参加プレイヤーの名前とipアドレスを受け取り
+            それらを使い参加プレイヤーの情報を生成する
+            そして参加プレイヤーにゲームで使用する迷路を決定して決定した迷路と各プレイヤーの情報を
+            送信する。
+            
+        """
+        
+        #迷路を決定
+        self.maze_object.maze_decision()
+        self.maze_object.show_maze()
+
+        #参加申請を受け取り self.ip_nameを設定する
+        self.get_participation_command()
+        
+        #プレイヤー情報を生成
+        self.create_player_info()
 
 
     def get_command(self):
         pass
-
-
 
     def pass_info(self):
         pass

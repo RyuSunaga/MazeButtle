@@ -11,7 +11,7 @@ from config import OBJECT_INFO,PLAYER_INFO,BULLET_INFO, ITEM_INFO
 from config import OBJECT_INFO_MANAGER, PLAYER_INFO_MANAGER, BULLET_INFO_MANAGER, ITEM_INFO_MANAGER
 from info import PlayerInfo, BulletInfo, ItemInfo
 from infomanager import PlayerInfoManager, BulletInfoManager, ItemInfoManager
-
+from info import PACKET, SERVER_TO_CLIENT_PACKET, CLIENT_TO_SERVER_PACKET
 
 class GameInfo(self):
     '''
@@ -19,7 +19,6 @@ class GameInfo(self):
        このオブジェクトをパケットに格納してサーバー側からクライアント側に送
        つまりこのオブジェクトはGUIを描画できるだけの情報を保持することになる。
     '''
-
     def __init__(self):
         self.player_info_list_ = []
         self.bullet_info_list_ = []

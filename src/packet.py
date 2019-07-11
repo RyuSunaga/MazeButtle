@@ -22,9 +22,19 @@ class Packet(object):
 
     def __init__(self):
         self.packet_type_ = PACKET
+        self.text_ = None
+
+    def set_text(self, text):
+        '''
+            相手に伝えたいメッセージがあればこれを使おう。
+        '''
+        self.text_ = text
 
     def get_packet_type(self):
         return self.packet_type_
+
+    def get_text(self):
+        return text
 
     def __del__(self):
         print(self.packet_type_ + "が破棄されます")

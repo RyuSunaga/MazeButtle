@@ -74,6 +74,13 @@ DOWN   = (0,-1)
 ############################# 方向定義 ##########################
 
 
+#Playerの色設定
+RED = 'red'
+GREEN = 'green'
+BLUE = 'blue'
+YELLOW = 'yellow'
+COLORS = [RED, GREEN, BLUE, YELLOW]
+
 
 
 # Playerが選択するコマンド一覧
