@@ -11,7 +11,10 @@ BUFSIZE = 4096
 #通路も定数を用意したかったがよい変数名がなかったのでとりあえず保留 by sunaga
 #壁
 W = 1 
-
+#弾丸
+B = 2
+#プレイヤー
+P = 3 
 
 #### 迷路を定義->みんなでひとつずつ迷路を定義してくれ by sunaga
 #### 1が壁 0が通路　
@@ -74,29 +77,99 @@ X = 0
 Y = 1
 
 
-# Playerが選択するコマンド一覧
+############################# 方向定義 ##########################
 RIGHT  = (1,0)
 LEFT   = (-1,0)
 UP     = (0,1)
 DOWN   = (0,-1)
-ATTACK = (0,0)
+############################# 方向定義 ##########################
 
 
-#class command(object):
-#    """
-#    プレイヤーからの操作となる関数を持つクラス
-#    1.十字方向に移動する操作、move_command()
-#    2.攻撃を行う関数、attack_command()
-#    """
-#
-#    def move_command(self):
-#        RIGHT = (1, 0)
-#        LEFT = (-1, 0)
-#        UP = (0, 1)
-#        DOWN = (0, -1)
-#
-#    def attack_command(self):
-#        ATTACK
+#Playerの色設定
+RED = 'red'
+GREEN = 'green'
+BLUE = 'blue'
+YELLOW = 'yellow'
+COLORS = [RED, GREEN, BLUE, YELLOW]
+
+
+
+# Playerが選択するコマンド一覧
+
+#参加コマンド
+JOIN = "JOIN"
+
+#行動コマンド
+MOVE = "MOVE"
+RIGHT_MOVE = "RIGHT_MOVE"
+LEFT_MOVE = "LEFT_MOVE"
+UP_MOVE = "UP_MOVE"
+DOWN_MOVE = "DOWN_MOVE"
+
+#攻撃コマンド
+ATTACK = "ATTACK"
+RIGHT_ATTACK = "RIGHT_ATTACK"
+LEFT_ATTACK = "LEFT_ATTACK"
+UP_ATTACK = "UP_ATTACK"
+DOWN_ATTACK = "DOWN_ATTACK"
+############################################
+
+
+
+#プレイヤーからgamemanagerに送りBulletInfoオブジェクトを作成してもらう
+CREATE_BULLET = "CREATE_BULLET"
+##############################################
+
+
+def get_direct_str(COMMAND):
+    '''
+        与えられたコマンドに対応する方向を文字列で返す
+    '''
+    if(COMMAND == (1,0)):
+        return "RIGHT"
+    elif(COMMAND == (-1,0)):
+        return "LEFT"
+    elif(COMMAND == (0,1)):
+        return "UP"
+    elif(COMMAND == (0,-1)):
+        return "DOWN"
+    else:
+        return None
+
+
+########################################################################迷路上のオブジェクトの定数設定######################################
+OBJECT_INFO = "ObjectInfo"
+PLAYER_INFO = "PlayerInfo"
+BULLET_INFO = "BulletInfo"
+ITEM_INFO = "ItemInfo"
+########################################################################迷路上のオブジェクトの定数設定######################################
+
+
+
+########################################################################オブジェクト管理の定数設定######################################
+OBJECT_INFO_MANAGER = "ObjectInfoManager"
+PLAYER_INFO_MANAGER = "PlayerInfoManager"
+BULLET_INFO_MANAGER = "BulletInfoManager"
+ITEM_INFO_MANAGER = "ItemInfoManager"
+########################################################################オブジェクト管理の定数設定######################################
+
+
+########################################################################パケットオブジェクトの定数設定######################################
+PACKET = "PACKET"
+SERVER_TO_CLIENT_PACKET = "SERVER_TO_CLIENT_PACKET"
+CLIENT_TO_SERVER_PACKET = "CLIENT_TO_SERVER_PACKET"
+########################################################################パケットオブジェクトの定数設定######################################
+
+
+
+
+
+
+
+
+
+
+
 
 
 
