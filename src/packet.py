@@ -1,3 +1,4 @@
+import info
 from info import ObjectInfo, PlayerInfo, BulletInfo, ItemInfo
 from gameinfo import GameInfo
 from info import PACKET, SERVER_TO_CLIENT_PACKET, CLIENT_TO_SERVER_PACKET

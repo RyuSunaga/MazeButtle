@@ -1,19 +1,20 @@
 import config
 import info
 from config import X, Y
-from config import W,B,P
-from config import MOVE, ATTACK
+from config import W,B,P,I
+from config import JOIN, MOVE, ATTACK
 from config import RIGHT, LEFT, UP, DOWN
 from config import RIGHT_MOVE, LEFT_MOVE, UP_MOVE, DOWN_MOVE
 from config import RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, DOWN_ATTACKN
 from config import CREATE_BULLET
-from config import get_direct_str
 from config import OBJECT_INFO,PLAYER_INFO,BULLET_INFO, ITEM_INFO
 from config import OBJECT_INFO_MANAGER, PLAYER_INFO_MANAGER, BULLET_INFO_MANAGER, ITEM_INFO_MANAGER
-from info import PlayerInfo, BulletInfo, ItemInfo
+from config import PACKET, SERVER_TO_CLIENT_PACKET, CLIENT_TO_SERVER_PACKET
+from config import get_direct_str
 from maze import Maze
+from info import PlayerInfo, BulletInfo, ItemInfo
 from infomanager import PlayerInfoManager, BulletInfoManager, ItemInfoManager
-from info import PACKET, SERVER_TO_CLIENT_PACKET, CLIENT_TO_SERVER_PACKET
+
 
 ########################################################################################　GameInfoはゲーム中一回しか生成しない。　更新し続けるイメージ
 class GameInfo(self):
@@ -58,9 +59,9 @@ class GameInfo(self):
         '''
             迷路オブジェクトを取得
         '''
-        return self.maze_
+        return self.maze_object_
         
-    ############################################################################################設計ミスかな...................これってマネージャーの仕事だよね  
+    ############################################################################################設計ミスかな...................これってマネージャーの仕事だよね  今回は許して by sunaga
     def get_player_info(self,player_posi):
         '''
           迷路上のプレイヤーの座標から一致するPlayerInfoオブジェクトを返す
