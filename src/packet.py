@@ -1,3 +1,4 @@
+
 import info
 from config import PACKET_TYPE, NEXT_COMMAND, PLAYER_ID
 from info import ObjectInfo, PlayerInfo, BulletInfo, ItemInfo
@@ -35,7 +36,7 @@ class Packet(object):
         return self.packet_type_
 
     def get_text(self):
-        return text
+        return self.text_
 
     def __del__(self):
         print(self.packet_type_ + "が破棄されます")
@@ -99,7 +100,7 @@ class ClientToServerPacket(Packet):
         self.player_id_ = player_id
 
     def get_next_command(self):
-        return get_next_command
+        return self.get_next_command
 
     def get_player_id(self):
         return self.player_id_
@@ -122,7 +123,6 @@ class ClientToServerPacket(Packet):
          
     def get_dict_data(self):
         return self.dict_client_to_server_data
-
 
 
 

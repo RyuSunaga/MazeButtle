@@ -75,5 +75,6 @@ class Playerinfo():
 
 #Mazeオブジェクト受け取り必要情報取得
 class MazeField():
-    pass
+    maze = packet.ServerToClientPacket().get_game_info()
+
 

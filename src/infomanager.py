@@ -6,7 +6,7 @@ from config import W,B,P,I
 from config import MOVE, ATTACK
 from config import RIGHT, LEFT, UP, DOWN
 from config import RIGHT_MOVE, LEFT_MOVE, UP_MOVE, DOWN_MOVE
-from config import RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, DOWN_ATTACKN
+from config import RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, DOWN_ATTACK
 from config import CREATE_BULLET
 from config import get_direct_str
 from config import OBJECT_INFO,PLAYER_INFO,BULLET_INFO, ITEM_INFO
@@ -72,7 +72,7 @@ class ObjectInfoManager(object):
             if(object_info.get_posi() == posi):
                 return object_info
         return None
-    
+
 
     def get_object_info_index(self,id):
         '''
@@ -133,20 +133,20 @@ class PlayerInfoManager(ObjectInfoManager):
         #すでに初期化している場合実行させない。
         if(self.is_create_info == True):
             print("すでにプレイヤー情報は格納されています。")
-            return 
+            return
 
         #プレイヤーのid情報を決定
         self.id_list = id_list
 
         #プレイヤー情報を生成
         for id, name, color, posi in zip(id_list, name_list, color_list, posi_list):
-            self.create_player_info(id, nama,color, posi)
+            self.create_player_info(id, name,color, posi)
 
         #フラグ変更
         self.is_create_player_info = True
         print("プレイヤー情報を生成しました。")
         return
-    
+
     def create_player_info(id, name, color, posi):
         '''
             PlayerInfoオブジェクトを生成する。
@@ -162,7 +162,7 @@ class PlayerInfoManager(ObjectInfoManager):
         '''
             指定したidと一致するプレイヤーオブジェクトに次に実行するコマンドを設定する。
         '''
-    
+
     ###############################################################################この関数使いたくない
     def update_player_info(self, player_info):
         """
@@ -178,7 +178,7 @@ class PlayerInfoManager(ObjectInfoManager):
         return False
     ###############################################################################この関数使いたくない
 
-   
+
 
 class BulletInfoManager(ObjectInfoManager):
     '''
@@ -199,7 +199,7 @@ class BulletInfoManager(ObjectInfoManager):
 
     def show_bullet_info(self, parent_id):
         '''
-            指定したidの親を持つBulletInfoオブジェクトの情報を全て表示する。    
+            指定したidの親を持つBulletInfoオブジェクトの情報を全て表示する。
         '''
         for bullet_info in self.get_bullet_info(parent_id):
             bullet_info.show_info()
