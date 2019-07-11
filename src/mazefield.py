@@ -2,6 +2,8 @@
 #this is GUI file
 import tkinter as tk
 from config import MAZE_LIST
+from config import RIGHT_MOVE,LEFT_MOVE,UP_MOVE,DOWN_MOVE
+from config import RIGHT_ATTACK,LEFT_ATTACK,UP_ATTACK,DOWN_ATTACK
 #from maze import Maze
 
 
@@ -30,15 +32,39 @@ class MazeField(object):
 
 
     #########################################################################################ここから下、ガイアが作った関数コピペしたからうまく動かないかも。
-    def create_line(canvas,x,y,d,l):
-        if d=="ver":
-            for i in range(l):
-                canvas.create_line(x,y,x,y+60*l,fill="black")
-        elif d=="flat":
-            for i in range(l):
-                canvas.create_line(x,y,x+60*l,y,fill="black")
+    def up_move(self):
+        print("up")
+        return UP_MOVE 
+    
+    def left_move(self):
+        print("left")
+        return LEFT_MOVE
+        
+    def right_move(self):
+        print("right")
+        return RIGHT_MOVE
+        
+    def down_move(self):
+        print("down")
+        return DOWN_MOVE
+    
+    def up_attack(self):
+        print("up")
+        return UP_ATTACK
+    
+    def left_attack(self):
+        print("left")
+        return LEFT_ATTACK
+        
+    def right_attack(self):
+        print("right")
+        return RIGHT_ATTACK
+        
+    def down_attack(self):
+        print("down")
+        return DOWN_ATTACK
 
-    def create_maze(maze):
+    def create_maze(self,maze):
         root=tk.Tk()
         root.title("迷路")
         canvas=tk.Canvas(master=root,bg="white",height=60*len(maze),width=60*len(maze[0]))
@@ -62,48 +88,48 @@ class MazeField(object):
                 if j==1:
                     canvas.create_rectangle(hei*60,wid*60,(hei+1)*60,(wid+1)*60,fill="black")
                 elif j==2:
-                    canvas.create_oval(hei*60+15,wid*60+15,(hei+1)*60-15,(wid+1)*60-15,fill="yellow")
+                    canvas.create_polygon(hei*60+15,wid*60+30,hei*60+30,wid*60+15,hei*60+45,wid*60+30,hei*60+30,wid*60+45,fill="blue")
                 elif j==3:
                     canvas.create_oval(hei*60+5,wid*60+5,(hei+1)*60-5,(wid+1)*60-5,fill="red")
                 hei+=1
            wid+=1
            
-    def move_player():
+    def move_player(self):
           root=tk.Tk()
           root.title("移動コマンド")
           canvas=tk.Canvas(master=root,bg="white",height=300,width=300)
           canvas.grid()
-          btn1=tk.Button(master=canvas,text="↑",font=("メイリオ","20"),bg="grey",height=100,width=100)
+          btn1=tk.Button(master=canvas,command=self.up_move,text="↑",font=("メイリオ","20"),bg="grey",height=100,width=100)
           btn1.place(relx=0.33,rely=0,relwidth=0.33,relheight=0.33)
-          btn2=tk.Button(master=canvas,text="→",font=("メイリオ","20"),bg="grey",height=100,width=100)
+          btn2=tk.Button(master=canvas,command=self.right_move,text="→",font=("メイリオ","20"),bg="grey",height=100,width=100)
           btn2.place(relx=0.66,rely=0.33,relwidth=0.33,relheight=0.33)
-          btn3=tk.Button(master=canvas,text="←",font=("メイリオ","20"),bg="grey",height=100,width=100)
+          btn3=tk.Button(master=canvas,command=self.left_move,text="←",font=("メイリオ","20"),bg="grey",height=100,width=100)
           btn3.place(relx=0,rely=0.33,relwidth=0.33,relheight=0.33)
-          btn4=tk.Button(master=canvas,text="↓",font=("メイリオ","20"),bg="grey",height=100,width=100)
+          btn4=tk.Button(master=canvas,command=self.down_move,text="↓",font=("メイリオ","20"),bg="grey",height=100,width=100)
           btn4.place(relx=0.33,rely=0.66,relwidth=0.33,relheight=0.33)
           canvas.create_rectangle(100,100,200,200,fill="grey")
           
           
-    def attack_player():
+    def attack_player(self):
           root=tk.Tk()
           root.title("攻撃コマンド")
           canvas=tk.Canvas(master=root,bg="white",height=300,width=300)
           canvas.grid()
-          btn1=tk.Button(master=canvas,text="↑",font=("メイリオ","20"),bg="grey",height=100,width=100)
+          btn1=tk.Button(master=canvas,command=self.up_attack,text="↑",font=("メイリオ","20"),bg="grey",height=100,width=100)
           btn1.place(relx=0.33,rely=0,relwidth=0.33,relheight=0.33)
-          btn2=tk.Button(master=canvas,text="→",font=("メイリオ","20"),bg="grey",height=100,width=100)
+          btn2=tk.Button(master=canvas,command=self.right_attack,text="→",font=("メイリオ","20"),bg="grey",height=100,width=100)
           btn2.place(relx=0.66,rely=0.33,relwidth=0.33,relheight=0.33)
-          btn3=tk.Button(master=canvas,text="←",font=("メイリオ","20"),bg="grey",height=100,width=100)
+          btn3=tk.Button(master=canvas,command=self.left_attack,text="←",font=("メイリオ","20"),bg="grey",height=100,width=100)
           btn3.place(relx=0,rely=0.33,relwidth=0.33,relheight=0.33)
-          btn4=tk.Button(master=canvas,text="↓",font=("メイリオ","20"),bg="grey",height=100,width=100)
+          btn4=tk.Button(master=canvas,command=self.down_attack,text="↓",font=("メイリオ","20"),bg="grey",height=100,width=100)
           btn4.place(relx=0.33,rely=0.66,relwidth=0.33,relheight=0.33)
           canvas.create_rectangle(100,100,200,200,fill="grey")
           
-    
-    move_player()
-    attack_player()
-    create_maze(MAZE_LIST[1])
-    root.mainloop()
+mf = MazeField("1",1)      
+#mf.move_player()
+#mf.attack_player()
+mf.create_maze(MAZE_LIST[1])
+root.mainloop()
 
 
 
