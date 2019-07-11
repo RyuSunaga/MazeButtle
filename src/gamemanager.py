@@ -11,6 +11,7 @@ from info import PlayerInfo, BulletInfo, ItemInfo
 from infomanager import PlayerInfoManager, BulletInfoManager, ItemInfoManager
 from gameinfo import GameInfo
 from packet import ServerToClientPacket, ClientToServerPacket
+from mazesocket import MazeServerSocket, MazeClientSocket
 import random
 import socket
 import time
@@ -39,6 +40,7 @@ class GameManager(object):
         self.game_info_ = GameInfo()
         self.client_to_server_packet_ = ClientToServerPacket()
         self.server_to_client_packet_ = ServerToClientPacket()
+        self.maze_server_socket = MazeServerSocket()
         print("ゲーム開始準備　開始")
        
         
