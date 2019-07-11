@@ -172,3 +172,9 @@ CLIENT_TO_SERVER_PACKET = "CLIENT_TO_SERVER_PACKET"
 
 
 
+###################################データのやり取りで扱う辞書の定数
+
+
+PACKET_TYPE = "PACKET_TYPE"
+NEXT_COMMAND = "NEXT_COMMAND"
+PLAYER_ID = "PLAYER_ID"
