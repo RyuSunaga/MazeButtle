@@ -4,6 +4,9 @@ import tkinter as tk
 from config import MAZE_LIST
 from config import RIGHT_MOVE,LEFT_MOVE,UP_MOVE,DOWN_MOVE
 from config import RIGHT_ATTACK,LEFT_ATTACK,UP_ATTACK,DOWN_ATTACK
+from config import SERVER_TO_CLIENT_PACKET
+from config import RED, BLUE, GREEN, YELLOW
+from config import PACKET_TYPE, PLAYER_ID, PLAYER_NAME, PLAYER_COLOR, PLAYER_HP, POSI,MAZE, PLAYER_INFO_LIST, BULLET_INFO_LIST, ITEM_INFO_LIST, TURN,TEXT
 #from maze import Maze
 
 
@@ -24,12 +27,26 @@ class MazeField(object):
     
     def __init__(self,text, game_info):
         '''
-            maze_obejctはmaze.pyに入っているMazeクラス
+            
         '''
         self.text_ = text
-        self.game_info_ = game_info
-        pass
+        #ガイアへ
+        #通信処理が正常に実行されると以下のような変数が格納されるから
+        #しばらくはこれが入力されたことにして正常に描画できるように実装してくれ
+        #変わるのは中身だけだから一回つくれれば使いまわせるよ
 
+        ####################################################################配列は文字列から変換させて作るか,,,
+        self.game_info_ = {PACKET_TYPE:SERVER_TO_CLIENT_PACKET,
+                           MAZE:MAZE_LIST[1],
+                           TURN:5,
+                           TEXT:"のこり一週間頑張ろう!!!!!",
+                           PLAYER_HP:5,#これはidを見てこのクラスを保持しているクラスのplayer_idと一致するplayerのhpを入れる
+                           PLAYER_INFO_LIST:[{PLAYER_ID:1,PLAYER_NAME:"Gaia",PLAYER_COLOR:RED,POSI:[0,0]},
+                                             {PLAYER_ID:2,PLAYER_NAME:"Nojima",PLAYER_COLOR:BLUE,POSI:[9,9]},
+                                             {PLAYER_ID:3,PLAYER_NAME:"Sunaga",PLAYER_COLOR:YELLOW,POSI:[0,9]}],
+                           BULLET_INFO_LIST:[{POSI:[0,2]},{POSI:[4,9]},{POSI:[8,1]},{POSI:[9,6]}],
+                           ITEM_INFO_LIST:[]
+                          }
 
     #########################################################################################ここから下、ガイアが作った関数コピペしたからうまく動かないかも。
     def up_move(self):
