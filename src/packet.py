@@ -1,7 +1,7 @@
 import info
 from info import ObjectInfo, PlayerInfo, BulletInfo, ItemInfo
 from gameinfo import GameInfo
-from info import PACKET, SERVER_TO_CLIENT_PACKET, CLIENT_TO_SERVER_PACKET
+from config import PACKET, SERVER_TO_CLIENT_PACKET, CLIENT_TO_SERVER_PACKET
 
 #クライアントとサーバー間で扱うデータ群をまとめるクラス
 #info関連のクラスをインスタンス変数として持つ
