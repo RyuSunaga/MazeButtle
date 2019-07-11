@@ -60,7 +60,7 @@ class GameInfo(object):
             迷路オブジェクトを取得
         '''
         return self.maze_object_
-        
+
     ############################################################################################設計ミスかな...................これってマネージャーの仕事だよね  今回は許して by sunaga
     def get_player_info(self,player_posi):
         '''
@@ -70,8 +70,8 @@ class GameInfo(object):
             if(player_info.get_posi() == player_posi):
                 return player_info
         return None
-    
-    
+
+
     def get_bullet_info(self,bullet_posi):
         '''
            迷路上の弾丸の座標から一致するBulletInfoオブジェクトを返す
@@ -90,8 +90,8 @@ class GameInfo(object):
                 return item_info
         return None
     ############################################################################################設計ミスかな...................これってマネージャーの仕事だよね  今回は許して by sunaga
-    
-    
+
+
 
 
 

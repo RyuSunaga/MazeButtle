@@ -1,8 +1,10 @@
-import playerinfo as pi
 import config
 import socket
 import select
 import threading
+import info
+import packet
+import config
 
 #this is client file
 
@@ -30,13 +32,22 @@ class Socket(object):
     PORT = 50000
     BUFSIZE = 4096
 
+    #プレイヤー情報送信
+    def send(self):
+
+        packed = packet.ClientToServerPacket()
+        sock.send(packed.get().encode())
+
+    #プレイヤー情報受信
     def listen(self, sock, HOST, PORT, BUFSIZE):
         try:
             sock.connect((HOST, PORT))
             while True:
                 r_ready_sockets, w_ready_sockets, e_ready_sockets = select.select([sock], [], [])
                 try:
-                    recev_msg = sock.recv(BUFSIZE).decode()
+                    #サーバから受け取ったパケットをデコード
+                    packet.ServerToClientPacket() = sock.recv(BUFSIZE).decode()
+                    #packet.ClientToServerPacket().get_game_info を用いて他のプレイヤー描画更新処理
                 except:
                     break
         except Exception as e:
@@ -45,31 +56,24 @@ class Socket(object):
             sock.close()
             print("サーバとの接続が切断されました")
 
-
-'''
-情報の受け渡しについて
-辞書型にid,commandを格納    {id,command}
-
-'''
-
-"""
-プレイヤー自身の初期情報
-------------------------------------------------------------
-1.プレイヤーID              id   int
-2.体力、初期値5             hp   int
-3.位置情報、初期値[X,Y]     posi    int
-4.攻撃力、初期値2           power   int
-5.速度、初期値1             speed    int
-------------------------------------------------------------
-"""
-
-class Player():
+class Playerinfo():
     def __init__(self):
-        self.id=pi.PlayerInfo().set_id()
-        self.infolist = pi.PlayerInfo()
+        self.id=info.PlayerInfo().set_id()
+        self.infolist = info.PlayerInfo()
 
-    def UpdatePlayer(self,new_info):
-        #infolistからidを取得
-        if self.id==new_info.key:
-            self.myinfo = new_info
+    def update_player(self):
+        new_info=packet.ServerToClientPacket().get_game_info()
+        for _ in new_info:
+            if self.id==new_info.key:
+                #サーバに送るパケットに同封
+                packet.ClientToServerPacket().set_next_command(self.player_command)
+                packet.ClientToServerPacket().set_player_id( self.id)
+
+    #playerからのコマンド入力
+    def input_command(self):
+        self.player_command=config.JOIN
+
+#Mazeオブジェクト受け取り必要情報取得
+class MazeField():
+    pass
 
