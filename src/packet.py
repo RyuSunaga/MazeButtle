@@ -61,6 +61,14 @@ class ServerToClientPacket(Packet):
     def __del__(self):
         print(self.packet_type_ + "が破棄されます")
 
+    def info_to_dict(self):
+        '''
+            設定してあるインスタンス変数からソケット通信で送受信可能な形式に変更する。
+            形式はjsonをイメージ(辞書みたいな形)
+            dictを文字列に変えて返す
+        '''
+        pass 
+
 
 
 class ClientToServerPacket(Packet):
@@ -78,6 +86,8 @@ class ClientToServerPacket(Packet):
         #クライアントが担当しているプレイヤーのidを保持するインスタンス変数 -> これがないと設定されたコマンドが誰の行動かわからなくなる。
         self.player_id_ = None
 
+        self.data = {}
+
     def set_next_command(self,command):
         self.next_command_ = command
 
@@ -93,3 +103,8 @@ class ClientToServerPacket(Packet):
     def __del__(self):
         print(self.packet_type_ + "が破棄されます")
   
+
+
+
+
+

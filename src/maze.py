@@ -85,6 +85,44 @@ class Maze(object):
         print("迷路を決定しました。")
 
         self.is_decision = True
+
+    def get_player_color(self, posi):
+        '''
+            選択した座標のプレイヤーの色を取得する
+            迷路を描画するときに使ってくれ
+        '''
+        pass
+
+    ############################################################################################設計ミスかな...................これってマネージャーの仕事だよね  今回は許して by sunaga
+    def get_player_info(self,player_posi):
+        '''
+          迷路上のプレイヤーの座標から一致するPlayerInfoオブジェクトを返す
+        '''
+        for player_info in self.player_info_list_:
+            if(player_info.get_posi() == player_posi):
+                return player_info
+        return None
+    
+    
+    def get_bullet_info(self,bullet_posi):
+        '''
+           迷路上の弾丸の座標から一致するBulletInfoオブジェクトを返す
+        '''
+        for bullet_info in self.bullet_info_list_:
+            if(bullet_info.get_posi() == bullet_posi):
+                return bullet_info
+        return None
+
+    def get_item_info(self,item_posi):
+        '''
+           迷路上のアイテムの座標から一致するItemInfoオブジェクトを返す
+        '''
+        for item_info in self.item_info_list_:
+            if(item_info.get_posi() == item_posi):
+                return item_info
+        return None
+    ############################################################################################設計ミスかな...................これってマネージャーの仕事だよね  今回は許して by sunaga
+   
         
 
 
