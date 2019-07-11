@@ -1,5 +1,6 @@
 import config
 from config import X, Y
+from config import W,B,P,I
 from config import MOVE, ATTACK
 from config import RIGHT, LEFT, UP, DOWN
 from config import RIGHT_MOVE, LEFT_MOVE, UP_MOVE, DOWN_MOVE
@@ -10,16 +11,22 @@ from config import OBJECT_INFO,PLAYER_INFO,BULLET_INFO, ITEM_INFO
 from config import OBJECT_INFO_MANAGER, PLAYER_INFO_MANAGER, BULLET_INFO_MANAGER, ITEM_INFO_MANAGER
 from info import PlayerInfo
 from info import BulletInfo
-from mazeinfo import MazeInfo
 
 
 class Maze(object):
     '''
         迷路クラス
+        本当はしたくなかったけど簡単のためにInfo関連のオブジェクトも入れよう
+        目的は
+            ガイアの作った迷路を描画するクラスで描画しやすい情報を渡すこと
     '''
     
     def __init__(self):
         self.is_decision = False
+        self.player_info_list_ = []
+        self,bullet_info_list_ = []
+        self.item_info_list_ = []
+        #maze_は0,W,P,Iのどれか
         self.maze_ = None
 
     def is_decision_maze(self):

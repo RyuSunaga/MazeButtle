@@ -2,6 +2,7 @@
 #今のところ管理する情報はPlayer、Bullet、Mazeの3つの情報
 import config
 from config import X, Y
+from config import W,B,P,I
 from config import MOVE, ATTACK
 from config import RIGHT, LEFT, UP, DOWN
 from config import RIGHT_MOVE, LEFT_MOVE, UP_MOVE, DOWN_MOVE

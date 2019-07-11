@@ -1,15 +1,16 @@
 #ゲーム全体を管理するクラス
 from config import MAZE_LIST
 import packet
-from config import W
+from config import W,B,P,I
 from config import X,Y
 from config import RIGHT,LEFT,UP,DOWN,ATTACK
 from config import HOST, PORT, BACKLOG, BUFSIZE
 from config import COLORS
+from maze import Maze
 from info import PlayerInfo, BulletInfo, ItemInfo
 from infomanager import PlayerInfoManager, BulletInfoManager, ItemInfoManager
-from packet import Packet
-from mazemanager import Maze
+from gameinfo import GameInfo
+from packet import ServerToClientPacket, ClientToServerPacket
 import random
 import socket
 import time
@@ -31,8 +32,13 @@ class GameManager(object):
         self.id_list = []
         #ipが同じ可能性があるのでリストに格納する
         self.ip_name_list = []
-        self.maze_object = Maze()
-        self.player_info_maneger = PlayerInfoManager()
+        self.maze_object_ = Maze()
+        self.player_info_maneger_ = PlayerInfoManager()
+        self.bullet_info_maneger_ = BulletInfoManager()
+        self.item_info_manager_ = ItemInfoManager()
+        self.game_info_ = GameInfo()
+        self.client_to_server_packet_ = ClientToServerPacket()
+        self.server_to_client_packet_ = ServerToClientPacket()
         print("ゲーム開始準備　開始")
        
         
