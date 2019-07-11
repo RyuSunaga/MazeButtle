@@ -38,16 +38,16 @@ NOJIMA_MAZE = [
 
 #ガイアが作る迷路
 GAIA_MAZE = [
-             [P,0,0,0,0,0,W,W,0,0],
+             [0,0,0,0,0,0,W,W,0,0],
              [0,W,0,0,W,0,0,0,0,0],
              [0,W,0,0,W,W,W,0,W,0],
              [0,W,0,0,W,0,0,0,W,0],
-             [B,W,0,0,0,0,0,W,W,0],
+             [0,W,0,0,0,0,0,W,W,0],
              [0,0,W,W,W,0,0,W,0,0],
-             [0,0,0,0,0,0,0,0,0,B],
+             [0,0,0,0,0,0,0,0,0,0],
              [0,W,0,W,W,W,W,W,W,0],
              [0,W,W,W,0,W,0,0,W,0],
-             [0,0,0,0,0,0,0,0,W,P]
+             [0,0,0,0,0,0,0,0,W,0]
              ]
 
 
@@ -172,9 +172,28 @@ CLIENT_TO_SERVER_PACKET = "CLIENT_TO_SERVER_PACKET"
 
 
 
-###################################データのやり取りで扱う辞書の定数
-
-
+###################################データのやり取りで扱う辞書の定数 
 PACKET_TYPE = "PACKET_TYPE"
 NEXT_COMMAND = "NEXT_COMMAND"
 PLAYER_ID = "PLAYER_ID"
+PLAYER_NAME = "PLAYER_NAME"
+PLAYER_COLOR = "PlAYER_COLOR"
+PLAYER_HP = "PLAYER_HP"
+POSI = "PLAYER_POSI"
+TURN = "TURN"
+MAZE = "MAZE"
+PLAYER_INFO_LIST= "PLAYER_INFO_LIST"
+BULLET_INFO_LIST = "BULLET_INFO_LIST"
+ITEM_INFO_LIST = "ITEM_INFO_LIST"
+###################################データのやり取りで扱う辞書の定数
+
+
+
+
+
+
+
+
+
+
+
