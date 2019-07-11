@@ -88,7 +88,7 @@ class MazeField(object):
                 if j==1:
                     canvas.create_rectangle(hei*60,wid*60,(hei+1)*60,(wid+1)*60,fill="black")
                 elif j==2:
-                    canvas.create_oval(hei*60+15,wid*60+15,(hei+1)*60-15,(wid+1)*60-15,fill="yellow")
+                    canvas.create_polygon(hei*60+15,wid*60+30,hei*60+30,wid*60+15,hei*60+45,wid*60+30,hei*60+30,wid*60+45,fill="blue")
                 elif j==3:
                     canvas.create_oval(hei*60+5,wid*60+5,(hei+1)*60-5,(wid+1)*60-5,fill="red")
                 hei+=1
@@ -126,8 +126,9 @@ class MazeField(object):
           canvas.create_rectangle(100,100,200,200,fill="grey")
           
 mf = MazeField("1",1)      
-mf.move_player()
-mf.attack_player()
+#mf.move_player()
+#mf.attack_player()
+mf.create_maze(MAZE_LIST[1])
 root.mainloop()
 
 
