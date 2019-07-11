@@ -1,4 +1,5 @@
 import config
+import info
 from config import X, Y
 from config import W,B,P
 from config import MOVE, ATTACK
@@ -10,31 +11,52 @@ from config import get_direct_str
 from config import OBJECT_INFO,PLAYER_INFO,BULLET_INFO, ITEM_INFO
 from config import OBJECT_INFO_MANAGER, PLAYER_INFO_MANAGER, BULLET_INFO_MANAGER, ITEM_INFO_MANAGER
 from info import PlayerInfo, BulletInfo, ItemInfo
+from maze import Maze
 from infomanager import PlayerInfoManager, BulletInfoManager, ItemInfoManager
 from info import PACKET, SERVER_TO_CLIENT_PACKET, CLIENT_TO_SERVER_PACKET
 
+########################################################################################　GameInfoはゲーム中一回しか生成しない。　更新し続けるイメージ
 class GameInfo(self):
     '''
        ゲームの情報を保持するクラス
        このオブジェクトをパケットに格納してサーバー側からクライアント側に送
        つまりこのオブジェクトはGUIを描画できるだけの情報を保持することになる。
     '''
-    def __init__(self):
-        self.player_info_list_ = []
-        self.bullet_info_list_ = []
-        self.item_info_list_ = []
+    #################################
+    #Info系オブジェクトはmanagerオブジェクトを使って設定する
+    #################################
+    def __init__(self, player_info_list, bullet_info_list, item_info_list,turn):
+        self.player_info_list_ = player_info_list
+        self.bullet_info_list_ = bullet_info_list
+        self.item_info_list_ = item_info_list
+        self.maze_object_ = Maze()
+        self.turn_ = turn
 
-        #ゲームのターン数を保持する
-        self.turn_ = None
-        #self.maze_は0,W,B,Pの4つのうちのどれかが渡される。
-        self.maze_ = None
+    def inspect_list(self,info_list1, info_list2):
+        '''
+            二つのリストが上書き可能か調べる-->>>>>>>>>>>>>>>>>>>>>>>>>>>>>とりあえず後で
+            調べるのは
+            1.配列の長さ ------> PlayerInfo()のリストの場合
+            2.オブジェクトのタイプ
+        '''
+        #if(info_list1[0] == PLAYER_INFO):
+        #    if(len(info_list1) != len(info_list2)):
+        #        print("プレイヤーオブジェクトの数がそろっていません")
+        #        return False
+        pass
+
+    def set_player_info_list(self, player_info_list):
+        pass
+
+    def set_turn(self, turn):
+        self.turn_ = turn
 
     def get_turn(self):
         return self.turn_
 
-    def get_maze(self):
+    def get_maze_object(self):
         '''
-            迷路の座標情報を取得する
+            迷路オブジェクトを取得
         '''
         return self.maze_
         
