@@ -1,7 +1,7 @@
 import info
 from info import ObjectInfo, PlayerInfo, BulletInfo, ItemInfo
 from gameinfo import GameInfo
-from info import PACKET, SERVER_TO_CLIENT_PACKET, CLIENT_TO_SERVER_PACKET
+from config import PACKET, SERVER_TO_CLIENT_PACKET, CLIENT_TO_SERVER_PACKET
 
 #クライアントとサーバー間で扱うデータ群をまとめるクラス
 #info関連のクラスをインスタンス変数として持つ
@@ -40,7 +40,7 @@ class Packet(object):
     def __del__(self):
         print(self.packet_type_ + "が破棄されます")
 
-    
+
 class ServerToClientPacket(Packet):
     '''
         サーバー側からクライアント側に渡すパケット
@@ -48,13 +48,13 @@ class ServerToClientPacket(Packet):
     '''
     def __init__(self):
         self.packet_type_ = SERVER_TO_CLIENT_PACKET
-        
+
         #maze_infoにGUIに必要な情報をすべて保持させるのがシンプルでいいかも
         self.game_info_ = None
 
     def set_game_info(self,game_info):
         self.game_info_ = game_info
-       
+
     def get_game_info(self):
         return self.game_info_
 
@@ -79,7 +79,7 @@ class ClientToServerPacket(Packet):
 
     def __init__(self):
         self.packet_type_ = CLIENT_TO_SERVER_PACKET
-        
+
         #プレイヤーが次に行うコマンドを保持するインスタンス変数　－＞　超重要
         self.next_command_ = None
 
@@ -102,9 +102,4 @@ class ClientToServerPacket(Packet):
 
     def __del__(self):
         print(self.packet_type_ + "が破棄されます")
-  
-
-
-
-
-
+ 
