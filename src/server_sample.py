@@ -1,3 +1,4 @@
+
 #--- encoding UTF-8 ---
 
 import socket
@@ -53,9 +54,10 @@ try:
                     b_msg = conn.recv(BUFSIZE)
                     msg = b_msg.decode('utf-8')
                     print('received messege:' + msg)
+                    print(type(msg),msg)
                     dic=ast.literal_eval(msg)
-                    print(type(dic))
-                    print(dic[1])
+                    print(type(dic),dic)
+                    print(dic["PACKET_TYPE"])
                     if len(msg) == 0:
                         sock.close()
                         sock_list.remove(sock)

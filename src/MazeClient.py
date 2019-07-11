@@ -5,7 +5,8 @@ import threading
 import info
 import packet
 import config
-
+from config import JOIN
+from info import PlayerInfo
 #this is client file
 
 ##############################################################################################################
@@ -27,47 +28,53 @@ class Socket(object):
     '''
     サーバと通信を行うクラス
     '''
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    HOST = '127.0.0.1'
-    PORT = 50000
-    BUFSIZE = 4096
+    def __init__(self):
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.HOST = '127.0.0.1'
+        self.PORT = 50000
+        self.BUFSIZE = 4096
 
     #プレイヤー情報送信
     def send(self):
-
-        packed = packet.ClientToServerPacket()
-        sock.send(packed.get().encode())
+        ctsp = packet.ClientToServerPacket()
+        ctsp.set_next_command(JOIN)
+        ctsp.set_player_id(114514)
+        data = ctsp.get_str_data()
+        self.sock.send(data.encode())
 
     #プレイヤー情報受信
-    def listen(self, sock, HOST, PORT, BUFSIZE):
+    def listen(self):
         try:
-            sock.connect((HOST, PORT))
-            while True:
-                r_ready_sockets, w_ready_sockets, e_ready_sockets = select.select([sock], [], [])
+            self.sock.connect((self.HOST, self.PORT))
+            for _ in range(2):
+                #r_ready_sock
+                # ets, w_ready_sockets, e_ready_sockets = select.select([sock], [], [])
                 try:
+                    self.send()
                     #サーバから受け取ったパケットをデコード
-                    packet.ServerToClientPacket() = sock.recv(BUFSIZE).decode()
+                    msg  = self.sock.recv(self.BUFSIZE).decode()
+                    print(type(msg),msg)
                     #packet.ClientToServerPacket().get_game_info を用いて他のプレイヤー描画更新処理
                 except:
                     break
         except Exception as e:
             print(e)
         finally:
-            sock.close()
+            self.sock.close()
             print("サーバとの接続が切断されました")
 
-class Playerinfo():
+class Player():
     def __init__(self):
-        self.id=info.PlayerInfo().set_id()
-        self.infolist = info.PlayerInfo()
-
-    def update_player(self):
-        new_info=packet.ServerToClientPacket().get_game_info()
-        for _ in new_info:
-            if self.id==new_info.key:
-                #サーバに送るパケットに同封
-                packet.ClientToServerPacket().set_next_command(self.player_command)
-                packet.ClientToServerPacket().set_player_id( self.id)
+        #self.id= PlayerInfo().get_id()
+        #self.infolist = PlayerInfo()
+        self.player_info_ = PlayerInfo(1,"nojima","red",[1,1])
+        pass
+    #def update_player(self):
+    #    new_info=packet.ServerToClientPacket().get_game_info()
+    #id==new_info.key:
+    #            #サーバに送るパケットに同封
+    #            packet.ClientToServerPacket().set_next_command(self.player_command)
+    #            packet.ClientToServerPacket().set_player_id( self.id)
 
     #playerからのコマンド入力
     def input_command(self):
@@ -78,3 +85,6 @@ class MazeField():
     maze = packet.ServerToClientPacket().get_game_info()
 
 
+soc=Socket()
+soc.listen()
+#soc.send()
