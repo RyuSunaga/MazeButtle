@@ -92,3 +92,24 @@ class Player():
 soc=Socket()
 soc.listen()
 #soc.send()
+
+
+
+
+class MazeClient(object):
+
+    def __init__(self):
+        self.maze_field_ = None
+        self.ctsp_ = None
+        self.maze_client_socket_ = None
+        self.game_info_ = None
+        #このクライアントが扱うプレイヤーのidを持つ
+        self.player_id_ = None
+        self.next_command_ = None
+
+
+
+
+
+
+S
