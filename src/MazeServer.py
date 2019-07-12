@@ -1,18 +1,9 @@
-#######################################
 
 
+from gamemanager import GameManager
+from packet import CLIENT_TO_SERVER_PACKET, SERVER_TO_CLIENT_PACKET 
+from mazesocket import MazeServerSocket
 
-
-
-#命名規則以外消したよ
-
-
-
-
-
-
-
-#########################################
 
 
 ##############################################################################################################
@@ -43,4 +34,45 @@
 #print("右へ移動後の座標",posi)
 
 ##############################################################################################################
+
+
+
+class MazeSurver(sobject):
+    '''
+        ゲームのサーバー
+        須永の集大成
+    '''
+    
+    def __init__(self):
+        self.game_manager_ = GameManager()
+        self.server_socket = MazeServerSocket()
+
+
+
+    def start_up(self):
+        '''
+            サーバー起動
+        '''
+        pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
