@@ -24,10 +24,10 @@ class MazeField(object):
         主な目的は現在のゲームの情報の描画とタッチしたUIからコマンドを生成すること。
         一言でいうとUIと中身のつなぎこみを行うクラス。
     '''
-    
+
     def __init__(self,text, game_info_data):
         '''
-            
+
         '''
         self.text_ = text
         #ガイアへ
@@ -51,32 +51,32 @@ class MazeField(object):
     #########################################################################################ここから下、ガイアが作った関数コピペしたからうまく動かないかも。
     def up_move(self):
         print("up")
-        return UP_MOVE 
-    
+        return UP_MOVE
+
     def left_move(self):
         print("left")
         return LEFT_MOVE
-        
+
     def right_move(self):
         print("right")
         return RIGHT_MOVE
-        
+
     def down_move(self):
         print("down")
         return DOWN_MOVE
-    
+
     def up_attack(self):
         print("up")
         return UP_ATTACK
-    
+
     def left_attack(self):
         print("left")
         return LEFT_ATTACK
-        
+
     def right_attack(self):
         print("right")
         return RIGHT_ATTACK
-        
+
     def down_attack(self):
         print("down")
         return DOWN_ATTACK
@@ -86,13 +86,13 @@ class MazeField(object):
         root.title("迷路")
         canvas=tk.Canvas(master=root,bg="white",height=60*len(maze),width=60*len(maze[0]))
         canvas1=tk.Canvas(master=root,bg="white",height=80,width=250)
-    
+
 
         label1=tk.Label(master=root,text="Turn1",font=("メイリオ","44"),bg="#cccccc")
         label1.place(relx=0.45,rely=0.89,relwidth=0.5,relheight=0.1)
         canvas1.grid(row=1,padx=1,pady=1,sticky=tk.W)
         canvas.grid(row=0,padx=2,pady=2)
-    
+
         canvas1.create_rectangle(10,10,40,70,fill="red")
         canvas1.create_rectangle(60,10,90,70,fill="red")
         canvas1.create_rectangle(110,10,140,70,fill="red")
@@ -111,7 +111,7 @@ class MazeField(object):
                 hei+=1
            wid+=1
         root.mainloop()
-           
+
     def move_player(self):
           root=tk.Tk()
           root.title("移動コマンド")
@@ -126,8 +126,8 @@ class MazeField(object):
           btn4=tk.Button(master=canvas,command=self.down_move,text="↓",font=("メイリオ","20"),bg="grey",height=100,width=100)
           btn4.place(relx=0.33,rely=0.66,relwidth=0.33,relheight=0.33)
           canvas.create_rectangle(100,100,200,200,fill="grey")
-          
-          
+
+
     def attack_player(self):
           root=tk.Tk()
           root.title("攻撃コマンド")
@@ -143,8 +143,8 @@ class MazeField(object):
           btn4.place(relx=0.33,rely=0.66,relwidth=0.33,relheight=0.33)
           canvas.create_rectangle(100,100,200,200,fill="grey")
 
-          
-mf = MazeField("1",1)      
+
+mf = MazeField("1",1)
 mf.move_player()
 mf.attack_player()
 mf.create_maze(MAZE_LIST[1])
