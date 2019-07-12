@@ -6,7 +6,7 @@ from config import W,B,P,I
 from config import JOIN, MOVE, ATTACK
 from config import RIGHT, LEFT, UP, DOWN
 from config import RIGHT_MOVE, LEFT_MOVE, UP_MOVE, DOWN_MOVE
-from config import RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, DOWN_ATTACKN
+from config import RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, DOWN_ATTACK
 from config import CREATE_BULLET
 from config import get_direct_str
 from config import OBJECT_INFO,PLAYER_INFO,BULLET_INFO, ITEM_INFO
@@ -19,17 +19,20 @@ from packet import  ServerToClientPacket, ClientToServerPacket
 
 
 
-class MazeSocket(object):
+class MazeSocketManager(object):
     '''
         クライアントとの通信処理で必要な情報と変数を扱うクラス。
         Serverとしてではなく、通信
     '''
 
-    def __init__(self):
-        self.HOST_ = None#HOST
-        self.PORT_ = None#PORT
-        self.BACKLOG_ = None#BACKLOG
-        self.BUFSIZE_ = None#BUFSIZE
+    def __init__(self,HOST,PORT,BACKLOG,BUFSIZE):
+        self.socket_ = None
+        self.HOST_ = HOST
+        self.PORT_ = PORT
+        self.BACKLOG_ = BACKLOG
+        self.BUFSIZE_ = BUFSIZE
+        self.game_info_data_ = None
+        self.player_command_data_ = None
 
     def is_possible_communication(self):
         '''
@@ -65,84 +68,155 @@ class MazeSocket(object):
 
     def get_BUFSIZE(self):
         return self.BUFSIZE_
-       
-class MazeServerSocket(MazeSocket):
+
+    def create_socket(self):
+        '''
+            socktを生成
+            閉じるのを忘れるなよ 
+        '''
+        self.socket_ = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        print("ソケットを生成しました。")
+
+
+    def close_socket(self):
+        '''
+            socketを閉じる
+        '''
+        self.socket_.close()
+        self.socket_ = None
+        print("ソケットを閉じました。")
+
+    #def send(self,send_data):
+    #    '''
+    #        送信したいデータを入れる
+    #        Packetクラスでget_send_data()から受け取ったデータを引数に入れる
+    #    '''
+    #    self.socket_.send(send_data.encode())
+    #    print("送信完了")
+
+
+class MazeServerSocketManager(MazeSocketManager):
     
 
-    def __init__(self):
-        super().__init__()
-        self.ip_name_list_ = []
-        self.server_to_client_packet_ = None#None
-        self.client_to_server_packet_ = None#[]
+    def __init__(self,HOST,PORT,BACKLOG,BUFSIZE):
+        super().__init__(HOST,PORT,BACKLOG,BUFSIZE)
+        #################################注意　サーバー側は複数のクライアントのデータを受け取る
+        #この二つ辞書にした方がいいのかもね
+        self.conn_ = None
+        self.addr_ = None
     
-    def set_server_to_clietn_packet(server_to_client_packet):
+    def bind(self):
         '''
-            サーバー側からクライアント側に渡すパケットをセットする。
+            接続待ちをするIPアドレスとポート番号を指定
         '''
-        self.server_to_client_packet_ = server_to_client_packet
-
-    def delete_all_client_to_sever_packet(self):
-        '''
-            クライアント側から受け取ったパケットをすべて消す。
-        '''
-        for i in range(len(self.client_to_server_packet_)):
-            del self.client_to_server_packet_[i]
-        print("クライアント側から受け取ったパケットをすべて消去しました。")
-
-
-    def get_client_to_server_packet(server_to_client_packet):
-        '''
-            クライアント側から受け取ったパケットを取得する。
-        '''
-        return self.client_to_server_packet_
-        
-    def get_ip_name_list(self):
-        '''
-            プレイヤーのゲーム参加コマンドを受け取り
-            各プレイヤーのipと名前をマッピングした辞書を返す。
-        '''
-        return self.ip_name_list_
-       
-    def show_ip_name_list(self):
-        for ip_name in self.ip_name_list_:
-            #定数を使ってもいいけど何回も使わないだろうから取り合えず数値を使う。
-            print("ip : " +  str(ip_name[0]) + "  name : " + ip_name[1])
-
-
-    def wait_participation_command(self):
-        '''
-            クライアントと通信して参加コマンドを受け取る
-            ClientToServerPacketに参加コマンドをセットしてもらったものを受け取る
-            それ以外は受け取らないよ
-            参加プレイヤーのipとnameを含むリストを格納したリストをインスタンス変数として保持する
-        '''
-
-        print("参加プレイヤー受付開始")
-        #################
-        #通信処理
-        #################
-
-        #################
-        #self.ip_name_listの生成
-        #################
-        print("参加プレイヤー受付終了")
+        self.socket_.bind((self.HOST_, self.PORT_))
+        print("bindをしました。")
         
 
+    def listen(self, connect_num):
+        '''
+            接続を待つ。connect_numは接続数
+        '''
+        print("listenを開始します")
+        self.socket_.listen(self.BACKLOG_)
+        print("listenをしました。")
 
-        ip_name_list = [['127.0.0.1',"sawada"],['127.0.0.1',"sunaga"],['127.0.0.1',"nojima"]]
-        #テスト用のコード、上の処理が完成するまではベタ打ちで対応
-        self.ip_name_list_ = ip_name_list
-        print("参加プレイヤーを表示します。")
-        
-        #参加プレイヤ―のipと名前を表示
-        self.show_ip_name_list()
+    def accept(self):
+        '''
+            接続を待ち受ける
+        '''
+        self.conn_, self.addr_ = self.socket_.accept()
 
-class MazeClientSocket(object):
+
+    def recv(self):
+        '''
+            データを受け取る
+        '''
+        if(self.conn_ == None):
+            print("connがないためデータの受信ができません。")
+        else:
+            self.player_command_data_ = self.conn_.recv(self.BUFSIZE_).decode()
+            print(self.addr_,"からデータを受け取りました。")
+            #self.conn_ = None
+            #self.addr_ = None
+            #print("connを消しました。")
+            #print("addrを消しました。")
+
+    def send(self,send_data):
+        '''
+            送信したいデータを入れる
+            Packetクラスでget_send_data()から受け取ったデータを引数に入れる
+        '''
+        self.conn_.send(send_data.encode())
+        print("送信完了")
+
+
+    def transmission(self):
+        '''
+            通信処理をまとめたい
+            ここらへんは勉強不足のため変なコード書くかもだけど許してくれ...
+        '''
+        self.create_socket()
+        self.bind()
+        self.listen(1)
+        self.accept()
+        self.recv()
+        print(self.player_command_data_)
+        self.send("send_data")
+        self.close_socket()
+
+class MazeClientSocketManager(MazeSocketManager):
     '''
         のじま、まかせた
     '''
-    def __init__(self):
-        super().__init__()
+    def __init__(self,HOST,PORT,BACKLOG,BUFSIZE):
+        super().__init__(HOST,PORT,BACKLOG,BUFSIZE)
 
-    pass
+    
+    def connect(self):
+        '''
+            IPアドレスとポートを指定
+            して接続を要求
+        '''
+        if(self.socket_ == None):
+            print("ソケットが生成されていません。")
+        else:
+            self.socket_.connect((self.HOST_, self.PORT_))
+            print("connect完了")
+
+    def recv(self):
+        '''
+            データを受け取る
+        '''
+        if(self.socket_ == None):
+            print("ソケットが生成されていません。")
+        else:
+            self.game_info_data_ = self.socket_.recv(self.BUFSIZE_).decode()
+            print("サーバー側からデータを受け取りました。")
+
+
+    def send(self,send_data):
+        '''
+            送信したいデータを入れる
+            Packetクラスでget_send_data()から受け取ったデータを引数に入れる
+        '''
+        self.socket_.send(send_data.encode())
+        print("送信完了")
+
+    def transmission(self):
+        '''
+            通信処理をまとめたい
+            ここらへんは勉強不足のため変なコード書くかもだけど許してくれ...
+        '''
+        self.create_socket()
+        self.connect()
+        self.send("test_dara")
+        self.recv()
+        self.close_socket()
+
+
+
+
+
+
 

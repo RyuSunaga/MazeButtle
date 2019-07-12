@@ -8,7 +8,7 @@ import config
 from config import JOIN
 from info import PlayerInfo
 from packet import ClientToServerPacket, ServerToClientPacket
-
+from mazesocket import MazeClientSocketManager
 #this is client file
 
 ##############################################################################################################
@@ -89,27 +89,29 @@ class Player():
     #maze = packet.ServerToClientPacket().get_game_info()
 
 
-soc=Socket()
-soc.listen()
+#soc=Socket()
+#soc.listen()
 #soc.send()
 
 
+####################################Socketの使い方参考にして
+HOST = '127.0.0.1'
+PORT = 50000
+BACKLOG = 10
+BUFSIZE = 4096
+ctss = MazeClientSocketManager(HOST,PORT,BACKLOG,BUFSIZE)
+ctss.transmission()
 
-
+############################################
 class MazeClient(object):
 
     def __init__(self):
         self.maze_field_ = None
         self.ctsp_ = None
         self.maze_client_socket_ = None
-        self.game_info_ = None
+        #これはサーバーから受け取ったデータが格納される
+        self.game_info_data = None
         #このクライアントが扱うプレイヤーのidを持つ
         self.player_id_ = None
         self.next_command_ = None
 
-
-
-
-
-
-S
