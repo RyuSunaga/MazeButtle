@@ -126,14 +126,3 @@ class GameManager(object):
         
         #プレイヤー情報を生成
         self.create_player_info()
-
-
-    def get_command(self):
-        pass
-
-    def pass_info(self):
-        pass
-
-    def main(self):
-        pass
-        

@@ -1,8 +1,8 @@
 
 
 from gamemanager import GameManager
-from packet import CLIENT_TO_SERVER_PACKET, SERVER_TO_CLIENT_PACKET 
-from mazesocket import MazeServerSocket
+from packet import ClientToServerPacket, ServerToClientPacket 
+from mazesocket import MazeServerSocketManager
 
 
 
@@ -36,18 +36,23 @@ from mazesocket import MazeServerSocket
 ##############################################################################################################
 
 
+HOST = '127.0.0.1'
+PORT = 50000
+BACKLOG = 10
+BUFSIZE = 4096
 
-class MazeSurver(sobject):
+class MazeServer(sobject):
     '''
         ゲームのサーバー
         須永の集大成
+        この中はきれいにまとめたい
     '''
     
     def __init__(self):
         self.game_manager_ = GameManager()
-        self.server_socket = MazeServerSocket()
-
-
+        self.stcp_ = ServerToClientPacket()
+        self.server_socket_manager = MazeServerSocketManager(HOST,PORT,BACKLOG,BUFSIZE)
+        self.player_command_data = []
 
     def start_up(self):
         '''
