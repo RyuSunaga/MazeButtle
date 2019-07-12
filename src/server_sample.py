@@ -58,11 +58,9 @@ try:
                     #print(type(dic),dic)
                     print(dic)
                     print(dic["PACKET_TYPE"])
-                    ####################################################ARRAY test
                     #print(dic["ARRAY"])
                     #for i in range(len(dic["ARRAY"])):
-                    #    print("test",dic["ARRAY"][i])
-                    ####################################################
+                    #    print("test",dic["ARRAY"])
                     if len(msg) == 0:
                         sock.close()
                         sock_list.remove(sock)

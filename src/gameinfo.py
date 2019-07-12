@@ -32,7 +32,6 @@ class GameInfo(object):
         self.player_info_list_ = None
         self.bullet_info_list_ = None
         self.item_info_list_ = None
-        #self.maze_object_ = Maze()---------------------------------------->通信で送る形式が変わったため必要ない気がする。
 
 
     def inspect_list(self,info_list1, info_list2):
@@ -63,11 +62,19 @@ class GameInfo(object):
     def set_item_info_list(self, item_info_list):
         self.item_info_list_ = item_info_list
 
+    def get_maze(self):
+        return self.maze_
 
-    #def get_maze_object(self):
-    #    '''
-    #        迷路オブジェクトを取得
-    #    '''
-    #    return self.maze_object_
+    def get_turn(self):
+        return self.turn_
+
+    def get_player_info_list(self):
+        return self.player_info_list_
+
+    def get_bullet_info_list(self):
+        return self.bullet_info_list_
+
+    def get_item_info_list(self):
+        return self.item_info_list_
 
 
