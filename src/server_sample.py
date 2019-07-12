@@ -53,11 +53,16 @@ try:
                 try:
                     b_msg = conn.recv(BUFSIZE)
                     msg = b_msg.decode('utf-8')
-                    print('received messege:' + msg)
-                    print(type(msg),msg)
+                    #print('received messege:' + msg)
                     dic=ast.literal_eval(msg)
-                    print(type(dic),dic)
+                    #print(type(dic),dic)
+                    print(dic)
                     print(dic["PACKET_TYPE"])
+                    ####################################################ARRAY test
+                    #print(dic["ARRAY"])
+                    #for i in range(len(dic["ARRAY"])):
+                    #    print("test",dic["ARRAY"][i])
+                    ####################################################
                     if len(msg) == 0:
                         sock.close()
                         sock_list.remove(sock)

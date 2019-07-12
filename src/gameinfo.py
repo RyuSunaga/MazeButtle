@@ -26,12 +26,14 @@ class GameInfo(object):
     #################################
     #Info系オブジェクトはmanagerオブジェクトを使って設定する
     #################################
-    def __init__(self, player_info_list, bullet_info_list, item_info_list,turn):
-        self.player_info_list_ = player_info_list
-        self.bullet_info_list_ = bullet_info_list
-        self.item_info_list_ = item_info_list
-        self.maze_object_ = Maze()
-        self.turn_ = turn
+    def __init__(self):
+        self.maze_ = None
+        self.turn_ = None
+        self.player_info_list_ = None
+        self.bullet_info_list_ = None
+        self.item_info_list_ = None
+        #self.maze_object_ = Maze()---------------------------------------->通信で送る形式が変わったため必要ない気がする。
+
 
     def inspect_list(self,info_list1, info_list2):
         '''
@@ -46,55 +48,26 @@ class GameInfo(object):
         #        return False
         pass
 
-    def set_player_info_list(self, player_info_list):
-        pass
+    def set_maze(self, maze):
+        self.maze_ = maze
 
     def set_turn(self, turn):
         self.turn_ = turn
 
-    def get_turn(self):
-        return self.turn_
+    def set_player_info_list(self, player_info_list):
+        self.player_info_list_ = player_info_list
 
-    def get_maze_object(self):
-        '''
-            迷路オブジェクトを取得
-        '''
-        return self.maze_object_
+    def set_bullet_info_list(self, bullet_info_list):
+        self.bullet_info_list_ = bullet_info_list
 
-    ############################################################################################設計ミスかな...................これってマネージャーの仕事だよね  今回は許して by sunaga
-    def get_player_info(self,player_posi):
-        '''
-          迷路上のプレイヤーの座標から一致するPlayerInfoオブジェクトを返す
-        '''
-        for player_info in self.player_info_list_:
-            if(player_info.get_posi() == player_posi):
-                return player_info
-        return None
+    def set_item_info_list(self, item_info_list):
+        self.item_info_list_ = item_info_list
 
 
-    def get_bullet_info(self,bullet_posi):
-        '''
-           迷路上の弾丸の座標から一致するBulletInfoオブジェクトを返す
-        '''
-        for bullet_info in self.bullet_info_list_:
-            if(bullet_info.get_posi() == bullet_posi):
-                return bullet_info
-        return None
-
-    def get_item_info(self,item_posi):
-        '''
-           迷路上のアイテムの座標から一致するItemInfoオブジェクトを返す
-        '''
-        for item_info in self.item_info_list_:
-            if(item_info.get_posi() == item_posi):
-                return item_info
-        return None
-    ############################################################################################設計ミスかな...................これってマネージャーの仕事だよね  今回は許して by sunaga
-
-
-
-
-
-
+    #def get_maze_object(self):
+    #    '''
+    #        迷路オブジェクトを取得
+    #    '''
+    #    return self.maze_object_
 
 
