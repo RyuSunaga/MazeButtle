@@ -33,7 +33,7 @@ class GameManager(object):
         self.id_list = []
         #ipが同じ可能性があるのでリストに格納する
         self.ip_name_list = []
-        self.maze_object_ = Maze()
+        #self.maze_object_ = Maze()---------------------------------->必要なし
         self.player_info_maneger_ = PlayerInfoManager()
         self.bullet_info_maneger_ = BulletInfoManager()
         self.item_info_manager_ = ItemInfoManager()

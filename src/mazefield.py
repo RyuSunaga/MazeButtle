@@ -37,9 +37,9 @@ class MazeField(object):
 
         ####################################################################配列は文字列から変換させて作るか,,,
         self.game_info_ = {PACKET_TYPE:SERVER_TO_CLIENT_PACKET,
+                           TEXT:"のこり一週間頑張ろう!!!!!",
                            MAZE:MAZE_LIST[1],
                            TURN:5,
-                           TEXT:"のこり一週間頑張ろう!!!!!",
                            PLAYER_HP:5,#これはidを見てこのクラスを保持しているクラスのplayer_idと一致するplayerのhpを入れる
                            PLAYER_INFO_LIST:[{PLAYER_ID:1,PLAYER_NAME:"Gaia",PLAYER_COLOR:RED,POSI:[0,0]},
                                              {PLAYER_ID:2,PLAYER_NAME:"Nojima",PLAYER_COLOR:BLUE,POSI:[9,9]},
@@ -110,6 +110,7 @@ class MazeField(object):
                     canvas.create_oval(hei*60+5,wid*60+5,(hei+1)*60-5,(wid+1)*60-5,fill="red")
                 hei+=1
            wid+=1
+        root.mainloop()
            
     def move_player(self):
           root=tk.Tk()
@@ -134,19 +135,19 @@ class MazeField(object):
           canvas.grid()
           btn1=tk.Button(master=canvas,command=self.up_attack,text="↑",font=("メイリオ","20"),bg="grey",height=100,width=100)
           btn1.place(relx=0.33,rely=0,relwidth=0.33,relheight=0.33)
-          btn2=tk.Button(master=canvas,command=self.right_attack,text="→",font=("メイリオ","20"),bg="grey",height=100,width=100)
+          btn2=tk.Button(master=canvas,command=selfmgame_info.right_attack,text="→",font=("メイリオ","20"),bg="grey",height=100,width=100)
           btn2.place(relx=0.66,rely=0.33,relwidth=0.33,relheight=0.33)
           btn3=tk.Button(master=canvas,command=self.left_attack,text="←",font=("メイリオ","20"),bg="grey",height=100,width=100)
           btn3.place(relx=0,rely=0.33,relwidth=0.33,relheight=0.33)
           btn4=tk.Button(master=canvas,command=self.down_attack,text="↓",font=("メイリオ","20"),bg="grey",height=100,width=100)
           btn4.place(relx=0.33,rely=0.66,relwidth=0.33,relheight=0.33)
           canvas.create_rectangle(100,100,200,200,fill="grey")
+
           
 mf = MazeField("1",1)      
-#mf.move_player()
-#mf.attack_player()
+mf.move_player()
+mf.attack_player()
 mf.create_maze(MAZE_LIST[1])
-root.mainloop()
-
+#mf.root.mainloop()
 
 

@@ -8,8 +8,11 @@ from config import MOVE, ATTACK
 from config import RIGHT_MOVE, LEFT_MOVE, UP_MOVE, DOWN_MOVE
 from config import RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, DOWN_ATTACK
 from config import CREATE_BULLET
+from config import OBJECT_INFO, PLAYER_INFO, BULLET_INFO, ITEM_INFO
 from config import get_direct_str
 from config import PLAYER_INFO, BULLET_INFO, ITEM_INFO
+from config import PACKET_TYPE, PLAYER_ID, PLAYER_NAME, PLAYER_COLOR, PLAYER_HP, POSI,MAZE, PLAYER_INFO_LIST, BULLET_INFO_LIST, ITEM_INFO_LIST, TURN,TEXT,NEXT_COMMAND
+
 
 #################################     メモ     #######################################################
 
@@ -74,7 +77,7 @@ class PlayerInfo(ObjectInfo):
         super().__init__(id, posi)
 
         self.object_type_ = PLAYER_INFO
-        self.name_ = None
+        self.name_ = name
         self.color_ = color
         self.hp_ = 10
         #self.posi_ = [None,None]
@@ -164,8 +167,20 @@ class PlayerInfo(ObjectInfo):
     def get_next_coomand_type(self):
         return self.next_command_type_
 
-    def get_next_coomand_direct(self):
+    def get_next_command_direct(self):
         return self.next_command_direct_
+
+    def get_dict_send_data(self):
+        '''
+            PlayerInfoを通信で使える形に変更する(辞書型) -> 文字列じゃない!!!!
+        '''
+        send_player_data = {}
+        send_player_data[PLAYER_ID] = self.id_
+        send_player_data[PLAYER_NAME] = self.name_
+        send_player_data[PLAYER_COLOR] = self.color_
+        send_player_data[POSI] = self.posi_
+        print("PlayerInfoの通信用データを生成しました。")
+        return send_player_data
 
     ##########################################ここまでプレイヤー情報を設定するための関数##############################################
         
@@ -266,11 +281,11 @@ class BulletInfo(ObjectInfo):
 
         self.object_type_ = BULLET_INFO
         #プレイヤーの位置情報を取得
-        player_posi = player_info().get_posi()
+        player_posi = player_info.get_posi()
         #コマンドが飛んでいく方向をベクトルで表している
-        self.direct_ = player_info().get_command()
+        self.direct_ = player_info.get_next_command_direct()
         self.parent_id_ = player_info.get_id()
-        self.posi_ = [player_posi[X]+direct[X], player_posi[Y]+direct[Y]]
+        self.posi_ = [player_posi[X]+self.direct_[X], player_posi[Y]+self.direct_[Y]]
         self.power_ = player_info.get_power()
         self.speed_ = player_info.get_speed()
 
@@ -300,6 +315,16 @@ class BulletInfo(ObjectInfo):
 
     def get_speed(self):
         return self.speed_
+
+    def get_dict_send_data(self):
+        '''
+            PlayerInfoを通信で使える形に変更する(辞書型) -> 文字列じゃない!!!!
+        '''
+        send_bullet_data = {}
+        send_bullet_data[POSI] = self.posi_
+        print("BulletInfoの通信用データを生成しました。")
+        return send_bullet_data
+
 
     def show_info(self):
         '''

@@ -12,6 +12,15 @@ from config import OBJECT_INFO_MANAGER, PLAYER_INFO_MANAGER, BULLET_INFO_MANAGER
 from info import PlayerInfo
 from info import BulletInfo
 
+#########################################################################################################
+
+
+#使わない
+
+
+#########################################################################################################
+
+
 
 class Maze(object):
     '''

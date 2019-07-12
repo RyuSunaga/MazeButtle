@@ -7,6 +7,8 @@ import packet
 import config
 from config import JOIN
 from info import PlayerInfo
+from packet import ClientToServerPacket, ServerToClientPacket
+
 #this is client file
 
 ##############################################################################################################
@@ -36,11 +38,13 @@ class Socket(object):
 
     #プレイヤー情報送信
     def send(self):
-        ctsp = packet.ClientToServerPacket()
+        ctsp = ClientToServerPacket()
         ctsp.set_next_command(JOIN)
         ctsp.set_player_id(114514)
-        data = ctsp.get_str_data()
-        self.sock.send(data.encode())
+        ctsp.set_text("クライアントからサーバーへの送信テスト")
+        send_data = ctsp.get_send_data()
+        self.sock.send(send_data.encode())
+        print("送信完了")
 
     #プレイヤー情報受信
     def listen(self):
@@ -81,8 +85,8 @@ class Player():
         self.player_command=config.JOIN
 
 #Mazeオブジェクト受け取り必要情報取得
-class MazeField():
-    maze = packet.ServerToClientPacket().get_game_info()
+#class MazeField():
+    #maze = packet.ServerToClientPacket().get_game_info()
 
 
 soc=Socket()
