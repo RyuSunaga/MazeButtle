@@ -25,7 +25,7 @@ class MazeField(object):
         一言でいうとUIと中身のつなぎこみを行うクラス。
     '''
     
-    def __init__(self,text, game_info):
+    def __init__(self,text, game_info_data):
         '''
             
         '''
@@ -36,17 +36,17 @@ class MazeField(object):
         #変わるのは中身だけだから一回つくれれば使いまわせるよ
 
         ####################################################################配列は文字列から変換させて作るか,,,
-        self.game_info_ = {PACKET_TYPE:SERVER_TO_CLIENT_PACKET,
-                           TEXT:"のこり一週間頑張ろう!!!!!",
-                           MAZE:MAZE_LIST[1],
-                           TURN:5,
-                           PLAYER_HP:5,#これはidを見てこのクラスを保持しているクラスのplayer_idと一致するplayerのhpを入れる
-                           PLAYER_INFO_LIST:[{PLAYER_ID:1,PLAYER_NAME:"Gaia",PLAYER_COLOR:RED,POSI:[0,0]},
-                                             {PLAYER_ID:2,PLAYER_NAME:"Nojima",PLAYER_COLOR:BLUE,POSI:[9,9]},
-                                             {PLAYER_ID:3,PLAYER_NAME:"Sunaga",PLAYER_COLOR:YELLOW,POSI:[0,9]}],
-                           BULLET_INFO_LIST:[{POSI:[0,2]},{POSI:[4,9]},{POSI:[8,1]},{POSI:[9,6]}],
-                           ITEM_INFO_LIST:[]
-                          }
+        self.game_info_data_ = {PACKET_TYPE:SERVER_TO_CLIENT_PACKET,
+                                TEXT:"のこり一週間頑張ろう!!!!!",
+                                MAZE:MAZE_LIST[1],
+                                TURN:5,
+                                PLAYER_HP:5,#これはidを見てこのクラスを保持しているクラスのplayer_idと一致するplayerのhpを入れる
+                                PLAYER_INFO_LIST:[{PLAYER_ID:1,PLAYER_NAME:"Gaia",PLAYER_COLOR:RED,POSI:[0,0]},
+                                                  {PLAYER_ID:2,PLAYER_NAME:"Nojima",PLAYER_COLOR:BLUE,POSI:[9,9]},
+                                                  {PLAYER_ID:3,PLAYER_NAME:"Sunaga",PLAYER_COLOR:YELLOW,POSI:[0,9]}],
+                                BULLET_INFO_LIST:[{POSI:[0,2]},{POSI:[4,9]},{POSI:[8,1]},{POSI:[9,6]}],
+                                ITEM_INFO_LIST:[]
+                                }
 
     #########################################################################################ここから下、ガイアが作った関数コピペしたからうまく動かないかも。
     def up_move(self):
