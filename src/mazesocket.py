@@ -171,7 +171,7 @@ class MazeClientSocketManager(MazeSocketManager):
     '''
     def __init__(self,HOST,PORT,BACKLOG,BUFSIZE):
         super().__init__(HOST,PORT,BACKLOG,BUFSIZE)
-
+        self.send_data = None
     
     def connect(self):
         '''
@@ -195,13 +195,20 @@ class MazeClientSocketManager(MazeSocketManager):
             print("サーバー側からデータを受け取りました。")
 
 
-    def send(self,send_data):
+    def send(self):
         '''
             送信したいデータを入れる
             Packetクラスでget_send_data()から受け取ったデータを引数に入れる
         '''
-        self.socket_.send(send_data.encode())
+        self.socket_.send(self.send_data.encode())
         print("送信完了")
+
+    def set_send_data(self,send_data):
+        '''
+            サーバー側に送りたい情報をセットする
+        '''
+        self.send_data = send_data
+        print("情報セット完了")
 
     def transmission(self):
         '''

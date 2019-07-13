@@ -100,6 +100,7 @@ PORT = 50000
 BACKLOG = 10
 BUFSIZE = 4096
 ctss = MazeClientSocketManager(HOST,PORT,BACKLOG,BUFSIZE)
+ctss.set_send_data("送りたい情報")
 ctss.transmission()
 
 ############################################
