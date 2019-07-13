@@ -116,7 +116,7 @@ class ServerToClientPacket(Packet):
         self.player_hp_ = None
         print("PacketにPlayer HPが設定されました。")
 
-        
+
     def set_dict_player_info_list(self):
         if(self.game_info_ == None):
             print("GameInfoが設定されていません")
@@ -145,7 +145,7 @@ class ServerToClientPacket(Packet):
             self.dict_item_info_list_ = []
             print("PacketにItemInfoListが設定されました。")
 
-            
+
     def set_text(self,text):
         self.text_ = text
         print("Packetにtextが設定されました。")
@@ -210,7 +210,7 @@ class ClientToServerPacket(Packet):
 
     def get_player_id(self):
         return self.player_id_
-    
+
 
     def info_to_dict(self):
         '''
@@ -221,7 +221,7 @@ class ClientToServerPacket(Packet):
         self.dict_client_to_server_data[PACKET_TYPE] = self.packet_type_
         self.dict_client_to_server_data[NEXT_COMMAND] = self.next_command_
         self.dict_client_to_server_data[PLAYER_ID] = self.player_id_
-        self.dict_client_to_server_data[TEXT] = self.text_
+        #self.dict_client_to_server_data[TEXT] = self.text_
         self.str_client_to_server_data = str(self.dict_client_to_server_data)
         print("サーバー側に送る情報を生成しました。")
 

@@ -125,13 +125,6 @@ class MazeClient(object):
 
     def get_maze_field(self):
         return self.maze_field_
-    '''
-    #迷路呼び出し
-    def call_maze(self):
-        self.maze_field_.move_player()
-        self.maze_field_.attack_player()
-        self.maze_field_.create_maze(self.maze_field_)
-    '''
 
     def send(self):
         self.maze_client_socket_manager_.set_send_data(
@@ -142,7 +135,6 @@ class MazeClient(object):
 #以下本処理
 
 mazeclient = MazeClient(HOST,PORT,BACKLOG,BUFSIZE)
-maze_object=mazefield.MazeField(mazeclient.set_text(),mazeclient.get_game_info_data())
 #mazeclient.listen()
 
 mazeclient.set_player_id()
@@ -150,6 +142,8 @@ mazeclient.set_player_hp()
 mazeclient.set_maze_field()
 mazeclient.set_player_info_list()
 mazeclient.set_bullet_info_list_()
+
+maze_object=mazefield.MazeField(mazeclient.set_text(),mazeclient.get_game_info_data())
 
 maze_object.move_player()
 maze_object.attack_player()

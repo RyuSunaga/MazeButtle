@@ -9,9 +9,8 @@ from config import RED, BLUE, GREEN, YELLOW
 from config import PACKET_TYPE, PLAYER_ID, PLAYER_NAME, PLAYER_COLOR, PLAYER_HP, POSI,MAZE, PLAYER_INFO_LIST, BULLET_INFO_LIST, ITEM_INFO_LIST, TURN,TEXT
 #from maze import Maze
 import packet
-from packet import ClientToServerPacket, ServerToClientPacket
+import mazesocket
 from mazesocket import MazeClientSocketManager
-import threading
 #############################################################################
 
 #ガイア　こっから本番だべ頼んだ by sunaga
@@ -68,45 +67,101 @@ class MazeField(object):
                                 )
     #########################################################################################ここから下、ガイアが作った関数コピペしたからうまく動かないかも。
 
+    def after(self):
+        mc=MazeClient.MazeClient(self.HOST_,self.PORT_,self.BACKLOG_,self.BUFSIZE_)
+        mc.set_player_id()
+        mc.set_player_hp()
+        mc.set_maze_field()
+        mc.set_player_info_list()
+        mc.set_bullet_info_list_()
+
     def up_move(self):
         print("up")
-        packet.ClientToServerPacket().set_next_command(UP_MOVE)
+        ctsp=packet.ClientToServerPacket()
+        ctsp.set_next_command(UP_MOVE)
+        #募集：PLAYER_IDの求め方
+        #ctsp.set_player_id(self.game_info_data_[PLAYER_ID])
+        ctsp.get_send_data()
+        ctsp.mazesocket.MazeClientSockrtManager().transmission()
+        self.after()
         return UP_MOVE
 
 
     def left_move(self):
         print("left")
-        packet.ClientToServerPacket().set_next_command(LEFT_MOVE)
+        ctsp = packet.ClientToServerPacket()
+        ctsp.set_next_command(LEFT_MOVE)
+        ctsp.set_player_id(self.game_info_data_[PLAYER_ID])
+        mcsm=mazesocket.MazeClientSocketManager(self.HOST_,self.PORT_,self.BACKLOG_,self.BUFSIZE_)
+        mcsm.set_send_data(ctsp)
+        mcsm.transmission()
+        self.after()
         return LEFT_MOVE
 
     def right_move(self):
         print("right")
-        packet.ClientToServerPacket().set_next_command(RIGHT_MOVE)
+        ctsp=packet.ClientToServerPacket()
+        ctsp.set_next_command(RIGHT_MOVE)
+        ctsp.set_player_id(self.game_info_data_[PLAYER_ID])
+        mcsm=mazesocket.MazeClientSocketManager(self.HOST_,self.PORT_,self.BACKLOG_,self.BUFSIZE_)
+        mcsm.set_send_data(ctsp)
+        mcsm.transmission()
+        self.after()
         return RIGHT_MOVE
 
     def down_move(self):
         print("down")
-        packet.ClientToServerPacket().set_next_command(DOWN_MOVE)
+        ctsp=packet.ClientToServerPacket()
+        ctsp.set_next_command(DOWN_MOVE)
+        ctsp.set_player_id(self.game_info_data_[PLAYER_ID])
+        mcsm=mazesocket.MazeClientSocketManager(self.HOST_,self.PORT_,self.BACKLOG_,self.BUFSIZE_)
+        mcsm.set_send_data(ctsp)
+        mcsm.transmission()
+        self.after()
         return DOWN_MOVE
 
     def up_attack(self):
         print("up")
-        packet.ClientToServerPacket().set_next_command(UP_ATTACK)
+        ctsp = packet.ClientToServerPacket()
+        ctsp.set_next_command(UP_ATTACK)
+        ctsp.set_player_id(self.game_info_data_[PLAYER_ID])
+        mcsm=mazesocket.MazeClientSocketManager(self.HOST_,self.PORT_,self.BACKLOG_,self.BUFSIZE_)
+        mcsm.set_send_data(ctsp)
+        mcsm.transmission()
+        self.after()
         return UP_ATTACK
 
     def left_attack(self):
         print("left")
-        packet.ClientToServerPacket().set_next_command(LEFT_ATTACK)
+        ctsp=packet.ClientToServerPacket()
+        ctsp.set_next_command(LEFT_ATTACK)
+        ctsp.set_player_id(self.game_info_data_[PLAYER_ID])
+        mcsm=mazesocket.MazeClientSocketManager(self.HOST_,self.PORT_,self.BACKLOG_,self.BUFSIZE_)
+        mcsm.set_send_data(ctsp)
+        mcsm.transmission()
+        self.after()
         return LEFT_ATTACK
 
     def right_attack(self):
         print("right")
-        packet.ClientToServerPacket().set_next_command(RIGHT_ATTACK)
+        ctsp=packet.ClientToServerPacket()
+        ctsp.set_next_command(RIGHT_ATTACK)
+        ctsp.set_player_id(self.game_info_data_[PLAYER_ID])
+        mcsm=mazesocket.MazeClientSocketManager(self.HOST_,self.PORT_,self.BACKLOG_,self.BUFSIZE_)
+        mcsm.set_send_data(ctsp)
+        mcsm.transmission()
+        self.after()
         return RIGHT_ATTACK
 
     def down_attack(self):
         print("down")
-        packet.ClientToServerPacket().set_next_command(DOWN_ATTACK)
+        ctsp=packet.ClientToServerPacket()
+        ctsp.set_next_command(DOWN_ATTACK)
+        ctsp.set_player_id(self.game_info_data_[PLAYER_ID])
+        mcsm=mazesocket.MazeClientSocketManager(self.HOST_,self.PORT_,self.BACKLOG_,self.BUFSIZE_)
+        mcsm.set_send_data(ctsp)
+        mcsm.transmission()
+        self.after()
         return DOWN_ATTACK
 
     def create_maze(self,maze):
@@ -169,7 +224,6 @@ class MazeField(object):
           btn4=tk.Button(master=canvas,command=self.down_attack,text="↓",font=("メイリオ","20"),bg="grey",height=100,width=100)
           btn4.place(relx=0.33,rely=0.66,relwidth=0.33,relheight=0.33)
           canvas.create_rectangle(100,100,200,200,fill="grey")
-
 
 
 '''
