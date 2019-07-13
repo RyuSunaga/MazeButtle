@@ -123,6 +123,8 @@ class MazeClient(object):
     def get_player_id(self):
         packet.ClientToServerPacket().set_player_id(self.player_id_)
 
+    def get_maze_field(self):
+        return self.maze_field_
     '''
     #迷路呼び出し
     def call_maze(self):
@@ -151,4 +153,4 @@ mazeclient.set_bullet_info_list_()
 
 maze_object.move_player()
 maze_object.attack_player()
-maze_object.create_maze([])
+maze_object.create_maze(mazeclient.get_maze_field())
