@@ -8,7 +8,6 @@ from info import PlayerInfo
 from packet import ClientToServerPacket, ServerToClientPacket
 from mazesocket import MazeClientSocketManager
 import mazefield
-import tkinter as tk
 
 ########################################################
 #テストのため
@@ -93,14 +92,11 @@ class MazeClient(object):
             mcsm.socket_.close()
             print("サーバとの通信終了")
 
-    #迷路呼び出し
-    def call_maze(self):
-        self.maze_field_ = mazefield.MazeField("text", self.game_info_data_)
-        root = tk.Tk()
-        self.maze_field_.move_player()
-        self.maze_field_.attack_player()
-        self.maze_field_.create_maze(self.game_info_data_[MAZE])
-        root.mainloop()
+    def set_maze_field(self):
+        '''
+        maze_field_をセット
+        '''
+        self.maze_field_=mazefield.MazeField("text", self.game_info_data_)
 
     def set_player_id(self):
         '''
@@ -125,6 +121,8 @@ class MazeClient(object):
         self.ctsp_.set_player_id(self.get_playe_id)
         self.ctsp_.set_next_command(self.get_next_command)
 
+    def get_maze_field(self):
+        return self.maze_field_
 
     def get_next_command(self):
         '''
@@ -138,6 +136,12 @@ class MazeClient(object):
         '''
         return self.player_id_
 
+    #迷路呼び出し
+    def call_maze(self):
+        self.maze_field_.move_player()
+        self.maze_field_.attack_player()
+        self.maze_field_.create_maze(self.game_info_data_[MAZE])
+
     def send(self):
         self.maze_client_socket_manager_.set_send_data(
             self.ctsp_)
@@ -145,21 +149,21 @@ class MazeClient(object):
 
     #tkinterで推したボタンに対応する定数をnext_command_にセットする
     def convert_command(self):
-        if self.maze_field_.move_player().up_move()==UP_MOVE:
+        if self.maze_field_==UP_MOVE:
             self.set_next_command(UP_MOVE)
-        if self.maze_field_.move_player() == DOWN_MOVE:
+        if self.maze_field_ == DOWN_MOVE:
             self.set_next_command(DOWN_MOVE)
-        if self.maze_field_.move_player()==RIGHT_MOVE:
+        if self.maze_field_==RIGHT_MOVE:
             self.set_next_command(RIGHT_MOVE)
-        if self.maze_field_.move_player()==LEFT_MOVE:
+        if self.maze_field_==LEFT_MOVE:
             self.set_next_command(LEFT_MOVE)
-        if self.maze_field_.attack_player() == UP_ATTACK:
+        if self.maze_field_== UP_ATTACK:
             self.set_next_command(UP_ATTACK)
-        if self.maze_field_.attack_player() == DOWN_ATTACK:
+        if self.maze_field_== DOWN_ATTACK:
             self.set_next_command(DOWN_ATTACK)
-        if self.maze_field_.attack_player() == RIGHT_ATTACK:
+        if self.maze_field_== RIGHT_ATTACK:
             self.set_next_command(RIGHT_ATTACK)
-        if self.maze_field_.attack_player() == LEFT_ATTACK:
+        if self.maze_field_== LEFT_ATTACK:
             self.set_next_command(LEFT_ATTACK)
 
     def convert_up_move(self):
@@ -168,8 +172,11 @@ class MazeClient(object):
 
 
 mazeclient = MazeClient(HOST,PORT,BACKLOG,BUFSIZE)
+mazeclient.set_maze_field()
+mazeclient.get_maze_field()
 
-thrd=threading.Thread(target=mazeclient.convert_command)
+
+thrd=threading.Thread(target=mazeclient.convert_command())
 thrd.start()
 
 mazeclient.call_maze()
