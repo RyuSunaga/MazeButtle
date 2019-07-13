@@ -9,7 +9,6 @@ from config import RED, BLUE, GREEN, YELLOW
 from config import PACKET_TYPE, PLAYER_ID, PLAYER_NAME, PLAYER_COLOR, PLAYER_HP, POSI,MAZE, PLAYER_INFO_LIST, BULLET_INFO_LIST, ITEM_INFO_LIST, TURN,TEXT
 #from maze import Maze
 
-
 #############################################################################
 
 #ガイア　こっから本番だべ頼んだ by sunaga
@@ -52,6 +51,7 @@ class MazeField(object):
     def up_move(self):
         print("up")
         return UP_MOVE
+
 
     def left_move(self):
         print("left")
@@ -135,7 +135,7 @@ class MazeField(object):
           canvas.grid()
           btn1=tk.Button(master=canvas,command=self.up_attack,text="↑",font=("メイリオ","20"),bg="grey",height=100,width=100)
           btn1.place(relx=0.33,rely=0,relwidth=0.33,relheight=0.33)
-          btn2=tk.Button(master=canvas,command=selfmgame_info.right_attack,text="→",font=("メイリオ","20"),bg="grey",height=100,width=100)
+          btn2=tk.Button(master=canvas,command=self.right_attack,text="→",font=("メイリオ","20"),bg="grey",height=100,width=100)
           btn2.place(relx=0.66,rely=0.33,relwidth=0.33,relheight=0.33)
           btn3=tk.Button(master=canvas,command=self.left_attack,text="←",font=("メイリオ","20"),bg="grey",height=100,width=100)
           btn3.place(relx=0,rely=0.33,relwidth=0.33,relheight=0.33)
@@ -143,11 +143,11 @@ class MazeField(object):
           btn4.place(relx=0.33,rely=0.66,relwidth=0.33,relheight=0.33)
           canvas.create_rectangle(100,100,200,200,fill="grey")
 
-
+'''
 mf = MazeField("1",1)
+root = tk.Tk()
 mf.move_player()
 mf.attack_player()
 mf.create_maze(MAZE_LIST[1])
-#mf.root.mainloop()
-
-
+root.mainloop()
+'''

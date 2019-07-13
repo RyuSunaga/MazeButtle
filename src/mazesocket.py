@@ -72,7 +72,7 @@ class MazeSocketManager(object):
     def create_socket(self):
         '''
             socktを生成
-            閉じるのを忘れるなよ 
+            閉じるのを忘れるなよ
         '''
         self.socket_ = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         print("ソケットを生成しました。")
@@ -96,7 +96,7 @@ class MazeSocketManager(object):
 
 
 class MazeServerSocketManager(MazeSocketManager):
-    
+
 
     def __init__(self,HOST,PORT,BACKLOG,BUFSIZE):
         super().__init__(HOST,PORT,BACKLOG,BUFSIZE)
@@ -104,14 +104,14 @@ class MazeServerSocketManager(MazeSocketManager):
         #この二つ辞書にした方がいいのかもね
         self.conn_ = None
         self.addr_ = None
-    
+
     def bind(self):
         '''
             接続待ちをするIPアドレスとポート番号を指定
         '''
         self.socket_.bind((self.HOST_, self.PORT_))
         print("bindをしました。")
-        
+
 
     def listen(self, connect_num):
         '''
@@ -172,7 +172,7 @@ class MazeClientSocketManager(MazeSocketManager):
     def __init__(self,HOST,PORT,BACKLOG,BUFSIZE):
         super().__init__(HOST,PORT,BACKLOG,BUFSIZE)
         self.send_data = None
-    
+
     def connect(self):
         '''
             IPアドレスとポートを指定
@@ -217,7 +217,7 @@ class MazeClientSocketManager(MazeSocketManager):
         '''
         self.create_socket()
         self.connect()
-        self.send("test_dara")
+        self.send()
         self.recv()
         self.close_socket()
 
