@@ -8,7 +8,7 @@ from config import SERVER_TO_CLIENT_PACKET
 from config import RED, BLUE, GREEN, YELLOW
 from config import PACKET_TYPE, PLAYER_ID, PLAYER_NAME, PLAYER_COLOR, PLAYER_HP, POSI,MAZE, PLAYER_INFO_LIST, BULLET_INFO_LIST, ITEM_INFO_LIST, TURN,TEXT
 #from maze import Maze
-
+import packet
 #############################################################################
 
 #ガイア　こっから本番だべ頼んだ by sunaga
@@ -50,6 +50,7 @@ class MazeField(object):
     #########################################################################################ここから下、ガイアが作った関数コピペしたからうまく動かないかも。
     def up_move(self):
         print("up")
+        packet.ClientToServerPacket().set_next_command(UP_MOVE)
         return UP_MOVE
 
 
