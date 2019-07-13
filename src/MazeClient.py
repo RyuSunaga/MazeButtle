@@ -105,13 +105,18 @@ ctss.transmission()
 ############################################
 class MazeClient(object):
 
-    def __init__(self):
+    def __init__(self,HOST,PORT,BACKLOG,BUFSIZE):
+        self.HOST_ = HOST
+        self.PORT_ = PORT
+        self.BACKLOG_ = BACKLOG
+        self.BUFSIZE_ = BUFSIZE 
         self.maze_field_ = None
         self.ctsp_ = None
-        self.maze_client_socket_ = None
+        self.maze_client_socket_manager_ = MazeClientSocketManager()
         #これはサーバーから受け取ったデータが格納される
         self.game_info_data = None
         #このクライアントが扱うプレイヤーのidを持つ
         self.player_id_ = None
         self.next_command_ = None
 
+mazeclient = MazeClient(HOST,PORT,BACKLOG,BUFSIZE)
