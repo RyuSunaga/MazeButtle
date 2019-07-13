@@ -9,6 +9,9 @@ from config import RED, BLUE, GREEN, YELLOW
 from config import PACKET_TYPE, PLAYER_ID, PLAYER_NAME, PLAYER_COLOR, PLAYER_HP, POSI,MAZE, PLAYER_INFO_LIST, BULLET_INFO_LIST, ITEM_INFO_LIST, TURN,TEXT
 #from maze import Maze
 import packet
+from packet import ClientToServerPacket, ServerToClientPacket
+from mazesocket import MazeClientSocketManager
+import threading
 #############################################################################
 
 #ガイア　こっから本番だべ頼んだ by sunaga
@@ -16,7 +19,10 @@ import packet
 #############################################################################
 
 
-
+HOST = '127.0.0.1'
+PORT = 50000
+BACKLOG = 10
+BUFSIZE = 4096
 class MazeField(object):
     '''
         MazeClientオブジェクトが保持するクラス。
@@ -47,7 +53,21 @@ class MazeField(object):
                                 ITEM_INFO_LIST:[]
                                 }
 
+        self.next_command_=None
+
+        self.HOST_ = HOST
+        self.PORT_ = PORT
+        self.BACKLOG_ = BACKLOG
+        self.BUFSIZE_ = BUFSIZE
+        self.ctsp_ = None
+        self.maze_client_socket_manager_ = MazeClientSocketManager(
+                                self.HOST_,
+                                self.PORT_,
+                                self.BACKLOG_,
+                                self.BUFSIZE_
+                                )
     #########################################################################################ここから下、ガイアが作った関数コピペしたからうまく動かないかも。
+
     def up_move(self):
         print("up")
         packet.ClientToServerPacket().set_next_command(UP_MOVE)
@@ -56,30 +76,37 @@ class MazeField(object):
 
     def left_move(self):
         print("left")
+        packet.ClientToServerPacket().set_next_command(LEFT_MOVE)
         return LEFT_MOVE
 
     def right_move(self):
         print("right")
+        packet.ClientToServerPacket().set_next_command(RIGHT_MOVE)
         return RIGHT_MOVE
 
     def down_move(self):
         print("down")
+        packet.ClientToServerPacket().set_next_command(DOWN_MOVE)
         return DOWN_MOVE
 
     def up_attack(self):
         print("up")
+        packet.ClientToServerPacket().set_next_command(UP_ATTACK)
         return UP_ATTACK
 
     def left_attack(self):
         print("left")
+        packet.ClientToServerPacket().set_next_command(LEFT_ATTACK)
         return LEFT_ATTACK
 
     def right_attack(self):
         print("right")
+        packet.ClientToServerPacket().set_next_command(RIGHT_ATTACK)
         return RIGHT_ATTACK
 
     def down_attack(self):
         print("down")
+        packet.ClientToServerPacket().set_next_command(DOWN_ATTACK)
         return DOWN_ATTACK
 
     def create_maze(self,maze):
@@ -128,7 +155,6 @@ class MazeField(object):
           btn4.place(relx=0.33,rely=0.66,relwidth=0.33,relheight=0.33)
           canvas.create_rectangle(100,100,200,200,fill="grey")
 
-
     def attack_player(self):
           root=tk.Tk()
           root.title("攻撃コマンド")
@@ -143,6 +169,8 @@ class MazeField(object):
           btn4=tk.Button(master=canvas,command=self.down_attack,text="↓",font=("メイリオ","20"),bg="grey",height=100,width=100)
           btn4.place(relx=0.33,rely=0.66,relwidth=0.33,relheight=0.33)
           canvas.create_rectangle(100,100,200,200,fill="grey")
+
+
 
 '''
 mf = MazeField("1",1)

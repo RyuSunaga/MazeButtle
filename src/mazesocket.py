@@ -193,6 +193,7 @@ class MazeClientSocketManager(MazeSocketManager):
         else:
             self.game_info_data_ = self.socket_.recv(self.BUFSIZE_).decode()
             print("サーバー側からデータを受け取りました。")
+            return self.game_info_data_
 
 
     def send(self):
@@ -221,6 +222,13 @@ class MazeClientSocketManager(MazeSocketManager):
         self.recv()
         self.close_socket()
 
+    def create_socket_2(self):
+        '''
+            socktを生成
+            閉じるのを忘れるなよ
+        '''
+        print("ソケットを生成した。")
+        return socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 
 
