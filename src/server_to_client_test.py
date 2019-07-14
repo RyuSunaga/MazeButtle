@@ -68,11 +68,20 @@ maze = MAZE_LIST[1]
 turn = 1
 
 player_info1 = PlayerInfo(1,"Gaia",RED,[0,0])
-player_info1.prepare_next_command(RIGHT_ATTACK)
+#player_info1.prepare_next_command(RIGHT_ATTACK)
+player_info1.prepare_next_command(LEFT_MOVE)
+player_info1.update_posi()
+
 player_info2 = PlayerInfo(2,"Nojima",BLUE,[9,9])
-player_info2.prepare_next_command(UP_ATTACK)
+#player_info2.prepare_next_command(UP_ATTACK)
+player_info2.prepare_next_command(UP_MOVE)
+player_info2.update_posi()
+
 player_info3 = PlayerInfo(3,"Sunaga",YELLOW,[0,9])
-player_info3.prepare_next_command(DOWN_ATTACK)
+#player_info3.prepare_next_command(DOWN_ATTACK)
+player_info3.prepare_next_command(DOWN_MOVE)
+player_info3.update_posi()
+
 player_info_list = [player_info1, player_info2, player_info3]
 
 bullet_info1 = BulletInfo(10,player_info1)

@@ -1,6 +1,7 @@
 
 import info
-from config import PACKET_TYPE, PLAYER_ID, PLAYER_NAME, PLAYER_COLOR, PLAYER_HP, POSI,MAZE, PLAYER_INFO_LIST, BULLET_INFO_LIST, ITEM_INFO_LIST, TURN,TEXT,NEXT_COMMAND
+from config import HOST,PORT
+from config import PACKET_TYPE, PLAYER_ID, PLAYER_NAME, PLAYER_COLOR, PLAYER_HP, PLAYER_POSI,BULLET_POSI,MAZE, PLAYER_INFO_LIST, BULLET_INFO_LIST, ITEM_INFO_LIST, TURN,TEXT,NEXT_COMMAND
 from info import ObjectInfo, PlayerInfo, BulletInfo, ItemInfo
 from gameinfo import GameInfo
 from config import PACKET, SERVER_TO_CLIENT_PACKET, CLIENT_TO_SERVER_PACKET
@@ -188,10 +189,14 @@ class ClientToServerPacket(Packet):
         self.next_command_ = None
         #クライアントが担当しているプレイヤーのidを保持するインスタンス変数 -> これがないと設定されたコマンドが誰の行動かわからなくなる。
         self.player_id_ = None
+        self.player_name_ = None
         self.dict_client_to_server_data = {PACKET_TYPE:None,
+                                           IP:None,
+                                           PORT:None,
                                            TEXT:None,
                                            NEXT_COMMAND:None,
-                                           PLAYER_ID:None}
+                                           PLAYER_ID:None,
+                                           PLAYER_NAME:None}
         self.str_client_to_server_data = None
 
         print(self.packet_type_,"生成完了")
@@ -205,12 +210,17 @@ class ClientToServerPacket(Packet):
     def set_player_id(self,player_id):
         self.player_id_ = player_id
 
+    def set_player_name(self,player_name):
+        self.player_name_ = player_name
+
     def get_next_command(self):
         return self.get_next_command
 
     def get_player_id(self):
         return self.player_id_
     
+    def get_player_name(self):
+        return self.player_name_
 
     def info_to_dict(self):
         '''
@@ -219,8 +229,13 @@ class ClientToServerPacket(Packet):
         '''
         print("サーバー側に送る情報を生成します。")
         self.dict_client_to_server_data[PACKET_TYPE] = self.packet_type_
+        ############とりあえずベタ打ち####################
+        self.dict_client_to_server_data[IP] = "127.0.0.1"
+        self.dict_client_to_server_data[PORT] = 50000
+        ##################################################
         self.dict_client_to_server_data[NEXT_COMMAND] = self.next_command_
         self.dict_client_to_server_data[PLAYER_ID] = self.player_id_
+        self.dict_client_to_server_data[PLAYER_NAME] = self.player_mame_
         self.dict_client_to_server_data[TEXT] = self.text_
         self.str_client_to_server_data = str(self.dict_client_to_server_data)
         print("サーバー側に送る情報を生成しました。")
