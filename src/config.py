@@ -79,8 +79,8 @@ Y = 1
 ############################# 方向定義 ##########################
 RIGHT  = (1,0)
 LEFT   = (-1,0)
-UP     = (0,1)
-DOWN   = (0,-1)
+UP     = (0,-1)
+DOWN   = (0,1)
 ############################# 方向定義 ##########################
 
 
@@ -124,13 +124,13 @@ def get_direct_str(COMMAND):
     '''
         与えられたコマンドに対応する方向を文字列で返す
     '''
-    if(COMMAND == (1,0)):
+    if(COMMAND ==  RIGHT):
         return "RIGHT"
-    elif(COMMAND == (-1,0)):
+    elif(COMMAND == LEFT):
         return "LEFT"
-    elif(COMMAND == (0,1)):
+    elif(COMMAND == UP):
         return "UP"
-    elif(COMMAND == (0,-1)):
+    elif(COMMAND == DOWN):
         return "DOWN"
     else:
         return None
@@ -179,7 +179,8 @@ PLAYER_ID = "PLAYER_ID"
 PLAYER_NAME = "PLAYER_NAME"
 PLAYER_COLOR = "PlAYER_COLOR"
 PLAYER_HP = "PLAYER_HP"
-POSI = "PLAYER_POSI"
+PLAYER_POSI = "PLAYER_POSI"
+BULLET_POSI = "BULLET_POSI"
 TURN = "TURN"
 MAZE = "MAZE"
 TEXT = "TEXT"
