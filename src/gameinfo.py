@@ -77,4 +77,8 @@ class GameInfo(object):
     def get_item_info_list(self):
         return self.item_info_list_
 
+    
+
+
+
 
