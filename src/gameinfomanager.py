@@ -151,11 +151,11 @@ class GameInfoManager(object):
             self.maze_ = MAZE_LIST[1]
             print("迷路を決定しました。")
             self.create_player_info()
-            print("プレイヤーの情報を生成しました。")
             print("ゲームの情報を生成しました。")
             self.is_init_game_ = True
+
         else:
-            print("初期化した後の更新はまだ実装していません。")
+            self.up_date_all_object_info()
             
         self.turn_ += 1
         self.game_info_ = GameInfo()
@@ -167,9 +167,108 @@ class GameInfoManager(object):
         print("ゲームの情報を更新しました。")
         return
 
+    def set_all_player_command(self):
+        '''
+            サーバーから受け取ったプレイヤーのコマンドを設定する。
+        '''
+        for player_info in self.client_to_server_data_:
+            id = player_info[PLAYER_ID]
+            next_command = player_info[NEXT_COMMAND]
+            print(id,next_command)
+            self.player_info_manager_.set_next_command(id,next_command)
+        print("すべてのプレイヤーの次のコマンドをセットしました")
+        
+
+    def create_id(self):
+        '''
+            まだ生成されていないidを生成して返す
+        '''
+        #とりあえず1000個までオブジェクト作れるようにしておこう
+        for id in range(1000):
+            if(not(id in self.id_list_)):
+                self.id_list_.append(id)
+                print("id = ",id,"を生成しました。")
+                return id
+        print("これ以上idを生成できませんでした。")
+        return -1
+
+    def delete_id(self,id):
+        '''
+            指定したidを削除する
+        '''
+        self.id_list_.remove(id)
+        print("id = ",id,"を削除しました。")
+
+    def up_date_all_object_info(self):
+        '''
+            ゲーム上のすべての情報を更新する
+        '''
+        print("ゲームの情報を更新します。")
+        
+        ###################################################################################ここの処理まだ不安
+        #弾丸を生成してから移動させるのは面倒なので最初に弾丸を移動させる
+        print("全ての弾丸の座標を移動させます。")
+        bullet_info_list = self.bullet_info_manager_.get_all_object_info()
+        for i in range(len(bullet_info_list)):
+            bullet_info = bullet_info_list[i]
+            bullet_info.update_posi()
+            if(bullet_info.is_posi_error()):
+                id = bullet_info.get_id()
+                self.bullet_info_manager_.delete_object_info(id)
+                self.delete_id(id)
+            else:
+                self.bullet_info_manager_.update_object_info(bullet_info)
+        ################################################################################################
+
+
+        #########################################################################################################プレイヤーのコマンドを実行
+        self.set_all_player_command()
+        print("すべてのプレイヤーオブジェクトのコマンドを実行します")
+        player_info_list = self.player_info_manager_.get_all_object_info()
+        for i in range(len(player_info_list)):
+            player_info = player_info_list[i]
+            command_type = player_info.get_next_command_type()
+            if(command_type == JOIN):
+                #############################これ起こりえない
+                print(JOIN)
+                pass
+            elif(command_type == MOVE):
+                print(MOVE)
+                #print(player_info.get_posi())
+                #print(player_info.get_next_command())
+                player_info.update_posi()
+                player_info_manager_.update_object_info(player_info)
+                #print(player_info.get_posi())
+            elif(command_type == ATTACK):
+                print(ATTACK)
+                id = self.create_id()
+                self.bullet_info_manager_.create_bullet_info(id,player_info)
+                #print(len(self.bullet_info_manager_.get_all_object_info()))
+                self.bullet_info_manager_.object_info_list_[-1].show_info()
+                bullet_info = self.bullet_info_manager_.object_info_list_[-1]
+                if(bullet_info.is_posi_error()):
+                    id = bullet_info.get_id()
+                    self.bullet_info_manager_.delete_object_info(id)
+                    self.delete_id(id)
+                else:
+                    self.bullet_info_manager_.update_object_info(bullet_info)
+                #print(len(self.bullet_info_manager_.get_all_object_info()))
+
+                #self.bullet_info_manager_.object_info_list_[-1].update_posi()
+                #self.bullet_info_manager_.object_info_list_[-1].show_info()
+            else:
+                print("何もコマンドがない")
+        ############################################################################################################
+
+        ##############################################################################################################全てのオブジェクトの変化後の座標位置をもとに処理を行う
 
 
 
+
+        ##############################################################################################################
+
+
+        return
 
 
 
