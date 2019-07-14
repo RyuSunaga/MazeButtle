@@ -11,7 +11,7 @@ from config import CREATE_BULLET
 from config import OBJECT_INFO, PLAYER_INFO, BULLET_INFO, ITEM_INFO
 from config import get_direct_str
 from config import PLAYER_INFO, BULLET_INFO, ITEM_INFO
-from config import PACKET_TYPE, PLAYER_ID, PLAYER_NAME, PLAYER_COLOR, PLAYER_HP, POSI,MAZE, PLAYER_INFO_LIST, BULLET_INFO_LIST, ITEM_INFO_LIST, TURN,TEXT,NEXT_COMMAND
+from config import PACKET_TYPE, PLAYER_ID, PLAYER_NAME, PLAYER_COLOR, PLAYER_HP, PLAYER_POSI,BULLET_POSI,MAZE, PLAYER_INFO_LIST, BULLET_INFO_LIST, ITEM_INFO_LIST, TURN,TEXT,NEXT_COMMAND
 
 
 #################################     メモ     #######################################################
@@ -112,7 +112,7 @@ class PlayerInfo(ObjectInfo):
         self.next_command_ = command
        
 
-    def set_command_type(self, command):
+    def set_next_command_type(self, command):
         '''
             コマンド毎にコマンドのタイプを決定する
         '''
@@ -123,7 +123,7 @@ class PlayerInfo(ObjectInfo):
         else:
             self.next_command_type_ = None
 
-    def set_command_direct(self, command):
+    def set_next_command_direct(self, command):
         '''
             コマンド毎にコマンドを実行する方向を決定する
         '''
@@ -138,7 +138,7 @@ class PlayerInfo(ObjectInfo):
         else:
             #方向無し
             self.next_command_direct_ = [0,0]
-        
+        print(self.next_command_direct_)
 
     ##########################################ここまでプレイヤー情報を設定するための関数##############################################
 
@@ -162,7 +162,7 @@ class PlayerInfo(ObjectInfo):
         return self.speed_
 
     def get_next_coomand(self):
-        return self.next__command_
+        return self.next_command_
     
     def get_next_coomand_type(self):
         return self.next_command_type_
@@ -178,7 +178,7 @@ class PlayerInfo(ObjectInfo):
         send_player_data[PLAYER_ID] = self.id_
         send_player_data[PLAYER_NAME] = self.name_
         send_player_data[PLAYER_COLOR] = self.color_
-        send_player_data[POSI] = self.posi_
+        send_player_data[PLAYER_POSI] = self.posi_
         print("PlayerInfoの通信用データを生成しました。")
         return send_player_data
 
@@ -211,10 +211,10 @@ class PlayerInfo(ObjectInfo):
         self.set_next_command(command)
        
         #コマンドのタイプを設定する
-        self.set_command_type(command)
+        self.set_next_command_type(command)
 
         #コマンドの方向を設定する
-        self.set_command_direct(command)
+        self.set_next_command_direct(command)
 
     def execute_next_command(self, command):
          '''
@@ -321,7 +321,7 @@ class BulletInfo(ObjectInfo):
             PlayerInfoを通信で使える形に変更する(辞書型) -> 文字列じゃない!!!!
         '''
         send_bullet_data = {}
-        send_bullet_data[POSI] = self.posi_
+        send_bullet_data[BULLET_POSI] = self.posi_
         print("BulletInfoの通信用データを生成しました。")
         return send_bullet_data
 

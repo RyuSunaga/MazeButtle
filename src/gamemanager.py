@@ -4,14 +4,14 @@ import packet
 from config import W,B,P,I
 from config import X,Y
 from config import RIGHT,LEFT,UP,DOWN,ATTACK
-from config import HOST, PORT, BACKLOG, BUFSIZE
+from config import HOST, PORT
 from config import COLORS
 from maze import Maze
 from info import PlayerInfo, BulletInfo, ItemInfo
 from infomanager import PlayerInfoManager, BulletInfoManager, ItemInfoManager
 from gameinfo import GameInfo
 from packet import ServerToClientPacket, ClientToServerPacket
-from mazesocket import MazeServerSocket, MazeClientSocket
+from mazesocket import MazeServerSocketManager, MazeClientSocketManager
 import random
 import socket
 import time

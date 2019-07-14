@@ -117,10 +117,11 @@ class PlayerInfoManager(ObjectInfoManager):
     """
 
     def __init__(self):
+        super().__init__()
         #各参加者のPlayerInfoクラスを格納
         self.manager_type_ = PLAYER_INFO_MANAGER
         self.id_list = []
-        self.is_create_player_info = False
+        self.is_create_player_info_ = False
 
 
     def init_player_info(self,id_list, name_list, color_list, posi_list):
@@ -131,7 +132,7 @@ class PlayerInfoManager(ObjectInfoManager):
         '''
 
         #すでに初期化している場合実行させない。
-        if(self.is_create_info == True):
+        if(self.is_create_player_info_ == True):
             print("すでにプレイヤー情報は格納されています。")
             return
 
@@ -140,14 +141,15 @@ class PlayerInfoManager(ObjectInfoManager):
 
         #プレイヤー情報を生成
         for id, name, color, posi in zip(id_list, name_list, color_list, posi_list):
-            self.create_player_info(id, name,color, posi)
+            print(id,name,color,posi)
+            self.create_player_info(id,name,color,posi)
 
         #フラグ変更
-        self.is_create_player_info = True
+        self.is_create_player_info_ = True
         print("プレイヤー情報を生成しました。")
         return
 
-    def create_player_info(id, name, color, posi):
+    def create_player_info(self,id,name,color,posi):
         '''
             PlayerInfoオブジェクトを生成する。
         '''
@@ -156,7 +158,9 @@ class PlayerInfoManager(ObjectInfoManager):
         player_info.set_name(name)
         player_info.set_color(color)
         player_info.set_posi(posi)
-        self.set_info(player_info)
+        
+        #self.set_info(player_info)
+        self.object_info_list_.append(player_info)
 
     def set_next_command(self,id,command):
         '''
@@ -185,6 +189,7 @@ class BulletInfoManager(ObjectInfoManager):
         迷路上の弾丸オブジェクトを管理するクラス
     '''
     def __init__(self):
+        super().__init__()
         self.manager_type_ = BULLET_INFO_MANAGER
 
     def get_bullet_info(self, parent_id):
@@ -228,6 +233,7 @@ class ItemInfoManager(ObjectInfoManager):
     '''
 
     def __init__(self):
+        super().__init__()
         self.managertype_ =  ITEM_INFO_MANAGER
 
 
