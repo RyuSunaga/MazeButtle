@@ -78,18 +78,18 @@ class MazeServer(object):
         #まだ実行していないプレイヤーのIDとコマンドを保持
         #クライアントが完成するまではとりあえず以下のデータを使う。
         #参加コマンド用のテスト
-        self.player_command_data = [{PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:None,PLAYER_NAME:"Nojima",NEXT_COMMAND:JOIN,TEXT:""},
-                                    {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:None,PLAYER_NAME:"Gaia",NEXT_COMMAND:JOIN,TEXT:""},
-                                    {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:None,PLAYER_NAME:"Sunaga",NEXT_COMMAND:JOIN,TEXT:""}]
+        #self.player_command_data = [{PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:None,PLAYER_NAME:"Nojima",NEXT_COMMAND:JOIN,TEXT:""},
+        #                            {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:None,PLAYER_NAME:"Gaia",NEXT_COMMAND:JOIN,TEXT:""},
+        #                            {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:None,PLAYER_NAME:"Sunaga",NEXT_COMMAND:JOIN,TEXT:""}]
         #移動コマンド用のテスト
-        #self.player_command_data = [{PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:1,PLAYER_NAME:"Nojima",NEXT_COMMAND:RIGHT_MOVE,TEXT:""},
-        #                            {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:2,PLAYER_NAME:"Gaia",NEXT_COMMAND:DOWN_MOVE,TEXT:""},
-        #                            {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:3,PLAYER_NAME:"Sunaga",NEXT_COMMAND:UP_MOVE,TEXT:""}]
+        #self.player_command_data = [{PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:0,PLAYER_NAME:"Nojima",NEXT_COMMAND:RIGHT_MOVE,TEXT:""},
+        #                            {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:1,PLAYER_NAME:"Gaia",NEXT_COMMAND:DOWN_MOVE,TEXT:""},
+        #                            {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:2,PLAYER_NAME:"Sunaga",NEXT_COMMAND:UP_MOVE,TEXT:""}]
 
         #弾丸生成用のテスト
-        #self.player_command_data = [{PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:1,PLAYER_NAME:"Nojima",NEXT_COMMAND:RIGHT_ATTACK,TEXT:""},
-        #                            {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:2,PLAYER_NAME:"Gaia",NEXT_COMMAND:DOWN_ATTACK,TEXT:""},
-        #                            {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:3,PLAYER_NAME:"Sunaga",NEXT_COMMAND:UP_ATTACK,TEXT:""}]
+        self.player_command_data = [{PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:0,PLAYER_NAME:"Nojima",NEXT_COMMAND:RIGHT_ATTACK,TEXT:""},
+                                    {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:1,PLAYER_NAME:"Gaia",NEXT_COMMAND:DOWN_ATTACK,TEXT:""},
+                                    {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:2,PLAYER_NAME:"Sunaga",NEXT_COMMAND:UP_ATTACK,TEXT:""}]
 
 
     def up_date_game_info(self):
@@ -146,6 +146,14 @@ def test3():
     MS.up_date_game_info()
     MS.send_client_game_info()
 
+def test4():
+    '''
+        プレイヤーオブジェクトにコマンドをセットする。
+    '''
+    print("TEST4")
+    MS = MazeServer(HOST,PORT,BACKLOG,BUFSIZE)
+    MS.up_date_game_info()
+    MS.game_info_manager_.up_date_all_object_info()
 
 def MAIN():
     '''
@@ -155,7 +163,7 @@ def MAIN():
 ##########################################TEST##############################################################
 
 
-test3()
+test4()
 
 
 

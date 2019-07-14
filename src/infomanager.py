@@ -40,11 +40,12 @@ class ObjectInfoManager(object):
         '''
             対応する情報を持つクラスを格納する関数
         '''
-
+       
         if(object_info.get_type() != self.info_type_):
             #格納する変数が対応する情報クラスでなければ入れさせない
             return False
         else:
+            print("APPEND")
             self.object_info_list_.append(object_info)
             return True
 
@@ -106,6 +107,18 @@ class ObjectInfoManager(object):
         for i in range(len(self.object_info_list_)):
             if(self.object_info_list_[i].get_id() == id):
                 del self.object_info_list_[i]
+                print("id = ",id,"の"+self.info_type_+"を削除しました。")
+                return True
+        return False
+
+    def update_object_info(self,object_info):
+        '''
+            指定したidのオブジェクトを更新する
+        '''
+        for i in range(len(self.object_info_list_)):
+            if(self.object_info_list_[i].get_id() == id):
+                self.object_info_list_[i] = object_info
+                print("id = ",id,"の"+self.info_type_+"を更新しました。")
                 return True
         return False
 
@@ -119,6 +132,7 @@ class PlayerInfoManager(ObjectInfoManager):
     def __init__(self):
         super().__init__()
         #各参加者のPlayerInfoクラスを格納
+        self.info_type_ = PLAYER_INFO
         self.manager_type_ = PLAYER_INFO_MANAGER
         self.id_list = []
         self.is_create_player_info_ = False
@@ -153,6 +167,7 @@ class PlayerInfoManager(ObjectInfoManager):
         '''
             PlayerInfoオブジェクトを生成する。
         '''
+        print("CREATE_PLAYER_INFO")
         player_info = PlayerInfo(id, name,color, posi)
         player_info.set_id(id)
         player_info.set_name(name)
@@ -166,6 +181,13 @@ class PlayerInfoManager(ObjectInfoManager):
         '''
             指定したidと一致するプレイヤーオブジェクトに次に実行するコマンドを設定する。
         '''
+        index = self.get_object_info_index(id)
+        if(index != -1):
+            self.object_info_list_[index].prepare_next_command(command)
+            print(self.object_info_list_[index].get_name(),"に",command,"コマンドを設定しました。")
+        return
+
+    
 
     ###############################################################################この関数使いたくない
     def update_player_info(self, player_info):
@@ -182,7 +204,7 @@ class PlayerInfoManager(ObjectInfoManager):
         return False
     ###############################################################################この関数使いたくない
 
-
+    
 
 class BulletInfoManager(ObjectInfoManager):
     '''
@@ -190,6 +212,7 @@ class BulletInfoManager(ObjectInfoManager):
     '''
     def __init__(self):
         super().__init__()
+        self.info_type_ = BULLET_INFO
         self.manager_type_ = BULLET_INFO_MANAGER
 
     def get_bullet_info(self, parent_id):
@@ -214,7 +237,7 @@ class BulletInfoManager(ObjectInfoManager):
             新しいBulletオブジェクトを生成する。
         '''
         bullet = BulletInfo(id,player_info)
-        self.set_info(bullet)
+        self.set_object_info(bullet)
 
     def move_all_bullet(self):
         '''
