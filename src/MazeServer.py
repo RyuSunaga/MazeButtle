@@ -3,7 +3,7 @@
 from gamemanager import GameManager
 from packet import ClientToServerPacket, ServerToClientPacket 
 from mazesocket import MazeServerSocketManager
-
+from gameinfomanager import GameInfoManeger
 
 
 ##############################################################################################################
@@ -36,10 +36,19 @@ from mazesocket import MazeServerSocketManager
 ##############################################################################################################
 
 
+
+
+
+
+
+
+
+######################################デモ用のサーバーの情報
 HOST = '127.0.0.1'
 PORT = 50000
 BACKLOG = 10
 BUFSIZE = 4096
+######################################
 
 class MazeServer(sobject):
     '''
@@ -48,15 +57,19 @@ class MazeServer(sobject):
         この中はきれいにまとめたい
     '''
     
-    def __init__(self):
-        self.game_manager_ = GameManager()
+    def __init__(self,HOST,PORT,BACKLOG,BUFSIZE):
+        #ゲームの情報を管理するのに必要
+        self.game_info_manager_ = GameInfoManeger()
+        #ゲームの情報を通信用に整形するのに必要
         self.stcp_ = ServerToClientPacket()
+        #通信に必要
         self.server_socket_manager = MazeServerSocketManager(HOST,PORT,BACKLOG,BUFSIZE)
+        #まだ表示していないプレイヤーのIDとコマンドを保持
         self.player_command_data = []
 
     def start_up(self):
         '''
-            サーバー起動
+            ゲームサーバー起動
         '''
         pass
 

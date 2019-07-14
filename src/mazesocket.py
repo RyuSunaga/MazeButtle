@@ -57,6 +57,12 @@ class MazeSocketManager(object):
     def set_BUFSIZE(self,BUFSIZE):
         self.BUFSIZE_ = BUFSIZE
 
+    def set_game_info_data(self,game_info_data):
+        self.game_info_data_ = game_info_data
+
+    def set_player_command_data(self,player_command_data):
+        self.player_command_data_ = player_command_data
+
     def get_HOST(self):
         return self.HOST_
 
@@ -68,6 +74,12 @@ class MazeSocketManager(object):
 
     def get_BUFSIZE(self):
         return self.BUFSIZE_
+
+    def get_game_info_data(self):
+        return self.game_info_data_
+
+    def get_player_commnd_data(self):
+        return self.player_command_data_
 
     def create_socket(self):
         '''
@@ -158,6 +170,7 @@ class MazeServerSocketManager(MazeSocketManager):
         '''
         self.create_socket()
         self.bind()
+        #listeの引数は待ち受けb人数かも
         self.listen(1)
         self.accept()
         self.recv()
