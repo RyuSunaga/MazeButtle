@@ -72,7 +72,7 @@ class MazeServer(object):
         #ゲームの情報を通信用に整形するのに必要
         self.stcp_ = ServerToClientPacket()
         #通信に必要
-        self.server_socket_manager = MazeServerSocketManager(HOST,PORT,BACKLOG,BUFSIZE)
+        self.server_socket_manager_ = MazeServerSocketManager(HOST,PORT,BACKLOG,BUFSIZE)
         
         
         #まだ実行していないプレイヤーのIDとコマンドを保持
@@ -92,13 +92,24 @@ class MazeServer(object):
         #                            {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:3,PLAYER_NAME:"Sunaga",NEXT_COMMAND:UP_ATTACK,TEXT:""}]
 
 
-    def up_date_game_info_manager(self):
+    def up_date_game_info(self):
         '''
             クライアントから受け取ったデータをもとにself.game_info_manager_更新する。
         '''
         self.game_info_manager_.set_client_to_server_data(self.player_command_data)
+        self.game_info_manager_.up_date_game()
 
-
+    def send_client_game_info(self):
+        '''
+            更新したゲームの情報をクライアントに送信する
+        '''
+        game_info = self.game_info_manager_.get_game_info()
+        self.stcp_.set_game_info(game_info)
+        send_data = self.stcp_.get_send_data()
+        #この時点でsend_dataは文字列->SocketManagerにいれて大丈夫
+        #print(send_data)
+        self.server_socket_manager_.set_send_data(send_data)
+        self.server_socket_manager_.transmission()
 
 ##########################################TEST##############################################################
 def test1():
@@ -107,7 +118,7 @@ def test1():
     '''
     print("TEST1")
     MS = MazeServer(HOST,PORT,BACKLOG,BUFSIZE)
-    MS.up_date_game_info_manager()
+    MS.up_date_game()
     print(MS.game_info_manager_.get_client_to_server_data())
 
 def test2():
@@ -117,17 +128,34 @@ def test2():
     '''
     print("TEST2")
     MS = MazeServer(HOST,PORT,BACKLOG,BUFSIZE)
-    MS.up_date_game_info_manager()
+    MS.up_date_game_info()
     MS.game_info_manager_.up_date_game()
     game_info = MS.game_info_manager_.get_game_info()
     print(game_info.get_maze())
     MS.stcp_.set_game_info(game_info)
     send_data = MS.stcp_.get_send_data()
     print(send_data)
+
+
+def test3():
+    '''
+        受け取ってあるデータをつかいクライアントに最新の情報を送信するところまでをやってみる
+    '''
+    print("TEST3")
+    MS = MazeServer(HOST,PORT,BACKLOG,BUFSIZE)
+    MS.up_date_game_info()
+    MS.send_client_game_info()
+
+
+def MAIN():
+    '''
+        はやくこれを書きたい
+    '''
+    pass
 ##########################################TEST##############################################################
 
 
-test2()
+test3()
 
 
 

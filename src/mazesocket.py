@@ -154,12 +154,19 @@ class MazeServerSocketManager(MazeSocketManager):
             #print("connを消しました。")
             #print("addrを消しました。")
 
-    def send(self,send_data):
+    def set_send_data(self,send_data):
+        print("クライアントに送るデータをセットしました。")
+        self.game_info_ = send_data
+
+
+    def send(self):
         '''
             送信したいデータを入れる
             Packetクラスでget_send_data()から受け取ったデータを引数に入れる
         '''
-        self.conn_.send(send_data.encode())
+        if(self.game_info_ == None):
+            print("クライアントに送るデータがセットされていません。")
+        self.conn_.send(self.game_info_.encode())
         print("送信完了")
 
 
@@ -175,7 +182,7 @@ class MazeServerSocketManager(MazeSocketManager):
         self.accept()
         self.recv()
         print(self.player_command_data_)
-        self.send("send_data")
+        self.send()
         self.close_socket()
 
 class MazeClientSocketManager(MazeSocketManager):
@@ -184,7 +191,6 @@ class MazeClientSocketManager(MazeSocketManager):
     '''
     def __init__(self,HOST,PORT,BACKLOG,BUFSIZE):
         super().__init__(HOST,PORT,BACKLOG,BUFSIZE)
-        self.send_data = None
     
     def connect(self):
         '''
@@ -206,6 +212,14 @@ class MazeClientSocketManager(MazeSocketManager):
         else:
             self.game_info_data_ = self.socket_.recv(self.BUFSIZE_).decode()
             print("サーバー側からデータを受け取りました。")
+            print(self.game_info_data_)
+    
+    def set_send_data(self,send_data):
+        '''
+            サーバー側に送りたい情報をセットする
+        '''
+        self.player_command_data_ = send_data
+        print("サーバー側に送る情報をセットしました。")
 
 
     def send(self):
@@ -213,15 +227,9 @@ class MazeClientSocketManager(MazeSocketManager):
             送信したいデータを入れる
             Packetクラスでget_send_data()から受け取ったデータを引数に入れる
         '''
-        self.socket_.send(self.send_data.encode())
+        print(self.player_command_data_)
+        self.socket_.send(self.player_command_data_.encode())
         print("送信完了")
-
-    def set_send_data(self,send_data):
-        '''
-            サーバー側に送りたい情報をセットする
-        '''
-        self.send_data = send_data
-        print("情報セット完了")
 
     def transmission(self):
         '''
@@ -230,7 +238,7 @@ class MazeClientSocketManager(MazeSocketManager):
         '''
         self.create_socket()
         self.connect()
-        self.send("test_dara")
+        self.send()
         self.recv()
         self.close_socket()
 
