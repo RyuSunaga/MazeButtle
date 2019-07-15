@@ -43,8 +43,7 @@ class MazeField(object):
                                 PLAYER_HP:3,#これはidを見てこのクラスを保持しているクラスのplayer_idと一致するplayerのhpを入れる
                                 PLAYER_INFO_LIST:[{PLAYER_ID:1,PLAYER_NAME:"Gaia",PLAYER_COLOR:RED,PLAYER_POSI:[2,3]},
                                                   {PLAYER_ID:2,PLAYER_NAME:"Nojima",PLAYER_COLOR:BLUE,PLAYER_POSI:[9,9]},
-                                        
-                                        {PLAYER_ID:3,PLAYER_NAME:"Sunaga",PLAYER_COLOR:YELLOW,PLAYER_POSI:[0,9]}],
+                                                  {PLAYER_ID:3,PLAYER_NAME:"Sunaga",PLAYER_COLOR:YELLOW,PLAYER_POSI:[0,9]}],
                                 BULLET_INFO_LIST:[{BULLET_POSI:[0,2]},{BULLET_POSI:[4,9]},{BULLET_POSI:[8,1]},{BULLET_POSI:[9,6]}],
                                 ITEM_INFO_LIST:[]
                                 }
@@ -85,7 +84,7 @@ class MazeField(object):
     #bulletの位置をMAZE配列に書き込む関数
     def locate_bullet(self):
         
-        maze=self.game_info_data_["MAZE"]
+        maze=self.game_info_data_[MAZE]
         
         #既存のbulletを消去
         count_row=0
@@ -97,11 +96,11 @@ class MazeField(object):
                 count_col+=1
             count_row+=1
     
-        bullet_list=self.game_info_data_["BULLET_INFO_LIST"]
+        bullet_list=self.game_info_data_[BULLET_INFO_LIST]
         
         #新しいbulletを追加
-        for i in self.game_info_data_["BULLET_INFO_LIST"]:
-            b_posi=i["BULLET_POSI"]
+        for i in self.game_info_data_[BULLET_INFO_LIST]:
+            b_posi=i[BULLET_POSI]
             count_row=0
             for j in maze:
                 if count_row==b_posi[0]:
@@ -112,11 +111,11 @@ class MazeField(object):
                         count_col+=1
                 count_row+=1
                 
-        self.game_info_data_["MAZE"]=maze
+        self.game_info_data_[MAZE]=maze
     
     #playerの位置をMAZE配列に書き込む関数
     def locate_player(self):
-        maze=self.game_info_data_["MAZE"]
+        maze=self.game_info_data_[MAZE]
         
         #既存のplayerを消去
         count_row=0
@@ -128,11 +127,11 @@ class MazeField(object):
                 count_col+=1
             count_row+=1
     
-        player_list=self.game_info_data_["PLAYER_INFO_LIST"]
+        player_list=self.game_info_data_[PLAYER_INFO_LIST]
         
         #新しいplayerを追加
-        for i in self.game_info_data_["PLAYER_INFO_LIST"]:
-            p_posi=i["PLAYER_POSI"]
+        for i in self.game_info_data_[PLAYER_INFO_LIST]:
+            p_posi=i[PLAYER_POSI]
             count_row=0
             for j in maze:
                 if count_row==p_posi[1]:
@@ -143,13 +142,13 @@ class MazeField(object):
                         count_col+=1
                 count_row+=1
                 
-        self.game_info_data_["MAZE"]=maze
+        self.game_info_data_[MAZE]=maze
         
             
         
                     
     def create_maze(self):
-        maze=self.game_info_data_["MAZE"]
+        maze=self.game_info_data_[MAZE]
         root=tk.Tk()
         
         root.title("迷路")
@@ -158,23 +157,24 @@ class MazeField(object):
         canvas1=tk.Canvas(master=root,bg="white",height=80,width=250)
 
 
-        label1=tk.Label(master=root,text="Turn"+str(self.game_info_data_["TURN"]),font=("メイリオ","44"),bg="#cccccc")
+        label1=tk.Label(master=root,text="Turn"+str(self.game_info_data_[TURN]),font=("メイリオ","44"),bg="#cccccc")
         label1.place(relx=0.45,rely=0.89,relwidth=0.28,relheight=0.1)
         
         text1=tk.Entry(width=5)
         text1.place(relx=0.74,rely=0.915,relwidth=0.25,relheight=0.05)
-        text1.insert(tk.END,self.game_info_data_["TEXT"])
+        text1.insert(tk.END,self.game_info_data_[TEXT])
         
         canvas1.grid(row=1,padx=1,pady=1,sticky=tk.W)
         canvas.grid(row=0,padx=2,pady=2)
         
         #hpの表示を修正
-        for n in range(self.game_info_data_["PLAYER_HP"]):
+        for n in range(self.game_info_data_[PLAYER_HP]):
          canvas1.create_rectangle(10+n*50,10,40+n*50,70,fill="red")
         
-        p_info=self.game_info_data_["PLAYER_INFO_LIST"]
+        p_info=self.game_info_data_[PLAYER_INFO_LIST]
         
         wid=0
+        
         for i in maze:
            hei=0
            for j in i:
@@ -184,11 +184,10 @@ class MazeField(object):
                     canvas.create_polygon(hei*60+15,wid*60+30,hei*60+30,wid*60+15,hei*60+45,wid*60+30,hei*60+30,wid*60+45,fill="blue")
                 elif j==3:
                     for k in p_info:
-                        p_posi=k["PLAYER_POSI"]
-                        #KeyErrorが出る、理由わからん
-                        #p_color=k["PLAYER_COLOR"]
+                        p_posi=k[PLAYER_POSI]
+                        p_color=k[PLAYER_COLOR]
                         if p_posi[1]==wid and p_posi[0]==hei:
-                            canvas.create_oval(hei*60+5,wid*60+5,(hei+1)*60-5,(wid+1)*60-5,fill="red")                    
+                            canvas.create_oval(hei*60+5,wid*60+5,(hei+1)*60-5,(wid+1)*60-5,fill=p_color)                    
                 hei+=1
            wid+=1
         root.mainloop()
@@ -233,3 +232,6 @@ mf = MazeField("1",1)
 mf.locate_bullet()
 mf.locate_player()
 mf.create_maze()
+
+info=mf.game_info_data_[PLAYER_INFO_LIST][0][PLAYER_COLOR]
+print(info)
