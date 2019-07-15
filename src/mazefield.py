@@ -133,26 +133,25 @@ class MazeField(object):
         #新しいplayerを追加
         for i in self.game_info_data_["PLAYER_INFO_LIST"]:
             p_posi=i["PLAYER_POSI"]
-            print(p_posi)
             count_row=0
             for j in maze:
                 if count_row==p_posi[1]:
-                    print(count_row)
                     count_col=0
                     for k in j:
                         if count_col==p_posi[0]:
-                            print(count_col)
                             maze[count_row][count_col]=3
                         count_col+=1
                 count_row+=1
                 
         self.game_info_data_["MAZE"]=maze
-        print(maze)
+        
             
         
                     
-    def create_maze(self,maze):
+    def create_maze(self):
+        maze=self.game_info_data_["MAZE"]
         root=tk.Tk()
+        
         root.title("迷路")
         
         canvas=tk.Canvas(master=root,bg="white",height=60*len(maze),width=60*len(maze[0]))
@@ -161,9 +160,11 @@ class MazeField(object):
 
         label1=tk.Label(master=root,text="Turn"+str(self.game_info_data_["TURN"]),font=("メイリオ","44"),bg="#cccccc")
         label1.place(relx=0.45,rely=0.89,relwidth=0.28,relheight=0.1)
-        text1=tk.Text(master=root,state=tk.DISABLED,font=("メイリオ","10"),bg="white")
-        text1.configure(width=40,height=10)
-        text1.place(relx=0.74,rely=0.89,relwidth=0.25,relheight=0.1)
+        
+        text1=tk.Entry(width=5)
+        text1.place(relx=0.74,rely=0.915,relwidth=0.25,relheight=0.05)
+        text1.insert(tk.END,self.game_info_data_["TEXT"])
+        
         canvas1.grid(row=1,padx=1,pady=1,sticky=tk.W)
         canvas.grid(row=0,padx=2,pady=2)
         
@@ -231,4 +232,4 @@ mf = MazeField("1",1)
 
 mf.locate_bullet()
 mf.locate_player()
-mf.create_maze(MAZE_LIST[1])
+mf.create_maze()
