@@ -41,7 +41,7 @@ class ObjectInfoManager(object):
             対応する情報を持つクラスを格納する関数
         '''
        
-        if(object_info.get_type() != self.info_type_):
+        if(object_info.get_object_type() != self.info_type_):
             #格納する変数が対応する情報クラスでなければ入れさせない
             return False
         else:

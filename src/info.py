@@ -58,7 +58,7 @@ class ObjectInfo(object):
     def get_posi(self):
         return self.posi_
 
-    def get_type(self):
+    def get_object_type(self):
         return self.object_type_
 
     def show_info(self):

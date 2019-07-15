@@ -11,6 +11,7 @@ from config import JOIN, MOVE, ATTACK
 from config import RIGHT, LEFT, UP, DOWN
 from config import RIGHT_MOVE, LEFT_MOVE, UP_MOVE, DOWN_MOVE
 from config import RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, DOWN_ATTACK
+from config import OBJECT_INFO, PLAYER_INFO, BULLET_INFO, ITEM_INFO
 from config import PACKET_TYPE, PLAYER_ID, PLAYER_NAME, PLAYER_COLOR, PLAYER_HP, PLAYER_POSI,BULLET_POSI,MAZE, PLAYER_INFO_LIST, BULLET_INFO_LIST, ITEM_INFO_LIST, TURN,TEXT,NEXT_COMMAND
 from config import CLIENT_TO_SERVER_PACKET, SERVER_TO_CLIENT_PACKET
 from maze import Maze
@@ -261,8 +262,38 @@ class GameInfoManager(object):
         ############################################################################################################
 
         ##############################################################################################################全てのオブジェクトの変化後の座標位置をもとに処理を行う
+        print("全てのオブジェクトの座標を更新しました。")
+        print("衝突処理に入ります。")
 
-
+        #きれいではないけど時間がないから以下の方法でやる
+        maze_object_dict = [[{PLAYER_INFO:[],BULLET_INFO:[]} for y in range(10)] for x in range(10)]
+        
+        player_info_list = self.player_info_manager_.get_all_object_info()
+        for player_info in player_info_list:
+            object_type = player_info.get_object_type()
+            posi = player_info.get_posi()
+            x = posi[X]
+            y = posi[Y]
+            maze_object_dict[x][y][object_type].append(player_info)
+        bullet_info_list = self.bullet_info_manager_.get_all_object_info()
+        for bullet_info in bullet_info_list:
+            object_type = bullet_info.get_object_type()
+            posi = bullet_info.get_posi()
+            x = posi[X]
+            y = posi[Y]
+            maze_object_dict[x][y][object_type].append(bullet_info)
+        
+        ####TEST
+        #for x in range(10):
+        #    for y in range(10):
+        #        print("x,y",x,y)
+        #        dic = maze_object_dict[x][y]
+        #        print(dic)
+        #        for player_info in dic[PLAYER_INFO]:
+        #            player_info.show_info()
+        #        for bullet_info in dic[BULLET_INFO]:
+        #            bullet_info.show_info()
+        ####TEST
 
 
         ##############################################################################################################
