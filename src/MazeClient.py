@@ -4,6 +4,7 @@ import select
 import threading
 import info
 import packet
+import ast
 from info import PlayerInfo
 from packet import ClientToServerPacket, ServerToClientPacket
 from mazesocket import MazeClientSocketManager
@@ -73,6 +74,21 @@ class MazeClient(object):
 
         print(self.player_name_,"クライアントの情報を生成しました。")
 
+    #def first_connect(self):
+    #    '''
+    #        サーバーとの最初の通信を行う
+    #    '''
+    #    if(self.is_send_first_command_ == True):
+    #        print("もう最初の通信は終わりましたよ")
+    #    else:
+    #        print("最初の通信を行います。")
+    #        self.player_next_command_ = JOIN
+    #        self.create_send_data()
+    #        self.maze_client_socket_manager_.set_send_data(self.str_player_command_data_)
+    #        print("クライアント側からサーバー側に送信する情報をセットしました。")
+    #        self.maze_client_socket_manager_.transmission()
+    #        print("最初の通信を終了します。")
+
     def first_connect(self):
         '''
             サーバーとの最初の通信を行う
@@ -85,8 +101,22 @@ class MazeClient(object):
             self.create_send_data()
             self.maze_client_socket_manager_.set_send_data(self.str_player_command_data_)
             print("クライアント側からサーバー側に送信する情報をセットしました。")
-            self.maze_client_socket_manager_.transmission()
-            print("最初の通信を終了します。")
+            print("クライアントソケットを生成します。")
+            client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+            client_sock.connect((self.HOST_, self.PORT_))
+            send_data = self.str_player_command_data_
+            client_sock.send(send_data.encode())
+            print("サーバー側にメッセージを送信しました。")
+            recv_data = client_sock.recv(self.BUFSIZE_)
+            if(recv_data != None):
+                try:
+                    self.game_info_data_ = ast.literal_eval(recv_data.decode())
+                except:
+                    print("サーバー側から受信したメッセージが不適切でした。")
+            print("サーバー側からメッセージを受け取りました。")
+            print(self.game_info_data_)
+            self.is_send_first_command = True
+            print("最初の通信が終了しました。")
 
     def create_send_data(self):
         '''
@@ -98,7 +128,8 @@ class MazeClient(object):
         self.ctsp_.set_player_name(self.player_name_)
         self.ctsp_.set_next_command(self.player_next_command_)
         self.ctsp_.set_text(self.server_to_client_message_)
-        self.str_player_command_data_ = self.ctsp_.info_to_dict()
+        self.str_player_command_data_ = self.ctsp_.get_send_data()
+        print(self.str_player_command_data_)
         print("クライアントからサーバーに渡すデータを生成しました。")
     
     #ここの処理がわからない -> 悪い野島これは須永のミス

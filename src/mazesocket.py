@@ -164,10 +164,11 @@ class MazeServerSocketManager(MazeSocketManager):
             送信したいデータを入れる
             Packetクラスでget_send_data()から受け取ったデータを引数に入れる
         '''
-        if(self.game_info_ == None):
+        if(self.game_info_data_ == None):
             print("クライアントに送るデータがセットされていません。")
-        self.conn_.send(self.game_info_.encode())
-        print("送信完了")
+        else:
+            self.conn_.send(self.game_info_data_.encode())
+            print("送信完了")
 
 
     def transmission(self):
