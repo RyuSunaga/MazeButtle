@@ -117,12 +117,14 @@ class ServerToClientPacket(Packet):
         self.player_hp_ = None
         print("PacketにPlayer HPが設定されました。")
 
-        
+    ###############################################################################################ここは上書き、気をつけろ
     def set_dict_player_info_list(self):
         if(self.game_info_ == None):
             print("GameInfoが設定されていません")
             print("PacketにPlayerInfoListの設定に失敗しました。")
         else:
+            #心配だが一回消す
+            self.dict_player_info_list_ = []
             player_info_list = self.game_info_.get_player_info_list()
             for player_info in player_info_list:
                 self.dict_player_info_list_.append(player_info.get_dict_send_data())
@@ -133,6 +135,8 @@ class ServerToClientPacket(Packet):
             print("GameInfoが設定されていません")
             print("PacketにBulletInfoListの設定に失敗しました。")
         else:
+            #心配だが一回消す
+            self.dict_bullet_info_list_ = []
             bullet_info_list = self.game_info_.get_bullet_info_list()
             for bullet_info in bullet_info_list:
                 self.dict_bullet_info_list_.append(bullet_info.get_dict_send_data())
@@ -143,9 +147,11 @@ class ServerToClientPacket(Packet):
             print("GameInfoが設定されていません")
             print("PacketにItemInfoListの設定に失敗しました。")
         else:
+            #心配だが一回消す
+            self.dict_item_info_list_ = []
             self.dict_item_info_list_ = []
             print("PacketにItemInfoListが設定されました。")
-
+    ########################################################################################################################
             
     def set_text(self,text):
         self.text_ = text
