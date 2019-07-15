@@ -201,6 +201,11 @@ def test6():
 
 
 
+def test6():
+    '''
+        MazeClientとの通信を試みる
+    '''
+
 
 def MAIN():
     '''

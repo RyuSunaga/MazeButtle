@@ -222,15 +222,15 @@ class MazeField(object):
           canvas.create_rectangle(100,100,200,200,fill="grey")
 
 
-mf = MazeField("1",1)
-mf.move_player()
-mf.attack_player()
+#mf = MazeField("1",1)
+#mf.move_player()
+#mf.attack_player()
 #mf.root.mainloop()
 
-mf.locate_bullet()
-mf.locate_player()
-mf.create_maze()
+#mf.locate_bullet()
+#mf.locate_player()
+#mf.create_maze()
 
-info=mf.game_info_data_[PLAYER_INFO_LIST][0][PLAYER_COLOR]
-print(info)
+#info=mf.game_info_data_[PLAYER_INFO_LIST][0][PLAYER_COLOR]
+#print(info)
 

@@ -236,11 +236,13 @@ class MazeClientSocketManager(MazeSocketManager):
             通信処理をまとめたい
             ここらへんは勉強不足のため変なコード書くかもだけど許してくれ...
         '''
+        print("通信を開始します。")
         self.create_socket()
         self.connect()
         self.send()
         self.recv()
         self.close_socket()
+        print("通信を終了します。")
 
 
 
