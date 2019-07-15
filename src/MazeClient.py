@@ -60,8 +60,11 @@ class MazeClient(object):
         self.maze_field_ = None
         self.ctsp_ = None
         self.player_id_ = None
-        self.player_next_command_ = None
         self.player_name_ = player_name
+        self.player_hp_ = None
+        self.player_posi_ = []
+        self.player_color_ = None
+        self.player_next_command_ = None
         self.server_to_client_message_ = None 
         #最初のコマンドをサーバーに送信したかどうか
         self.is_send_first_command_ = False
@@ -115,8 +118,64 @@ class MazeClient(object):
                     print("サーバー側から受信したメッセージが不適切でした。")
             print("サーバー側からメッセージを受け取りました。")
             print(self.game_info_data_)
+            #####このクラスの情報を設定する  ->>>>> 名前で頑張る
+            player_info_dict_list = self.game_info_data_[PLAYER_INFO_LIST]
+            for player_info_dict in player_info_dict_list:
+                if(player_info_dict[PLAYER_NAME] == self.player_name_):
+                    print("あなたの名前が見つかりました",self.player_name_)
+                    self.player_id_ = player_info_dict[PLAYER_ID]
+                    self.player_color_ = player_info_dict[PLAYER_COLOR]
+                    self.player_hp_ = player_info_dict[PLAYER_HP]
+                    self.player_posi_ = player_info_dict[PLAYER_POSI]
+                    print("あなたのID:",self.player_id_)
+                    print("あなたの色:",self.player_color_)
+                    print("あなたのHP:",self.player_hp_)
+                    print("あなたの座標:",self.player_posi_)                    
+            self.is_send_first_command_ = True
+            print("最初の通信が終了しました。")
+
+    def send_data(self):
+        '''
+            通信にはこちらを使う
+        '''
+        if(self.is_send_first_command_ == False):
+            self.first_connect()
+        else:
+            print("サーバー側に選択したコマンドを送信します")
+            print("最初の通信を行います。")
+            self.create_send_data()
+            self.maze_client_socket_manager_.set_send_data(self.str_player_command_data_)
+            print("クライアント側からサーバー側に送信する情報をセットしました。")
+            print("クライアントソケットを生成します。")
+            client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+            client_sock.connect((self.HOST_, self.PORT_))
+            send_data = self.str_player_command_data_
+            client_sock.send(send_data.encode())
+            print("サーバー側にメッセージを送信しました。")
+            recv_data = client_sock.recv(self.BUFSIZE_)
+            if(recv_data != None):
+                try:
+                    self.game_info_data_ = ast.literal_eval(recv_data.decode())
+                except:
+                    print("サーバー側から受信したメッセージが不適切でした。")
+            print("サーバー側からメッセージを受け取りました。")
+            print(self.game_info_data_)
+            #####このクラスの情報を設定する  ->>>>> 名前で頑張る
+            player_info_dict_list = self.game_info_data_[PLAYER_INFO_LIST]
+            for player_info_dict in player_info_dict_list:
+                if(player_info_dict[PLAYER_NAME] == self.player_name_):
+                    print("あなたの名前が見つかりました",self.player_name_)
+                    self.player_id_ = player_info_dict[PLAYER_ID]
+                    self.player_color_ = player_info_dict[PLAYER_COLOR]
+                    self.player_hp_ = player_info_dict[PLAYER_HP]
+                    self.player_posi_ = player_info_dict[PLAYER_POSI]
+                    print("あなたのID:",self.player_id_)
+                    print("あなたの色:",self.player_color_)
+                    print("あなたのHP:",self.player_hp_)
+                    print("あなたの座標:",self.player_posi_)                    
             self.is_send_first_command = True
             print("最初の通信が終了しました。")
+
 
     def create_send_data(self):
         '''
@@ -171,13 +230,28 @@ player_command_data = [{PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',POR
 
 
 #########################TEST#####################
-test_name = 'Ryu'
-MC = MazeClient(test_name,C_HOST,C_PORT,C_BACKLOG,C_BUFSIZE)
-MC.first_connect()
+def test1():
+    test_name = 'Ryu'
+    MC = MazeClient(test_name,C_HOST,C_PORT,C_BACKLOG,C_BUFSIZE)
+    MC.first_connect()
 
+
+def test2():
+    '''
+        二回以上サーバー側と通信できるかテスト
+    '''
+    test_name = 'Ryu'
+    MC = MazeClient(test_name,C_HOST,C_PORT,C_BACKLOG,C_BUFSIZE)
+    MC.send_data()
+    command_list = [RIGHT_MOVE,LEFT_MOVE,RIGHT_MOVE,RIGHT_MOVE,RIGHT_MOVE,RIGHT_MOVE,RIGHT_MOVE,DOWN_ATTACK]
+    ##本来はGUIでコマンドを設定できるようにしないといけない
+    for command in command_list:
+        MC.player_next_command_ = command
+        print("次のコマンド",MC.player_next_command_)
+        MC.send_data()
 #########################TEST#####################
 
-
+test2()
 
 
 

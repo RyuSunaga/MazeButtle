@@ -64,7 +64,7 @@ class ServerToClientPacket(Packet):
                                             TEXT:None,
                                             MAZE:None,
                                             TURN:None,
-                                            PLAYER_HP:None,#これはidを見てこのクラスを保持しているクラスのplayer_idと一致するplayerのhpを入れる------->これはクライアントの仕事やな
+                                            #PLAYER_HP:None,#これはidを見てこのクラスを保持しているクラスのplayer_idと一致するplayerのhpを入れる------->これはクライアントの仕事やな
                                             PLAYER_INFO_LIST:[],
                                             #PLAYER_INFO_LIST:[{PLAYER_ID:1,PLAYER_NAME:"Gaia",PLAYER_COLOR:RED,POSI:[0,0]},
                                             #                  {PLAYER_ID:2,PLAYER_NAME:"Nojima",PLAYER_COLOR:BLUE,POSI:[9,9]},

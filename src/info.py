@@ -183,6 +183,7 @@ class PlayerInfo(ObjectInfo):
         send_player_data = {}
         send_player_data[PLAYER_ID] = self.id_
         send_player_data[PLAYER_NAME] = self.name_
+        send_player_data[PLAYER_HP] = self.hp_
         send_player_data[PLAYER_COLOR] = self.color_
         send_player_data[PLAYER_POSI] = self.posi_
         print("PlayerInfoの通信用データを生成しました。")
