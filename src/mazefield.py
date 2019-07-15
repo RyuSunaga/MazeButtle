@@ -6,7 +6,7 @@ from config import RIGHT_MOVE,LEFT_MOVE,UP_MOVE,DOWN_MOVE
 from config import RIGHT_ATTACK,LEFT_ATTACK,UP_ATTACK,DOWN_ATTACK
 from config import SERVER_TO_CLIENT_PACKET
 from config import RED, BLUE, GREEN, YELLOW
-from config import PACKET_TYPE, PLAYER_ID, PLAYER_NAME, PLAYER_COLOR, PLAYER_HP, POSI,MAZE, PLAYER_INFO_LIST, BULLET_INFO_LIST, ITEM_INFO_LIST, TURN,TEXT
+from config import PACKET_TYPE, PLAYER_ID, PLAYER_NAME,PLAYER_POSI, PLAYER_COLOR, PLAYER_HP,MAZE, PLAYER_INFO_LIST, BULLET_INFO_LIST, ITEM_INFO_LIST,BULLET_POSI, TURN,TEXT
 #from maze import Maze
 
 
@@ -41,10 +41,10 @@ class MazeField(object):
                                 MAZE:MAZE_LIST[1],
                                 TURN:5,
                                 PLAYER_HP:5,#これはidを見てこのクラスを保持しているクラスのplayer_idと一致するplayerのhpを入れる
-                                PLAYER_INFO_LIST:[{PLAYER_ID:1,PLAYER_NAME:"Gaia",PLAYER_COLOR:RED,POSI:[0,0]},
-                                                  {PLAYER_ID:2,PLAYER_NAME:"Nojima",PLAYER_COLOR:BLUE,POSI:[9,9]},
-                                                  {PLAYER_ID:3,PLAYER_NAME:"Sunaga",PLAYER_COLOR:YELLOW,POSI:[0,9]}],
-                                BULLET_INFO_LIST:[{POSI:[0,2]},{POSI:[4,9]},{POSI:[8,1]},{POSI:[9,6]}],
+                                PLAYER_INFO_LIST:[{PLAYER_ID:1,PLAYER_NAME:"Gaia",PLAYER_COLOR:RED,PLAYER_POSI:[0,0]},
+                                                  {PLAYER_ID:2,PLAYER_NAME:"Nojima",PLAYER_COLOR:BLUE,PLAYER_POSI:[9,9]},
+                                                  {PLAYER_ID:3,PLAYER_NAME:"Sunaga",PLAYER_COLOR:YELLOW,PLAYER_POSI:[0,9]}],
+                                BULLET_INFO_LIST:[{BULLET_POSI:[0,2]},{BULLET_POSI:[4,9]},{BULLET_POSI:[8,1]},{BULLET_POSI:[9,6]}],
                                 ITEM_INFO_LIST:[]
                                 }
 
@@ -145,9 +145,10 @@ class MazeField(object):
 
 
 mf = MazeField("1",1)
-mf.move_player()
-mf.attack_player()
-mf.create_maze(MAZE_LIST[1])
+print(mf.game_info_data_[PLAYER_INFO_LIST][0][PLAYER_COLOR])
+#mf.move_player()
+#mf.attack_player()
+#mf.create_maze(MAZE_LIST[1])
 #mf.root.mainloop()
 
 

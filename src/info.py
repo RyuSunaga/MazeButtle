@@ -58,7 +58,7 @@ class ObjectInfo(object):
     def get_posi(self):
         return self.posi_
 
-    def get_type(self):
+    def get_object_type(self):
         return self.object_type_
 
     def show_info(self):
@@ -89,6 +89,9 @@ class PlayerInfo(ObjectInfo):
         #次のコマンドのタイプ（移動か攻撃）と座標を設定
         self.next_command_type_ = None
         self.next_command_direct_ = [None,None]
+
+        #移動前の座標を保持しておく
+        self.last_posi_ = [None, None]
 
     ##########################################プレイヤー情報を設定するための関数##############################################
  
@@ -238,13 +241,31 @@ class PlayerInfo(ObjectInfo):
          next_posi = [self.posi_[X] + self.next_command_direct_[X], self.posi_[Y] + self.next_command_direct_[Y]]
          if(not(0 <= next_posi[X] and next_posi[X] <= 9)):
              print("そこには移動できません")
+             self.last_posi_ = self.posi_
              return
          if(not(0 <= next_posi[Y] and next_posi[Y] <= 9)):
              print("そこには移動できません")
+             self.last_posi_ = self.posi_
              return
+         self.last_posi_ = self.posi_
          self.posi_ = next_posi
          print("Name " + self.name_ + "の位置情報を更新しました。")
-         
+
+    def back_last_posi(self):
+        '''
+            衝突処理などで元の座標に戻りたいとき使う
+        '''
+        print(self.name_,"を最後にいた座標に戻します。")
+        self.posi_ = self.last_posi_
+        print("Name " + self.name_ + "の位置情報を更新しました。")
+
+    def decrease_hp(self,damage):
+        '''
+            ダメージ分HPを減らす
+        '''
+        print(self.name_,"のHPを",damage,"減らします。")
+        self.hp_ -= damage
+        
     def clear_next_command(self):
         '''
             設定されているコマンドが実行されたら使う
