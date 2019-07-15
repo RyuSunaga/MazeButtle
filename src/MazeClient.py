@@ -5,10 +5,12 @@ import threading
 import info
 import packet
 import ast
+import time
 from info import PlayerInfo
 from packet import ClientToServerPacket, ServerToClientPacket
 from mazesocket import MazeClientSocketManager
-import mazefield
+from mazefield import MazeField
+import threading
 
 ########################################################
 #テストのため
@@ -75,6 +77,9 @@ class MazeClient(object):
         #これはサーバーから受け取ったデータが格納される
         self.game_info_data = None
 
+        #############重要
+        self.maze_filed_ = None
+
         print(self.player_name_,"クライアントの情報を生成しました。")
 
     #def first_connect(self):
@@ -91,6 +96,24 @@ class MazeClient(object):
     #        print("クライアント側からサーバー側に送信する情報をセットしました。")
     #        self.maze_client_socket_manager_.transmission()
     #        print("最初の通信を終了します。")
+
+    def create_gui(self):
+        '''
+            ガイアの作ったクラスを使ってGUIを作る
+        '''
+        if(self.game_info_data_ == None):
+            print("ゲームの情報がないためGUIを作ることが出来ません")
+        else:
+            print("迷路情報をを生成します。")
+            self.maze_field_ = None
+            self.maze_field_ = MazeField("",self.game_info_data_)
+            self.maze_field_.locate_bullet()
+            self.maze_field_.locate_player()
+            #mf.create_maze()
+            #mf.move_player()
+            #mf.attack_player()
+            self.maze_field_.create_GUI_v2()
+
 
     def first_connect(self):
         '''
@@ -131,8 +154,14 @@ class MazeClient(object):
                     print("あなたの色:",self.player_color_)
                     print("あなたのHP:",self.player_hp_)
                     print("あなたの座標:",self.player_posi_)                    
+                    ######################時間がないからしょうがない
+                    self.game_info_data_[PLAYER_HP] = self.player_hp_
+                    if(self.game_info_data_[TEXT] == None):
+                        self.game_info_data_[TEXT] = "" 
+                    #####################
             self.is_send_first_command_ = True
             print("最初の通信が終了しました。")
+
 
     def send_data(self):
         '''
@@ -173,6 +202,12 @@ class MazeClient(object):
                     print("あなたの色:",self.player_color_)
                     print("あなたのHP:",self.player_hp_)
                     print("あなたの座標:",self.player_posi_)                    
+                    ######################時間がないからしょうがない
+                    self.game_info_data_[PLAYER_HP] = self.player_hp_
+                    if(self.game_info_data_[TEXT] == None):
+                        self.game_info_data_[TEXT] = "" 
+                    #####################
+
             self.is_send_first_command = True
             print("最初の通信が終了しました。")
 
@@ -240,24 +275,28 @@ def test2():
     '''
         二回以上サーバー側と通信できるかテスト
     '''
+
     test_name = 'Ryu'
     MC = MazeClient(test_name,C_HOST,C_PORT,C_BACKLOG,C_BUFSIZE)
     MC.send_data()
-    command_list = [RIGHT_MOVE,LEFT_MOVE,RIGHT_MOVE,RIGHT_MOVE,RIGHT_MOVE,RIGHT_MOVE,RIGHT_MOVE,DOWN_ATTACK]
+    MC.create_gui()
+    time.sleep(1)
+    command_list = [RIGHT_MOVE,LEFT_MOVE,RIGHT_MOVE,RIGHT_MOVE,RIGHT_MOVE,DOWN_ATTACK,DOWN_ATTACK,DOWN_ATTACK]
     ##本来はGUIでコマンドを設定できるようにしないといけない
     for command in command_list:
         MC.player_next_command_ = command
         print("次のコマンド",MC.player_next_command_)
         MC.send_data()
+        MC.create_gui()
+        time.sleep(1)
 #########################TEST#####################
 
 test2()
 
 
 
-
-
-
+#thrd=threading.Thread(target=listen)
+#thrd.start()
 
 
 
