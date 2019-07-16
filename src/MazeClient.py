@@ -113,7 +113,8 @@ class MazeClient(object):
             #mf.move_player()
             #mf.attack_player()
             self.maze_field_.create_GUI_v2()
-
+            print("取得したコマンド",self.maze_field_.get_next_command())
+            self.player_next_command_ = self.maze_field_.get_next_command()
 
     def first_connect(self):
         '''
@@ -289,9 +290,25 @@ def test2():
         MC.send_data()
         MC.create_gui()
         time.sleep(1)
+
+def test3():
+    '''
+        GUIからコマンド処理を実現
+    '''
+    test_name = 'Ryu'
+    MC = MazeClient(test_name,C_HOST,C_PORT,C_BACKLOG,C_BUFSIZE)
+    MC.send_data()
+    MC.create_gui()
+    time.sleep(1)
+    ##本来はGUIでコマンドを設定できるようにしないといけない
+    for turn in range(50):
+        print("次のコマンド",MC.player_next_command_)
+        MC.send_data()
+        MC.create_gui()
+        time.sleep(1)
 #########################TEST#####################
 
-test2()
+test3()
 
 
 

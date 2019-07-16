@@ -160,7 +160,8 @@ class MazeServer(object):
             client_sock.send(new_game_info.encode())
             time += 1
             print(str(time)+"回通信をしました。")
-            if(time >= 10):
+            #100回まで通信できるよ
+            if(time >= 100):
                 break
         client_sock.close()
         print("ソケットを閉じました")
