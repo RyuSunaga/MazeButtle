@@ -77,6 +77,8 @@ class MazeServer(object):
         self.BUFSIZE_ = BUFSIZE
         self.game_info_manager_ = GameInfoManager()
         self.game_info_ = None
+        #クライアントの接続数 -> あらかじめ最大数を決めておこう
+        self.client_num_ = 2
         #クライアントを格納するリスト
         self.clients_ = []
         #ゲームの情報を通信用に整形するのに必要
@@ -175,7 +177,7 @@ class MazeServer(object):
             handle_thread = threading.Thread(target=self.handler, args=(client_sock,client_add),daemon=True)
             handle_thread.start()
 
-    def remove_connection(self):
+    def remove_connection(self,client_sock,client_add):
         '''
             クライアントとの接続を切断する。
         '''
@@ -196,18 +198,30 @@ class MazeServer(object):
                 break
             else:
                 if not recv_data:
-                    remove_connection(client_sock,client_add)
+                    self.remove_connection(client_sock,client_add)
                     break
                 else:
                     print("データを受信しました。")
                     print(recv_data.decode())
-
-                    time.sleep(100)
-                    print("データを送信します  この上時間作った方がいいかも")
+                    player_command_data = ast.literal_eval(recv_data.decode())
+                    self.player_command_data_list_.append(player_command_data)
+                    print("クライアントから受け取ったプレイヤーのコマンドをサーバーにセットしました。")
+                    if(len(self.player_command_data_list_) == self.client_num_):
+                        print("すべてのクライアントからデータを受け取りました。")
+                        time.sleep(5)
+                        self.up_date_game_info()
+                    else:
+                        while len(self.player_command_data_list_) < self.client_num_:
+                            print("全てのクライアントからデータを受け取っていません。")
+                            time.sleep(1)
+                            print("送受信数:",len(self.player_command_data_list_))
+                        print("すべてのクライアントからデータを受け取りました。")
+                        print("ゲーム情報を更新します。10秒待機します　20秒必要かな????")
+                        time.sleep(15)
+                    
                     new_game_info = self.get_client_game_info()
                     client_sock.send(new_game_info.encode())
-            
-
+                    print(client_add,"にデータを送りました")
 
 
 
