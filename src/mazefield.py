@@ -49,9 +49,10 @@ class MazeField(object):
 
     #########################################################################################ここから下、ガイアが作った関数コピペしたからうまく動かないかも。
     def up_move(self):
-        print("up")
+        print(UP_MOVE)
         self.next_command_ = UP_MOVE   
-        return UP_MOVE
+        print("コマンドを決定しました。")
+        
 
     def left_move(self):
         print("left")
@@ -237,10 +238,11 @@ class MazeField(object):
           root.mainloop()
           
     def create_GUI(self):
-        self.create_maze()
-        self.move_player()
-        self.attack_player()
-        
+        #self.create_maze()
+        #self.move_player()
+        #self.attack_player()
+        self.create_GUI_v2()
+
     def create_GUI_v2(self):
         maze=self.game_info_data_[MAZE]
         root=tk.Tk()
