@@ -295,7 +295,7 @@ def test3():
     '''
         GUIからコマンド処理を実現
     '''
-    test_name = 'Ryu'
+    test_name = 'Gaia'
     MC = MazeClient(test_name,C_HOST,C_PORT,C_BACKLOG,C_BUFSIZE)
     MC.send_data()
     MC.create_gui()
