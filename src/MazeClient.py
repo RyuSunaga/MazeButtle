@@ -306,11 +306,29 @@ def test3():
         MC.send_data()
         MC.create_gui()
         time.sleep(1)
+
+def test4():
+    '''
+        GUIからコマンド処理を実現
+    '''
+    test_name = 'Nojima'
+    MC = MazeClient(test_name,C_HOST,C_PORT,C_BACKLOG,C_BUFSIZE)
+    MC.send_data()
+    MC.create_gui()
+    time.sleep(1)
+    ##本来はGUIでコマンドを設定できるようにしないといけない
+    for turn in range(50):
+        print("次のコマンド",MC.player_next_command_)
+        MC.send_data()
+        MC.create_gui()
+        time.sleep(1)
 #########################TEST#####################
 
-test3()
+#########################TEST#####################
 
+#test3()
 
+#test4()
 
 #thrd=threading.Thread(target=listen)
 #thrd.start()

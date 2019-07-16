@@ -4,6 +4,8 @@ from gameinfomanager import GameInfoManager
 from mazesocket import MazeServerSocketManager
 import socket
 import ast
+import threading
+import time
 from config import HOST,PORT
 from config import MAZE_LIST
 from config import JOIN
@@ -75,29 +77,16 @@ class MazeServer(object):
         self.BUFSIZE_ = BUFSIZE
         self.game_info_manager_ = GameInfoManager()
         self.game_info_ = None
+        #クライアントを格納するリスト
+        self.clients_ = []
         #ゲームの情報を通信用に整形するのに必要
         self.stcp_ = ServerToClientPacket()
         #通信に必要
         self.server_socket_manager_ = MazeServerSocketManager(HOST,PORT,BACKLOG,BUFSIZE)
-        
+        #クライアントから受け取ったプレイヤーのコマンドの情報を格納するリスト
         self.player_command_data_list_ = []
+
         
-        #まだ実行していないプレイヤーのIDとコマンドを保持
-        #クライアントが完成するまではとりあえず以下のデータを使う。
-        #参加コマンド用のテスト
-        #self.player_command_data_list_ = [{PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:None,PLAYER_NAME:"Nojima",NEXT_COMMAND:JOIN,TEXT:""},
-        #                                  {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:None,PLAYER_NAME:"Gaia",NEXT_COMMAND:JOIN,TEXT:""},
-        #                                  {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:None,PLAYER_NAME:"Sunaga",NEXT_COMMAND:JOIN,TEXT:""}]
-        #移動コマンド用のテスト
-        #self.player_command_data_list_ = [{PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:0,PLAYER_NAME:"Nojima",NEXT_COMMAND:RIGHT_MOVE,TEXT:""},
-        #                                  {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:1,PLAYER_NAME:"Gaia",NEXT_COMMAND:DOWN_MOVE,TEXT:""},
-        #                                  {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:2,PLAYER_NAME:"Sunaga",NEXT_COMMAND:UP_MOVE,TEXT:""}]
-
-        #弾丸生成用のテスト
-        #self.player_command_data_list_ = [{PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:0,PLAYER_NAME:"Nojima",NEXT_COMMAND:RIGHT_ATTACK,TEXT:""},
-        #                                  {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:1,PLAYER_NAME:"Gaia",NEXT_COMMAND:DOWN_ATTACK,TEXT:""},
-        #                                  {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:2,PLAYER_NAME:"Sunaga",NEXT_COMMAND:UP_ATTACK,TEXT:""}]
-
 
     def up_date_game_info(self):
         '''
@@ -165,6 +154,66 @@ class MazeServer(object):
                 break
         client_sock.close()
         print("ソケットを閉じました")
+
+    def server_start_up2(self):
+        '''
+            複数のクライアントと通信できるようにする
+        '''
+        print("MazeServer2を起動します")
+        server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        print("ソケットを生成しました。")
+        server_sock.bind((self.HOST_,self.PORT_))
+        print("bindをしました。")
+        server_sock.listen(10)
+        
+        while True:
+            client_sock, client_add = server_sock.accept()
+            print("[接続]{}".format(client_add))
+            self.clients_.append((client_sock, client_add))
+
+            #ここからへんまだ理解不足や
+            handle_thread = threading.Thread(target=self.handler, args=(client_sock,client_add),daemon=True)
+            handle_thread.start()
+
+    def remove_connection(self):
+        '''
+            クライアントとの接続を切断する。
+        '''
+        print("クライアントとの通信を切ります。")
+
+    def handler(self,client_sock,client_add):
+        '''
+            クライアントからデータを受信する。
+        '''
+        print("HANDLE を起動")
+
+
+        while True:
+            try:
+                recv_data = client_sock.recv(self.BUFSIZE_)
+            except ConnectionResetError:
+                self.remove_connection(client_sock, client_add)
+                break
+            else:
+                if not recv_data:
+                    remove_connection(client_sock,client_add)
+                    break
+                else:
+                    print("データを受信しました。")
+                    print(recv_data.decode())
+
+                    time.sleep(100)
+                    print("データを送信します  この上時間作った方がいいかも")
+                    new_game_info = self.get_client_game_info()
+                    client_sock.send(new_game_info.encode())
+            
+
+
+
+
+
+
+
 
 ##########################################TEST##############################################################
 def test1():
@@ -264,6 +313,16 @@ def test6():
     MS = MazeServer(HOST,PORT,BACKLOG,BUFSIZE)
     MS.server_start_up()
 
+def test7():
+    '''
+        複数のクライアントと通信する
+    '''
+    print("TEST7")
+    MS = MazeServer(HOST,PORT,BACKLOG,BUFSIZE)
+    MS.server_start_up2()
+
+
+
 def MAIN():
     '''
         はやくこれを書きたい
@@ -272,7 +331,7 @@ def MAIN():
 ##########################################TEST##############################################################
 
 
-test6()
+test7()
 
 
 
