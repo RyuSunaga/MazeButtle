@@ -28,6 +28,7 @@ class MazeField(object):
         '''
         '''
         self.text_ = text
+        self.next_command_ = None
         #ガイアへ
         #通信処理が正常に実行されると以下のような変数が格納されるから
         #しばらくはこれが入力されたことにして正常に描画できるように実装してくれ
@@ -49,36 +50,48 @@ class MazeField(object):
     #########################################################################################ここから下、ガイアが作った関数コピペしたからうまく動かないかも。
     def up_move(self):
         print("up")
+        self.next_command_ = UP_MOVE   
         return UP_MOVE
 
     def left_move(self):
         print("left")
+        self.next_command_ = LEFT_MOVE
         return LEFT_MOVE
 
     def right_move(self):
         print("right")
+        self.next_command_ = RIGHT_MOVE
         return RIGHT_MOVE
 
     def down_move(self):
         print("down")
+        self.next_command_ = DOWN_MOVE
         return DOWN_MOVE
 
     def up_attack(self):
         print("up")
+        self.next_command_ = UP_ATTACK
         return UP_ATTACK
 
     def left_attack(self):
         print("left")
+        self.next_command_ = LEFT_ATTACK
         return LEFT_ATTACK
 
     def right_attack(self):
         print("right")
+        self.next_command_ = RIGHT_ATTACK
         return RIGHT_ATTACK
 
     def down_attack(self):
         print("down")
+        self.next_command_ = DOWN_ATTACK
         return DOWN_ATTACK
     
+    def get_next_command(self):
+        print("設定されたコマンドを返します")
+        return self.next_command_
+
     #bulletの位置をMAZE配列に書き込む関数
     def locate_bullet(self):
         
