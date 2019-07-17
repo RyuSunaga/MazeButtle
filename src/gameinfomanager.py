@@ -165,6 +165,7 @@ class GameInfoManager(object):
         self.game_info_.set_bullet_info_list(self.bullet_info_manager_.get_all_object_info())
         self.game_info_.set_item_info_list(self.item_info_manager_.get_all_object_info())
         print("ゲームの情報を更新しました。")
+        time.sleep(5)
         return
 
     def set_all_player_command(self):
@@ -327,7 +328,7 @@ class GameInfoManager(object):
                     print("プレイヤーオブジェクトのみ　衝突無し")
                 elif(player_num == 0 and bullet_num == 1):
                     print("弾丸オブジェクトのみ　衝突無し")
-                elif(palyer_num >= 2 and bullet_num == 0):
+                elif(player_num >= 2 and bullet_num == 0):
                     print("プレイヤー同士の衝突が発生 それぞれのプレイヤーを元の座標に戻します。")
                     for player_info in player_info_list:
                         player_info.back_last_posi()

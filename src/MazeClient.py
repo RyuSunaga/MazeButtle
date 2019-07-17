@@ -112,7 +112,7 @@ class MazeClient(object):
             #mf.create_maze()
             #mf.move_player()
             #mf.attack_player()
-            self.maze_field_.create_GUI_v2()
+            self.maze_field_.create_GUI_v2(self.player_name_, self.player_color_)
             print("取得したコマンド",self.maze_field_.get_next_command())
             self.player_next_command_ = self.maze_field_.get_next_command()
 
@@ -206,6 +206,7 @@ class MazeClient(object):
                     ######################時間がないからしょうがない
                     self.game_info_data_[PLAYER_HP] = self.player_hp_
                     if(self.game_info_data_[TEXT] == None):
+                        print("TEXTがNoneだったので整形しました。")
                         self.game_info_data_[TEXT] = "" 
                     #####################
 
@@ -322,6 +323,25 @@ def test4():
         MC.send_data()
         MC.create_gui()
         time.sleep(1)
+
+def test5():
+    '''
+        GUIからコマンド処理を実現
+    '''
+    test_name = 'Sunaga'
+    MC = MazeClient(test_name,C_HOST,C_PORT,C_BACKLOG,C_BUFSIZE)
+    MC.send_data()
+    MC.create_gui()
+    time.sleep(1)
+    ##本来はGUIでコマンドを設定できるようにしないといけない
+    for turn in range(50):
+        print("次のコマンド",MC.player_next_command_)
+        MC.send_data()
+        MC.create_gui()
+        time.sleep(1)
+
+
+
 #########################TEST#####################
 
 #########################TEST#####################
