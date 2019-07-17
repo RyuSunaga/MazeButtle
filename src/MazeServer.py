@@ -77,8 +77,12 @@ class MazeServer(object):
         self.BUFSIZE_ = BUFSIZE
         self.game_info_manager_ = GameInfoManager()
         self.game_info_ = None
+        self.send_data_ = None
+        self.is_first_connect_ = False
+        self.server_start_time_ = time.time()
+        self.time_limit_ = 60
         #クライアントの接続数 -> あらかじめ最大数を決めておこう
-        self.client_num_ = 2
+        self.client_num_ = 3
         #クライアントを格納するリスト
         self.clients_ = []
         #ゲームの情報を通信用に整形するのに必要
@@ -99,15 +103,16 @@ class MazeServer(object):
         print("すべてのプレイヤーのコマンドを消去します。")
         self.player_command_data_list_ = []
 
-    def get_client_game_info(self):
+    def create_client_game_info(self):
         '''
             クライアントに送るように更新したゲームの情報を取得する
         '''
         game_info = self.game_info_manager_.get_game_info()
         self.stcp_.set_game_info(game_info)
         send_data = self.stcp_.get_send_data()
+        self.send_data_ = send_data
         #この時点でsend_dataは文字列->SocketManagerにいれて大丈夫
-        return send_data
+        #return send_data
         #print(send_data)
         #self.server_socket_manager_.set_send_data(send_data)
         #self.server_socket_manager_.transmission()
@@ -205,11 +210,42 @@ class MazeServer(object):
                     print(recv_data.decode())
                     player_command_data = ast.literal_eval(recv_data.decode())
                     self.player_command_data_list_.append(player_command_data)
+                    last_client_num = len(self.player_command_data_list_)
                     print("クライアントから受け取ったプレイヤーのコマンドをサーバーにセットしました。")
+                    if(self.is_first_connect_ == False):
+                       #サーバーが起動してから30秒かプレイヤーの人数が4人になるまでまつ
+                       while (time.time() - self.server_start_time_ <= self.time_limit_) and len(self.player_command_data_list_) < 4:
+                           print("クライアントの接続を待っています。 残り時間:" +str(int(self.time_limit_ - (time.time() - self.server_start_time_))))
+                           print("現在の受付数;"+str(len(self.player_command_data_list_)))
+                           time.sleep(1)
+                       print("参加プレイヤーの受付を終了しました。")
+                       print("参加プレイヤーは"+ str(len(self.player_command_data_list_)) + "人です。")
+                       self.client_num_ = len(self.player_command_data_list_)
+                       self.is_first_connect_ = True
+                       print("ゲームを開始します")
+                       time.sleep(5)
+                       
+                       #最初のゲームの情報を生成
+                       if(last_client_num == len(self.player_command_data_list_)):
+                           print(client_add,"あなたが最後のプレイヤーです")
+                           time.sleep(5)
+                           self.up_date_game_info()
+                           self.create_client_game_info()
+                       else:
+                           print("最初のゲームの情報を生成中です、しばらくお待ちください。")
+                           time.sleep(15)
+                       print("クライアントにデータを送信します。")
+                       new_game_info = self.send_data_
+                       client_sock.send(new_game_info.encode())
+                       print(client_add,"にデータを送りました")
+                       print("クライアントからの情報を受け付けます。")
+                       continue
+
                     if(len(self.player_command_data_list_) == self.client_num_):
                         print("すべてのクライアントからデータを受け取りました。")
                         time.sleep(5)
                         self.up_date_game_info()
+                        self.create_client_game_info()
                     else:
                         while len(self.player_command_data_list_) < self.client_num_:
                             print("全てのクライアントからデータを受け取っていません。")
@@ -219,7 +255,7 @@ class MazeServer(object):
                         print("ゲーム情報を更新します。10秒待機します　20秒必要かな????")
                         time.sleep(15)
                     
-                    new_game_info = self.get_client_game_info()
+                    new_game_info = self.send_data_
                     client_sock.send(new_game_info.encode())
                     print(client_add,"にデータを送りました")
 

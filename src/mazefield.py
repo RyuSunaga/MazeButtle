@@ -34,6 +34,7 @@ class MazeField(object):
         #しばらくはこれが入力されたことにして正常に描画できるように実装してくれ
         #変わるのは中身だけだから一回つくれれば使いまわせるよ
         self.game_info_data_ = game_info_data
+
         ####################################################################配列は文字列から変換させて作るか,,,
        # self.game_info_data_ = {PACKET_TYPE:SERVER_TO_CLIENT_PACKET,
        #                         TEXT:"のこり一週間頑張ろう!!!!!",
@@ -243,11 +244,11 @@ class MazeField(object):
         #self.attack_player()
         self.create_GUI_v2()
 
-    def create_GUI_v2(self):
+    def create_GUI_v2(self, player_name, player_color):
         maze=self.game_info_data_[MAZE]
         root=tk.Tk()
         
-        root.title("迷路")
+        root.title("迷路" + "Name:" + player_name + " Color:" + player_color)
         
         canvas=tk.Canvas(master=root,bg="white",height=60*len(maze),width=60*len(maze[0]))
         canvas1=tk.Canvas(master=root,bg="white",height=80,width=250)
