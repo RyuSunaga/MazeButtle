@@ -67,7 +67,7 @@ class MazeClient(object):
         self.player_posi_ = []
         self.player_color_ = None
         self.player_next_command_ = None
-        self.server_to_client_message_ = None 
+        self.server_to_client_message_ = None
         #最初のコマンドをサーバーに送信したかどうか
         self.is_send_first_command_ = False
         self.maze_client_socket_manager_ = MazeClientSocketManager(HOST,PORT,BACKLOG,BUFSIZE)
@@ -129,7 +129,7 @@ class MazeClient(object):
             self.maze_client_socket_manager_.set_send_data(self.str_player_command_data_)
             print("クライアント側からサーバー側に送信する情報をセットしました。")
             print("クライアントソケットを生成します。")
-            client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+            client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             client_sock.connect((self.HOST_, self.PORT_))
             send_data = self.str_player_command_data_
             client_sock.send(send_data.encode())
@@ -154,11 +154,11 @@ class MazeClient(object):
                     print("あなたのID:",self.player_id_)
                     print("あなたの色:",self.player_color_)
                     print("あなたのHP:",self.player_hp_)
-                    print("あなたの座標:",self.player_posi_)                    
+                    print("あなたの座標:",self.player_posi_)
                     ######################時間がないからしょうがない
                     self.game_info_data_[PLAYER_HP] = self.player_hp_
                     if(self.game_info_data_[TEXT] == None):
-                        self.game_info_data_[TEXT] = "" 
+                        self.game_info_data_[TEXT] = ""
                     #####################
             self.is_send_first_command_ = True
             print("最初の通信が終了しました。")
@@ -177,7 +177,7 @@ class MazeClient(object):
             self.maze_client_socket_manager_.set_send_data(self.str_player_command_data_)
             print("クライアント側からサーバー側に送信する情報をセットしました。")
             print("クライアントソケットを生成します。")
-            client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+            client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             client_sock.connect((self.HOST_, self.PORT_))
             send_data = self.str_player_command_data_
             client_sock.send(send_data.encode())
@@ -202,12 +202,12 @@ class MazeClient(object):
                     print("あなたのID:",self.player_id_)
                     print("あなたの色:",self.player_color_)
                     print("あなたのHP:",self.player_hp_)
-                    print("あなたの座標:",self.player_posi_)                    
+                    print("あなたの座標:",self.player_posi_)
                     ######################時間がないからしょうがない
                     self.game_info_data_[PLAYER_HP] = self.player_hp_
                     if(self.game_info_data_[TEXT] == None):
                         print("TEXTがNoneだったので整形しました。")
-                        self.game_info_data_[TEXT] = "" 
+                        self.game_info_data_[TEXT] = ""
                     #####################
 
             self.is_send_first_command = True
@@ -227,11 +227,11 @@ class MazeClient(object):
         self.str_player_command_data_ = self.ctsp_.get_send_data()
         print(self.str_player_command_data_)
         print("クライアントからサーバーに渡すデータを生成しました。")
-    
+
     #ここの処理がわからない -> 悪い野島これは須永のミス
     def set_player_id(self,id):
         #self.player_id_= self.game_info_data[PLAYER_INFO_LIST]
-        self.player_id_ = id 
+        self.player_id_ = id
 
     def get_game_info_data(self):
         return self.game_info_data
@@ -239,7 +239,7 @@ class MazeClient(object):
     def get_player_id(self):
         return self.player_id_
 
-    
+    '''
     #サーバからのソケット取得、及びデコードによりgame_info_data_更新
     #まだ使うか謎
     def listen(self):
@@ -253,7 +253,7 @@ class MazeClient(object):
         finally:
             self.socket_.close()
             print("サーバとの通信終了")
-
+    '''
 
 
 
@@ -262,7 +262,7 @@ print("HOSTとかPORTとかが変な動きするかも")
 player_command_data = [{PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:None,PLAYER_NAME:"Nojima",NEXT_COMMAND:JOIN,TEXT:""},
                        {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:None,PLAYER_NAME:"Gaia",NEXT_COMMAND:JOIN,TEXT:""},
                        {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:None,PLAYER_NAME:"Sunaga",NEXT_COMMAND:JOIN,TEXT:""}]
-     
+
 
 
 
@@ -352,12 +352,5 @@ def test5():
 
 #thrd=threading.Thread(target=listen)
 #thrd.start()
-
-
-
-
-
-
-
 
 
