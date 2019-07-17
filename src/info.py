@@ -4,7 +4,7 @@ import config
 from config import X, Y
 from config import W,B,P,I
 from config import RIGHT, LEFT, UP, DOWN
-from config import MOVE, ATTACK
+from config import JOIN, MOVE, ATTACK
 from config import RIGHT_MOVE, LEFT_MOVE, UP_MOVE, DOWN_MOVE
 from config import RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, DOWN_ATTACK
 from config import CREATE_BULLET
@@ -58,7 +58,7 @@ class ObjectInfo(object):
     def get_posi(self):
         return self.posi_
 
-    def get_type(self):
+    def get_object_type(self):
         return self.object_type_
 
     def show_info(self):
@@ -90,6 +90,9 @@ class PlayerInfo(ObjectInfo):
         self.next_command_type_ = None
         self.next_command_direct_ = [None,None]
 
+        #移動前の座標を保持しておく
+        self.last_posi_ = [None, None]
+
     ##########################################プレイヤー情報を設定するための関数##############################################
  
 
@@ -116,7 +119,10 @@ class PlayerInfo(ObjectInfo):
         '''
             コマンド毎にコマンドのタイプを決定する
         '''
-        if(command == RIGHT_MOVE or command  == LEFT_MOVE or command == UP_MOVE or command == DOWN_MOVE):
+        print("aaaaa")
+        if(command == JOIN):
+            self.next_command_type_ = JOIN
+        elif(command == RIGHT_MOVE or command  == LEFT_MOVE or command == UP_MOVE or command == DOWN_MOVE):
             self.next_command_type_ = MOVE
         elif(command == RIGHT_ATTACK or command  == LEFT_ATTACK or command == UP_ATTACK or command == DOWN_ATTACK):
             self.next_command_type_ = ATTACK
@@ -161,10 +167,10 @@ class PlayerInfo(ObjectInfo):
     def get_speed(self):
         return self.speed_
 
-    def get_next_coomand(self):
+    def get_next_command(self):
         return self.next_command_
     
-    def get_next_coomand_type(self):
+    def get_next_command_type(self):
         return self.next_command_type_
 
     def get_next_command_direct(self):
@@ -177,6 +183,7 @@ class PlayerInfo(ObjectInfo):
         send_player_data = {}
         send_player_data[PLAYER_ID] = self.id_
         send_player_data[PLAYER_NAME] = self.name_
+        send_player_data[PLAYER_HP] = self.hp_
         send_player_data[PLAYER_COLOR] = self.color_
         send_player_data[PLAYER_POSI] = self.posi_
         print("PlayerInfoの通信用データを生成しました。")
@@ -189,7 +196,7 @@ class PlayerInfo(ObjectInfo):
             playerの情報をすべて表示する関数
         '''
         print("--------------------------------------------------------------")
-        print("ObjectType",self.type_)
+        print("ObjectType",self.object_type_)
         print("ID:",self.id_)
         print("Name:",self.name_)
         print("Color:",self.color_)
@@ -232,9 +239,34 @@ class PlayerInfo(ObjectInfo):
             この関数はmanagerクラスから実行される
             設定されているnext_commandの情報をもとにプレイヤーの位置を更新する。
          '''
-         self.posi_ = [self.posi_[X] + self.next_command_direct_[X], self.posi_[Y] + self.next_command_direct_[Y]]
+         next_posi = [self.posi_[X] + self.next_command_direct_[X], self.posi_[Y] + self.next_command_direct_[Y]]
+         if(not(0 <= next_posi[X] and next_posi[X] <= 9)):
+             print("そこには移動できません")
+             self.last_posi_ = self.posi_
+             return
+         if(not(0 <= next_posi[Y] and next_posi[Y] <= 9)):
+             print("そこには移動できません")
+             self.last_posi_ = self.posi_
+             return
+         self.last_posi_ = self.posi_
+         self.posi_ = next_posi
          print("Name " + self.name_ + "の位置情報を更新しました。")
-         
+
+    def back_last_posi(self):
+        '''
+            衝突処理などで元の座標に戻りたいとき使う
+        '''
+        print(self.name_,"を最後にいた座標に戻します。")
+        self.posi_ = self.last_posi_
+        print("Name " + self.name_ + "の位置情報を更新しました。")
+
+    def decrease_hp(self,damage):
+        '''
+            ダメージ分HPを減らす
+        '''
+        print(self.name_,"のHPを",damage,"減らします。")
+        self.hp_ -= damage
+        
     def clear_next_command(self):
         '''
             設定されているコマンドが実行されたら使う
@@ -332,10 +364,11 @@ class BulletInfo(ObjectInfo):
         '''
 
         print("--------------------------------------------------------------")
-        print("ObjectType",self.type_)
+        print("ObjectType",self.object_type_)
+        print("ObjectID",self.id_)
         print("Parent ID:",self.parent_id_)
-        print("Posi:(X, Y):",self.get_posi())
-        print("Direct:",get_direct_str(self.set_direct))
+        print("Posi:(X, Y):",self.posi_)
+        print("Direct:",self.direct_)
         print("Power:",self.power_)
         print("Speed:",self.speed_)
         print("--------------------------------------------------------------")
@@ -345,11 +378,23 @@ class BulletInfo(ObjectInfo):
             インスタンス変数の情報から、弾丸を次のターンの座標へ移動する。
         """
         
-        self.posi_ = [self.posi_[X] + self.get_direct_[X], self.posi_[Y] + self.direct_[Y]]
+        self.posi_ = [self.posi_[X] + self.direct_[X], self.posi_[Y] + self.direct_[Y]]
         print("Parent ID " + str(self.parent_id_) + "の弾丸の座標の更新に成功しました。")
 
-
-
+    def is_posi_error(self):
+        '''
+            座標が迷路外ならばTrue
+            そうでないならばFalseを返す
+        '''
+        if(not(0 <= self.posi_[X] and self.posi_[X] <= 9)):
+             print("弾丸座標エラー")
+             return True
+        if(not(0 <= self.posi_[Y] and self.posi_[Y] <= 9)):
+             print("弾丸座標エラー")
+             return True
+        print("弾丸の座標は正常です。")
+        return False 
+         
 
 class ItemInfo(ObjectInfo):
     '''

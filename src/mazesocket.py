@@ -164,10 +164,11 @@ class MazeServerSocketManager(MazeSocketManager):
             送信したいデータを入れる
             Packetクラスでget_send_data()から受け取ったデータを引数に入れる
         '''
-        if(self.game_info_ == None):
+        if(self.game_info_data_ == None):
             print("クライアントに送るデータがセットされていません。")
-        self.conn_.send(self.game_info_.encode())
-        print("送信完了")
+        else:
+            self.conn_.send(self.game_info_data_.encode())
+            print("送信完了")
 
 
     def transmission(self):
@@ -245,11 +246,13 @@ class MazeClientSocketManager(MazeSocketManager):
             通信処理をまとめたい
             ここらへんは勉強不足のため変なコード書くかもだけど許してくれ...
         '''
+        print("通信を開始します。")
         self.create_socket()
         self.connect()
         self.send()
         self.recv()
         self.close_socket()
+        print("通信を終了します。")
 
     def create_socket_2(self):
         '''

@@ -11,6 +11,7 @@ from config import JOIN, MOVE, ATTACK
 from config import RIGHT, LEFT, UP, DOWN
 from config import RIGHT_MOVE, LEFT_MOVE, UP_MOVE, DOWN_MOVE
 from config import RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, DOWN_ATTACK
+from config import OBJECT_INFO, PLAYER_INFO, BULLET_INFO, ITEM_INFO
 from config import PACKET_TYPE, PLAYER_ID, PLAYER_NAME, PLAYER_COLOR, PLAYER_HP, PLAYER_POSI,BULLET_POSI,MAZE, PLAYER_INFO_LIST, BULLET_INFO_LIST, ITEM_INFO_LIST, TURN,TEXT,NEXT_COMMAND
 from config import CLIENT_TO_SERVER_PACKET, SERVER_TO_CLIENT_PACKET
 from maze import Maze
@@ -151,11 +152,10 @@ class GameInfoManager(object):
             self.maze_ = MAZE_LIST[1]
             print("迷路を決定しました。")
             self.create_player_info()
-            print("プレイヤーの情報を生成しました。")
             print("ゲームの情報を生成しました。")
             self.is_init_game_ = True
         else:
-            print("初期化した後の更新はまだ実装していません。")
+            self.up_date_all_object_info()
             
         self.turn_ += 1
         self.game_info_ = GameInfo()
@@ -165,11 +165,212 @@ class GameInfoManager(object):
         self.game_info_.set_bullet_info_list(self.bullet_info_manager_.get_all_object_info())
         self.game_info_.set_item_info_list(self.item_info_manager_.get_all_object_info())
         print("ゲームの情報を更新しました。")
+        time.sleep(5)
         return
 
+    def set_all_player_command(self):
+        '''
+            サーバーから受け取ったプレイヤーのコマンドを設定する。
+        '''
+        for player_info in self.client_to_server_data_:
+            id = player_info[PLAYER_ID]
+            next_command = player_info[NEXT_COMMAND]
+            print(id,next_command)
+            self.player_info_manager_.set_next_command(id,next_command)
+        print("すべてのプレイヤーの次のコマンドをセットしました")
+        
 
+    def create_id(self):
+        '''
+            まだ生成されていないidを生成して返す
+        '''
+        #とりあえず1000個までオブジェクト作れるようにしておこう
+        for id in range(1000):
+            if(not(id in self.id_list_)):
+                self.id_list_.append(id)
+                print("id = ",id,"を生成しました。")
+                return id
+        print("これ以上idを生成できませんでした。")
+        return -1
 
+    def delete_id(self,id):
+        '''
+            指定したidを削除する
+        '''
+        self.id_list_.remove(id)
+        print("id = ",id,"を削除しました。")
 
+    def up_date_all_object_info(self):
+        '''
+            ゲーム上のすべてのオブジェクトを更新する
+        '''
+        print("オブジェクトの情報を更新します。")
+        
+        ###################################################################################ここの処理まだ不安
+        #弾丸を生成してから移動させるのは面倒なので最初に弾丸を移動させる
+        print("全ての弾丸の座標を移動させます。")
+        bullet_info_list = self.bullet_info_manager_.get_all_object_info()
+        for i in range(len(bullet_info_list)):
+            bullet_info = bullet_info_list[i]
+            bullet_info.update_posi()
+            if(bullet_info.is_posi_error()):
+                id = bullet_info.get_id()
+                self.bullet_info_manager_.delete_object_info(id)
+                self.delete_id(id)
+            else:
+                self.bullet_info_manager_.update_object_info(bullet_info)
+        ################################################################################################
+
+        self.set_all_player_command()
+        #########################################################################################################プレイヤーのコマンドを実行
+        print("すべてのプレイヤーオブジェクトのコマンドを実行します")
+        player_info_list = self.player_info_manager_.get_all_object_info()
+        for i in range(len(player_info_list)):
+            player_info = player_info_list[i]
+            command_type = player_info.get_next_command_type()
+            if(command_type == JOIN):
+                #############################これ起こりえない
+                print(JOIN)
+                pass
+            elif(command_type == MOVE):
+                print(MOVE)
+                #print(player_info.get_posi())
+                #print(player_info.get_next_command())
+                player_info.update_posi()
+                self.player_info_manager_.update_object_info(player_info)
+                #print(player_info.get_posi())
+            elif(command_type == ATTACK):
+                print(ATTACK)
+                id = self.create_id()
+                self.bullet_info_manager_.create_bullet_info(id,player_info)
+                #print(len(self.bullet_info_manager_.get_all_object_info()))
+                self.bullet_info_manager_.object_info_list_[-1].show_info()
+                bullet_info = self.bullet_info_manager_.object_info_list_[-1]
+                if(bullet_info.is_posi_error()):
+                    id = bullet_info.get_id()
+                    self.bullet_info_manager_.delete_object_info(id)
+                    self.delete_id(id)
+                else:
+                    self.bullet_info_manager_.update_object_info(bullet_info)
+                #print(len(self.bullet_info_manager_.get_all_object_info()))
+
+                #self.bullet_info_manager_.object_info_list_[-1].update_posi()
+                #self.bullet_info_manager_.object_info_list_[-1].show_info()
+            else:
+                print("何もコマンドがない")
+        ############################################################################################################
+
+        ##############################################################################################################全てのオブジェクトの変化後の座標位置をもとに処理を行う
+        print("全てのオブジェクトの座標を更新しました。")
+        print("衝突処理に入ります。")
+
+        #きれいではないけど時間がないから以下の方法でやる
+        maze_object_dict = [[{PLAYER_INFO:[],BULLET_INFO:[]} for x in range(10)] for y in range(10)]
+        
+        player_info_list = self.player_info_manager_.get_all_object_info()
+        for player_info in player_info_list:
+            object_type = player_info.get_object_type()
+            posi = player_info.get_posi()
+            x = posi[X]
+            y = posi[Y]
+            maze_object_dict[x][y][object_type].append(player_info)
+        bullet_info_list = self.bullet_info_manager_.get_all_object_info()
+        for bullet_info in bullet_info_list:
+            object_type = bullet_info.get_object_type()
+            posi = bullet_info.get_posi()
+            x = posi[X]
+            y = posi[Y]
+            maze_object_dict[x][y][object_type].append(bullet_info)
+        
+        ####TEST
+        #for x in range(10):
+        #    for y in range(10):
+        #        print("x,y",x,y)
+        #        dic = maze_object_dict[x][y]
+        #        print(dic)
+        #        for player_info in dic[PLAYER_INFO]:
+        #            player_info.show_info()
+        #        for bullet_info in dic[BULLET_INFO]:
+        #            bullet_info.show_info()
+        ####TEST
+
+        ########################################衝突処理
+        for x in range(10):
+            for y in range(10):
+                object_dict = maze_object_dict[x][y]
+                player_info_list = object_dict[PLAYER_INFO]
+                bullet_info_list = object_dict[BULLET_INFO]
+                player_num = len(player_info_list)
+                bullet_num = len(bullet_info_list)
+                print("x,y",x,y,"にあるプレイヤーオブジェクトの数",player_num)
+                print("x,y",x,y,"にあるバレットオブジェクトの数",bullet_num)
+
+                ##################################################################壁の衝突
+                if(self.maze_[y][x] == W):
+                    print("ここは壁やで プレイヤーは元の位置に戻して、弾丸は破壊するよ。")
+                    if(player_num >= 1):
+                        time.sleep(10)
+                    for player_info in player_info_list:
+                        player_info.back_last_posi()
+                        print("もどりまーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーす")
+                        self.player_info_manager_.update_object_info(player_info)
+                    for bullet_info in bullet_info_list:
+                        id = bullet_info.get_id()
+                        self.bullet_info_manager_.delete_object_info(id)
+                        self.delete_id(id)
+                    continue
+                ##################################################################ここまで壁の衝突
+
+                ##################################################################オブジェクト同士の衝突
+                if(player_num == 0 and bullet_num == 0):
+                    print("オブジェクト無し 衝突無し")
+                elif(player_num == 1 and bullet_num == 0):
+                    print("プレイヤーオブジェクトのみ　衝突無し")
+                elif(player_num == 0 and bullet_num == 1):
+                    print("弾丸オブジェクトのみ　衝突無し")
+                elif(player_num >= 2 and bullet_num == 0):
+                    print("プレイヤー同士の衝突が発生 それぞれのプレイヤーを元の座標に戻します。")
+                    for player_info in player_info_list:
+                        player_info.back_last_posi()
+                        self.player_info_manager_.update_object_info(player_info)
+                elif(palyer_num == 0 and bulley_num >= 2):
+                    print("弾丸同士の衝突が発生 それぞれの弾丸を破棄します。")
+                    for bullet_info in bullet_info_list:
+                        id = bullet_info.get_id()
+                        self.bullet_info_manager_.delete_object_info(id)
+                        self.delete_id(id)
+                elif(player_num == 1 and bullet_num >= 1):
+                    print("一人のプレイヤーと弾丸が衝突しました。プレイヤーのライフを減らして弾丸を破棄します。")
+                    total_damage = 0
+                    for bullet_info in bullet_info_list:
+                        total_damage += bullet_info.get_power()
+                        id = bullet_info.get_id()
+                        self.bullet_info_manager_.delete_object_info(id)
+                        self.delete_id(id)
+                    print("TOTAL DAMAGE = ",total_damage)
+                    for player_info in player_info_list:
+                        player_info.decrease_hp(total_damage)
+                        self.player_info_manager_.update_object_info(player_info)
+                elif(palyer_num >= 2 and bullet_num >= 1):
+                    print("複数のプレイヤーと弾丸が衝突しました。プレイヤーのライフを減らして弾丸を破棄します。その後プレイヤーを元居た座標に戻します。")
+                    total_damage = 0
+                    for bullet_info in bullet_info_list:
+                        total_damage += bullet_info.get_power()
+                        id = bullet_info.get_id()
+                        self.bullet_info_manager_.delete_object_info(id)
+                        self.delete_id(id)
+                    print("TOTAL DAMAGE = ",total_damage)
+                    for player_info in player_info_list:
+                        player_info.decrease_hp(total_damage)
+                        player_info.back_last_posi()
+                        self.player_info_manager_.update_object_info(player_info)
+                ##############################################################################ここまでオブジェクト同士の衝突
+        print("衝突処理完了")
+
+        ##########################################ここまで衝突処理
+
+        print("すべてのオブジェクトの情報が更新されました。")
+        return
 
 
 
