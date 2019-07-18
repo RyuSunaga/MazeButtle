@@ -7,4 +7,4 @@ C_BACKLOG = 10
 C_BUFSIZE = 4096
 
 name = input("プレイヤーの名前を入力してください。")
-ClientMain(name, C_HOST, C_PORT, C_
+ClientMain(name, C_HOST, C_PORT, C_BACKLOG, C_BUFSIZE)
