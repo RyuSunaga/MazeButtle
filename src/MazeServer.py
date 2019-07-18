@@ -81,7 +81,7 @@ class MazeServer(object):
         self.send_data_ = None
         self.is_first_connect_ = False
         self.server_start_time_ = time.time()
-        self.time_limit_ = 30
+        self.time_limit_ = 60
         #クライアントの接続数 -> あらかじめ最大数を決めておこう
         self.client_num_ = 3
         #クライアントを格納するリスト
