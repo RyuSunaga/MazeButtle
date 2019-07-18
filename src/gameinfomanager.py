@@ -14,15 +14,20 @@ from config import RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, DOWN_ATTACK
 from config import OBJECT_INFO, PLAYER_INFO, BULLET_INFO, ITEM_INFO
 from config import PACKET_TYPE, PLAYER_ID, PLAYER_NAME, PLAYER_COLOR, PLAYER_HP, PLAYER_POSI,BULLET_POSI,MAZE, PLAYER_INFO_LIST, BULLET_INFO_LIST, ITEM_INFO_LIST, TURN,TEXT,NEXT_COMMAND
 from config import CLIENT_TO_SERVER_PACKET, SERVER_TO_CLIENT_PACKET
+from config import FIRST_TEXT, ATTACK_TEXT, MOVE_TEXT, CONFLICT_TEXT, HIT_TEXT, WIN_TEXT, LOSE_TEXT 
+from config import TEST
+
 from maze import Maze
 from info import PlayerInfo, BulletInfo, ItemInfo
 from infomanager import PlayerInfoManager, BulletInfoManager, ItemInfoManager
 from gameinfo import GameInfo
 from packet import ServerToClientPacket, ClientToServerPacket
 from mazesocket import MazeServerSocketManager, MazeClientSocketManager
+
 import random
 import socket
 import time
+
 
 
 class GameInfoManager(object):
@@ -165,7 +170,6 @@ class GameInfoManager(object):
         self.game_info_.set_bullet_info_list(self.bullet_info_manager_.get_all_object_info())
         self.game_info_.set_item_info_list(self.item_info_manager_.get_all_object_info())
         print("ゲームの情報を更新しました。")
-        time.sleep(5)
         return
 
     def set_all_player_command(self):
@@ -274,6 +278,12 @@ class GameInfoManager(object):
             x = posi[X]
             y = posi[Y]
             maze_object_dict[x][y][object_type].append(player_info)
+            if(self.turn_ >= 1):
+                last_posi = player_info.get_last_posi()
+                x = last_posi[X]
+                y = last_posi[Y]
+                maze_object_dict[x][y][object_type].append(player_info)
+            
         bullet_info_list = self.bullet_info_manager_.get_all_object_info()
         for bullet_info in bullet_info_list:
             object_type = bullet_info.get_object_type()
@@ -302,17 +312,18 @@ class GameInfoManager(object):
                 bullet_info_list = object_dict[BULLET_INFO]
                 player_num = len(player_info_list)
                 bullet_num = len(bullet_info_list)
-                print("x,y",x,y,"にあるプレイヤーオブジェクトの数",player_num)
-                print("x,y",x,y,"にあるバレットオブジェクトの数",bullet_num)
+                #print("x,y",x,y,"にあるプレイヤーオブジェクトの数",player_num)
+                #print("x,y",x,y,"にあるバレットオブジェクトの数",bullet_num)
 
                 ##################################################################壁の衝突
                 if(self.maze_[y][x] == W):
-                    print("ここは壁やで プレイヤーは元の位置に戻して、弾丸は破壊するよ。")
+                    #print("ここは壁やで プレイヤーは元の位置に戻して、弾丸は破壊するよ。")
                     if(player_num >= 1):
-                        time.sleep(10)
+                        #time.sleep(2)
+                        pass
                     for player_info in player_info_list:
                         player_info.back_last_posi()
-                        print("もどりまーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーす")
+                        #print("もどりまーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーす")
                         self.player_info_manager_.update_object_info(player_info)
                     for bullet_info in bullet_info_list:
                         id = bullet_info.get_id()
@@ -333,7 +344,7 @@ class GameInfoManager(object):
                     for player_info in player_info_list:
                         player_info.back_last_posi()
                         self.player_info_manager_.update_object_info(player_info)
-                elif(palyer_num == 0 and bulley_num >= 2):
+                elif(player_num == 0 and bullet_num >= 2):
                     print("弾丸同士の衝突が発生 それぞれの弾丸を破棄します。")
                     for bullet_info in bullet_info_list:
                         id = bullet_info.get_id()
@@ -344,14 +355,29 @@ class GameInfoManager(object):
                     total_damage = 0
                     for bullet_info in bullet_info_list:
                         total_damage += bullet_info.get_power()
+                        print("TOTAL DAMAGE:",total_damage)
+                        #time.sleep(1)
                         id = bullet_info.get_id()
                         self.bullet_info_manager_.delete_object_info(id)
                         self.delete_id(id)
                     print("TOTAL DAMAGE = ",total_damage)
                     for player_info in player_info_list:
+                        #応急処置
+                        current_player_info = None
+                        current_player_info_list = self.player_info_manager_.get_all_object_info()
+                        for c_player_info in current_player_info_list:
+                            if(c_player_info.get_id() == player_info.get_id()):
+                                current_player_info = c_player_info
+                                break
+                        #取得した同じプレイヤーのHPがすでに更新されているものであればHPを最新のものに変更する
+                        if(current_player_info.get_hp() < player_info.get_hp()):
+                            player_info.set_hp(current_player_info.get_hp())
+                        ######################ここまで応急処置
                         player_info.decrease_hp(total_damage)
+                        print("HP:",player_info.get_hp())
+                        time.sleep(2)
                         self.player_info_manager_.update_object_info(player_info)
-                elif(palyer_num >= 2 and bullet_num >= 1):
+                elif(player_num >= 2 and bullet_num >= 1):
                     print("複数のプレイヤーと弾丸が衝突しました。プレイヤーのライフを減らして弾丸を破棄します。その後プレイヤーを元居た座標に戻します。")
                     total_damage = 0
                     for bullet_info in bullet_info_list:

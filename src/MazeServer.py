@@ -16,6 +16,7 @@ from config import RIGHT_MOVE, LEFT_MOVE, UP_MOVE, DOWN_MOVE
 from config import RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, DOWN_ATTACK
 from config import PACKET_TYPE, PLAYER_ID, PLAYER_NAME, PLAYER_COLOR, PLAYER_HP, PLAYER_POSI,BULLET_POSI,MAZE, PLAYER_INFO_LIST, BULLET_INFO_LIST, ITEM_INFO_LIST, TURN,TEXT,NEXT_COMMAND
 from config import CLIENT_TO_SERVER_PACKET, SERVER_TO_CLIENT_PACKET
+from config import TEST
 
 
 ##############################################################################################################
@@ -57,6 +58,7 @@ from config import CLIENT_TO_SERVER_PACKET, SERVER_TO_CLIENT_PACKET
 
 ######################################デモ用のサーバーの情報
 HOST = '127.0.0.1'
+#HOST = '10.65.168.111'
 PORT = 50000
 BACKLOG = 10
 BUFSIZE = 4096
@@ -80,7 +82,7 @@ class MazeServer(object):
         self.send_data_ = None
         self.is_first_connect_ = False
         self.server_start_time_ = time.time()
-        self.time_limit_ = 60
+        self.time_limit_ = 30
         #クライアントの接続数 -> あらかじめ最大数を決めておこう
         self.client_num_ = 3
         #クライアントを格納するリスト
@@ -215,7 +217,7 @@ class MazeServer(object):
                     if(self.is_first_connect_ == False):
                        #サーバーが起動してから30秒かプレイヤーの人数が4人になるまでまつ
                        while (time.time() - self.server_start_time_ <= self.time_limit_) and len(self.player_command_data_list_) < 4:
-                           print("クライアントの接続を待っています。 残り時間:" +str(int(self.time_limit_ - (time.time() - self.server_start_time_))))
+                           print("クライアントの接続を待っています。 残り時間:" +str(int(self.time_limit_ - (time.time() - self.server_start_time_)))+"秒")
                            print("現在の受付数;"+str(len(self.player_command_data_list_)))
                            time.sleep(1)
                        print("参加プレイヤーの受付を終了しました。")
@@ -243,7 +245,7 @@ class MazeServer(object):
 
                     if(len(self.player_command_data_list_) == self.client_num_):
                         print("すべてのクライアントからデータを受け取りました。")
-                        time.sleep(5)
+                        time.sleep(1)
                         self.up_date_game_info()
                         self.create_client_game_info()
                     else:
@@ -253,7 +255,7 @@ class MazeServer(object):
                             print("送受信数:",len(self.player_command_data_list_))
                         print("すべてのクライアントからデータを受け取りました。")
                         print("ゲーム情報を更新します。10秒待機します　20秒必要かな????")
-                        time.sleep(15)
+                        time.sleep(7)
                     
                     new_game_info = self.send_data_
                     client_sock.send(new_game_info.encode())

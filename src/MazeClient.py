@@ -1,3 +1,4 @@
+
 import config
 import socket
 import select
@@ -24,6 +25,9 @@ from config import RIGHT_MOVE, LEFT_MOVE, UP_MOVE, DOWN_MOVE
 from config import RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, DOWN_ATTACK
 from config import PACKET_TYPE, PLAYER_ID, PLAYER_NAME, PLAYER_COLOR, PLAYER_HP, PLAYER_POSI,BULLET_POSI,MAZE, PLAYER_INFO_LIST, BULLET_INFO_LIST, ITEM_INFO_LIST, TURN,TEXT,NEXT_COMMAND
 from config import CLIENT_TO_SERVER_PACKET, SERVER_TO_CLIENT_PACKET
+from config import WIN, LOSE, NORMAL
+from config import TEST
+
 ########################################################
 
 ##############################################################################################################
@@ -52,6 +56,8 @@ C_BUFSIZE = 4096
 #ctss.transmission()
 ############################################
 
+
+
 class MazeClient(object):
 
     def __init__(self,player_name,HOST,PORT,BACKLOG,BUFSIZE):
@@ -67,7 +73,7 @@ class MazeClient(object):
         self.player_posi_ = []
         self.player_color_ = None
         self.player_next_command_ = None
-        self.server_to_client_message_ = None
+        self.server_to_client_message_ = None 
         #最初のコマンドをサーバーに送信したかどうか
         self.is_send_first_command_ = False
         self.maze_client_socket_manager_ = MazeClientSocketManager(HOST,PORT,BACKLOG,BUFSIZE)
@@ -104,17 +110,45 @@ class MazeClient(object):
         if(self.game_info_data_ == None):
             print("ゲームの情報がないためGUIを作ることが出来ません")
         else:
-            print("迷路情報をを生成します。")
-            self.maze_field_ = None
-            self.maze_field_ = MazeField("",self.game_info_data_)
-            self.maze_field_.locate_bullet()
-            self.maze_field_.locate_player()
-            #mf.create_maze()
-            #mf.move_player()
-            #mf.attack_player()
-            self.maze_field_.create_GUI_v2(self.player_name_, self.player_color_)
-            print("取得したコマンド",self.maze_field_.get_next_command())
-            self.player_next_command_ = self.maze_field_.get_next_command()
+
+            ######ここで勝敗判定をするWIN -> 0, LOSE -> 1, NORMAL -> 2
+            game_flag = [True,False,False]
+            if(self.player_hp_ <= 0):
+                game_flag[WIN] = False
+                game_flag[LOSE] = True
+                game_flag[NORMAL] = False
+            ####自分が勝ったか判定
+            
+            if(game_flag[LOSE] != True):
+               player_info_dict_list = self.game_info_data_[PLAYER_INFO_LIST]
+               for player_dict in player_info_dict_list:
+                   print("aaaa",player_dict)
+                   if(player_dict[PLAYER_ID] == self.player_id_):
+                       continue
+                   if(player_dict[PLAYER_HP] > 0):
+                       #まだ勝っていない
+                       game_flag[WIN] = False
+                       game_flag[LOSE] = False
+                       game_flag[NORMAL] = True
+                       break
+            if(game_flag[WIN]):
+                print("あなたは勝ちました")
+                self.maze_field_.create_win_window(self.player_name_, self.player_color_)
+            elif(game_flag[LOSE]):
+                print("あなたは負けました")
+                self.maze_field_.create_lose_window(self.player_name_, self.player_color_)
+            else:
+                print("迷路情報をを生成します。")
+                self.maze_field_ = None
+                self.maze_field_ = MazeField("",self.game_info_data_)
+                self.maze_field_.locate_bullet()
+                self.maze_field_.locate_player()
+                #mf.create_maze()
+                #mf.move_player()
+                #mf.attack_player()
+                self.maze_field_.create_GUI_v2(self.player_name_, self.player_color_)
+                print("取得したコマンド",self.maze_field_.get_next_command())
+                self.player_next_command_ = self.maze_field_.get_next_command()
 
     def first_connect(self):
         '''
@@ -129,7 +163,7 @@ class MazeClient(object):
             self.maze_client_socket_manager_.set_send_data(self.str_player_command_data_)
             print("クライアント側からサーバー側に送信する情報をセットしました。")
             print("クライアントソケットを生成します。")
-            client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
             client_sock.connect((self.HOST_, self.PORT_))
             send_data = self.str_player_command_data_
             client_sock.send(send_data.encode())
@@ -154,11 +188,11 @@ class MazeClient(object):
                     print("あなたのID:",self.player_id_)
                     print("あなたの色:",self.player_color_)
                     print("あなたのHP:",self.player_hp_)
-                    print("あなたの座標:",self.player_posi_)
+                    print("あなたの座標:",self.player_posi_)                    
                     ######################時間がないからしょうがない
                     self.game_info_data_[PLAYER_HP] = self.player_hp_
                     if(self.game_info_data_[TEXT] == None):
-                        self.game_info_data_[TEXT] = ""
+                        self.game_info_data_[TEXT] = "" 
                     #####################
             self.is_send_first_command_ = True
             print("最初の通信が終了しました。")
@@ -177,7 +211,7 @@ class MazeClient(object):
             self.maze_client_socket_manager_.set_send_data(self.str_player_command_data_)
             print("クライアント側からサーバー側に送信する情報をセットしました。")
             print("クライアントソケットを生成します。")
-            client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
             client_sock.connect((self.HOST_, self.PORT_))
             send_data = self.str_player_command_data_
             client_sock.send(send_data.encode())
@@ -202,12 +236,12 @@ class MazeClient(object):
                     print("あなたのID:",self.player_id_)
                     print("あなたの色:",self.player_color_)
                     print("あなたのHP:",self.player_hp_)
-                    print("あなたの座標:",self.player_posi_)
+                    print("あなたの座標:",self.player_posi_)                    
                     ######################時間がないからしょうがない
                     self.game_info_data_[PLAYER_HP] = self.player_hp_
                     if(self.game_info_data_[TEXT] == None):
                         print("TEXTがNoneだったので整形しました。")
-                        self.game_info_data_[TEXT] = ""
+                        self.game_info_data_[TEXT] = "" 
                     #####################
 
             self.is_send_first_command = True
@@ -227,11 +261,11 @@ class MazeClient(object):
         self.str_player_command_data_ = self.ctsp_.get_send_data()
         print(self.str_player_command_data_)
         print("クライアントからサーバーに渡すデータを生成しました。")
-
+    
     #ここの処理がわからない -> 悪い野島これは須永のミス
     def set_player_id(self,id):
         #self.player_id_= self.game_info_data[PLAYER_INFO_LIST]
-        self.player_id_ = id
+        self.player_id_ = id 
 
     def get_game_info_data(self):
         return self.game_info_data
@@ -239,7 +273,7 @@ class MazeClient(object):
     def get_player_id(self):
         return self.player_id_
 
-    '''
+    
     #サーバからのソケット取得、及びデコードによりgame_info_data_更新
     #まだ使うか謎
     def listen(self):
@@ -253,7 +287,7 @@ class MazeClient(object):
         finally:
             self.socket_.close()
             print("サーバとの通信終了")
-    '''
+
 
 
 
@@ -262,7 +296,7 @@ print("HOSTとかPORTとかが変な動きするかも")
 player_command_data = [{PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:None,PLAYER_NAME:"Nojima",NEXT_COMMAND:JOIN,TEXT:""},
                        {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:None,PLAYER_NAME:"Gaia",NEXT_COMMAND:JOIN,TEXT:""},
                        {PACKET_TYPE:CLIENT_TO_SERVER_PACKET,HOST:'127.0.0.1',PORT:50000,PLAYER_ID:None,PLAYER_NAME:"Sunaga",NEXT_COMMAND:JOIN,TEXT:""}]
-
+     
 
 
 
@@ -340,6 +374,17 @@ def test5():
         MC.create_gui()
         time.sleep(1)
 
+def ClientMain(player_name, host, port, backlog, bufsize):
+    MC = MazeClient(player_name,host, port, backlog, bufsize)
+    MC.send_data()
+    MC.create_gui()
+    time.sleep(1)
+    ##本来はGUIでコマンドを設定できるようにしないといけない
+    for turn in range(50):
+        print("次のコマンド",MC.player_next_command_)
+        MC.send_data()
+        MC.create_gui()
+        time.sleep(1)
 
 
 #########################TEST#####################
@@ -352,5 +397,12 @@ def test5():
 
 #thrd=threading.Thread(target=listen)
 #thrd.start()
+
+
+
+
+
+
+
 
 

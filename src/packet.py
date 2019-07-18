@@ -1,11 +1,10 @@
-
-
 import info
 from config import HOST,PORT
 from config import PACKET_TYPE, PLAYER_ID, PLAYER_NAME, PLAYER_COLOR, PLAYER_HP, PLAYER_POSI,BULLET_POSI,MAZE, PLAYER_INFO_LIST, BULLET_INFO_LIST, ITEM_INFO_LIST, TURN,TEXT,NEXT_COMMAND
 from info import ObjectInfo, PlayerInfo, BulletInfo, ItemInfo
 from gameinfo import GameInfo
 from config import PACKET, SERVER_TO_CLIENT_PACKET, CLIENT_TO_SERVER_PACKET
+from config import TEST
 #クライアントとサーバー間で扱うデータ群をまとめるクラス
 #info関連のクラスをインスタンス変数として持つ
 #余裕があったら色々新しい迷路上のオブジェクトを追加しよう。 by sunaga
@@ -266,6 +265,5 @@ class ClientToServerPacket(Packet):
         '''
         self.info_to_dict()
         return self.str_client_to_server_data
-
 
 

@@ -12,6 +12,7 @@ from config import OBJECT_INFO_MANAGER, PLAYER_INFO_MANAGER, BULLET_INFO_MANAGER
 from config import PACKET, SERVER_TO_CLIENT_PACKET, CLIENT_TO_SERVER_PACKET
 from config import get_direct_str
 from maze import Maze
+from config import TEST
 from info import PlayerInfo, BulletInfo, ItemInfo
 from infomanager import PlayerInfoManager, BulletInfoManager, ItemInfoManager
 

@@ -7,6 +7,7 @@ Created on 2019/04/25
 import socket
 from packet import ClientToServerPacket,ServerToClientPacket
 import pickle
+from config import TEST
 
 
 #接続先ホストの名前。ドメイン込み（あるいはIPアドレス）

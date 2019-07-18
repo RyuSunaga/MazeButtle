@@ -1,3 +1,4 @@
+
 #this is GUI file
 import tkinter as tk
 from config import MAZE_LIST
@@ -244,6 +245,20 @@ class MazeField(object):
         #self.attack_player()
         self.create_GUI_v2()
 
+    def create_win_window(self, player_name, player_color):
+        root = tk.Tk()
+        #root.title("お前の勝ちだ")
+        root.title("迷路" + "Name:" + player_name + " Color:" + player_color + "   お前の勝ちだ")
+        root.mainloop()
+
+    def create_lose_window(self, player_name, player_color):
+        root = tk.Tk()
+        #root.title("お前の負けだ")
+        root.title("迷路" + "Name:" + player_name + " Color:" + player_color + "   お前の負けだ")
+        root.mainloop()
+
+
+
     def create_GUI_v2(self, player_name, player_color):
         maze=self.game_info_data_[MAZE]
         root=tk.Tk()
@@ -329,8 +344,3 @@ class MazeField(object):
 #mf.attack_player()
 
 #mf.create_GUI_v2()
-
-
-
-
-

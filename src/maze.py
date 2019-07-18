@@ -11,6 +11,8 @@ from config import OBJECT_INFO,PLAYER_INFO,BULLET_INFO, ITEM_INFO
 from config import OBJECT_INFO_MANAGER, PLAYER_INFO_MANAGER, BULLET_INFO_MANAGER, ITEM_INFO_MANAGER
 from info import PlayerInfo
 from info import BulletInfo
+from config import TEST
+
 
 #########################################################################################################
 
