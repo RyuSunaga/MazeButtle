@@ -85,7 +85,7 @@ class MazeSocketManager(object):
     def create_socket(self):
         '''
             socktを生成
-            閉じるのを忘れるなよ 
+            閉じるのを忘れるなよ
         '''
         self.socket_ = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         print("ソケットを生成しました。")
@@ -109,7 +109,7 @@ class MazeSocketManager(object):
 
 
 class MazeServerSocketManager(MazeSocketManager):
-    
+
 
     def __init__(self,HOST,PORT,BACKLOG,BUFSIZE):
         super().__init__(HOST,PORT,BACKLOG,BUFSIZE)
@@ -117,14 +117,14 @@ class MazeServerSocketManager(MazeSocketManager):
         #この二つ辞書にした方がいいのかもね
         self.conn_ = None
         self.addr_ = None
-    
+
     def bind(self):
         '''
             接続待ちをするIPアドレスとポート番号を指定
         '''
         self.socket_.bind((self.HOST_, self.PORT_))
         print("bindをしました。")
-        
+
 
     def listen(self, connect_num):
         '''
@@ -193,7 +193,12 @@ class MazeClientSocketManager(MazeSocketManager):
     '''
     def __init__(self,HOST,PORT,BACKLOG,BUFSIZE):
         super().__init__(HOST,PORT,BACKLOG,BUFSIZE)
+<<<<<<< HEAD
+        self.send_data = None
+
+=======
     
+>>>>>>> c6133f13eaee2ce39cb3435c8484576862d31250
     def connect(self):
         '''
             IPアドレスとポートを指定
@@ -214,6 +219,9 @@ class MazeClientSocketManager(MazeSocketManager):
         else:
             self.game_info_data_ = self.socket_.recv(self.BUFSIZE_).decode()
             print("サーバー側からデータを受け取りました。")
+<<<<<<< HEAD
+            return self.game_info_data_
+=======
             print(self.game_info_data_)
     
     def set_send_data(self,send_data):
@@ -222,6 +230,7 @@ class MazeClientSocketManager(MazeSocketManager):
         '''
         self.player_command_data_ = send_data
         print("サーバー側に送る情報をセットしました。")
+>>>>>>> c6133f13eaee2ce39cb3435c8484576862d31250
 
 
     def send(self):
@@ -245,6 +254,15 @@ class MazeClientSocketManager(MazeSocketManager):
         self.recv()
         self.close_socket()
         print("通信を終了します。")
+
+    def create_socket_2(self):
+        '''
+            socktを生成
+            閉じるのを忘れるなよ
+        '''
+        print("ソケットを生成した。")
+        return socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
 
 
 

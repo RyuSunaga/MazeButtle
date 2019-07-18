@@ -1,3 +1,4 @@
+
 #this is GUI file
 import tkinter as tk
 from config import MAZE_LIST
@@ -343,8 +344,3 @@ class MazeField(object):
 #mf.attack_player()
 
 #mf.create_GUI_v2()
-
-
-
-
-

@@ -1,4 +1,3 @@
-
 import info
 from config import HOST,PORT
 from config import PACKET_TYPE, PLAYER_ID, PLAYER_NAME, PLAYER_COLOR, PLAYER_HP, PLAYER_POSI,BULLET_POSI,MAZE, PLAYER_INFO_LIST, BULLET_INFO_LIST, ITEM_INFO_LIST, TURN,TEXT,NEXT_COMMAND
@@ -266,6 +265,5 @@ class ClientToServerPacket(Packet):
         '''
         self.info_to_dict()
         return self.str_client_to_server_data
-
 
 
