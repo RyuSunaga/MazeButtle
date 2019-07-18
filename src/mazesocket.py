@@ -193,12 +193,9 @@ class MazeClientSocketManager(MazeSocketManager):
     '''
     def __init__(self,HOST,PORT,BACKLOG,BUFSIZE):
         super().__init__(HOST,PORT,BACKLOG,BUFSIZE)
-<<<<<<< HEAD
+
         self.send_data = None
 
-=======
-    
->>>>>>> c6133f13eaee2ce39cb3435c8484576862d31250
     def connect(self):
         '''
             IPアドレスとポートを指定
@@ -219,9 +216,7 @@ class MazeClientSocketManager(MazeSocketManager):
         else:
             self.game_info_data_ = self.socket_.recv(self.BUFSIZE_).decode()
             print("サーバー側からデータを受け取りました。")
-<<<<<<< HEAD
             return self.game_info_data_
-=======
             print(self.game_info_data_)
     
     def set_send_data(self,send_data):
@@ -230,7 +225,6 @@ class MazeClientSocketManager(MazeSocketManager):
         '''
         self.player_command_data_ = send_data
         print("サーバー側に送る情報をセットしました。")
->>>>>>> c6133f13eaee2ce39cb3435c8484576862d31250
 
 
     def send(self):
