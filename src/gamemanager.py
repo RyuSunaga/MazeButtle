@@ -12,6 +12,7 @@ from infomanager import PlayerInfoManager, BulletInfoManager, ItemInfoManager
 from gameinfo import GameInfo
 from packet import ServerToClientPacket, ClientToServerPacket
 from mazesocket import MazeServerSocketManager, MazeClientSocketManager
+from config import TEST
 import random
 import socket
 import time

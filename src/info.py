@@ -1,4 +1,5 @@
 #迷路上のオブジェクトを定義する＋クラス
+import time
 import config
 import config
 from config import X, Y
@@ -12,6 +13,7 @@ from config import OBJECT_INFO, PLAYER_INFO, BULLET_INFO, ITEM_INFO
 from config import get_direct_str
 from config import PLAYER_INFO, BULLET_INFO, ITEM_INFO
 from config import PACKET_TYPE, PLAYER_ID, PLAYER_NAME, PLAYER_COLOR, PLAYER_HP, PLAYER_POSI,BULLET_POSI,MAZE, PLAYER_INFO_LIST, BULLET_INFO_LIST, ITEM_INFO_LIST, TURN,TEXT,NEXT_COMMAND
+from config import TEST
 
 
 #################################     メモ     #######################################################
@@ -79,7 +81,7 @@ class PlayerInfo(ObjectInfo):
         self.object_type_ = PLAYER_INFO
         self.name_ = name
         self.color_ = color
-        self.hp_ = 10
+        self.hp_ = 5
         #self.posi_ = [None,None]
         self.power_ = 1
         self.speed_ = 1
@@ -91,7 +93,10 @@ class PlayerInfo(ObjectInfo):
         self.next_command_direct_ = [None,None]
 
         #移動前の座標を保持しておく
-        self.last_posi_ = [None, None]
+        self.last_posi_ = posi
+
+        #最新の情報
+        self.state_text_ = None
 
     ##########################################プレイヤー情報を設定するための関数##############################################
  
@@ -146,6 +151,9 @@ class PlayerInfo(ObjectInfo):
             self.next_command_direct_ = [0,0]
         print(self.next_command_direct_)
 
+    def set_state_text(self,text):
+        self.state_text_ = text
+
     ##########################################ここまでプレイヤー情報を設定するための関数##############################################
 
     
@@ -188,6 +196,9 @@ class PlayerInfo(ObjectInfo):
         send_player_data[PLAYER_POSI] = self.posi_
         print("PlayerInfoの通信用データを生成しました。")
         return send_player_data
+
+    def get_state_text_(self):
+        return self.state_text_
 
     ##########################################ここまでプレイヤー情報を設定するための関数##############################################
         
@@ -252,6 +263,9 @@ class PlayerInfo(ObjectInfo):
          self.posi_ = next_posi
          print("Name " + self.name_ + "の位置情報を更新しました。")
 
+    def get_last_posi(self):
+        return self.last_posi_
+
     def back_last_posi(self):
         '''
             衝突処理などで元の座標に戻りたいとき使う
@@ -265,6 +279,7 @@ class PlayerInfo(ObjectInfo):
             ダメージ分HPを減らす
         '''
         print(self.name_,"のHPを",damage,"減らします。")
+        #time.sleep(5)
         self.hp_ -= damage
         
     def clear_next_command(self):

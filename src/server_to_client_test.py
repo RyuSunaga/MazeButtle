@@ -12,6 +12,7 @@ from config import JOIN, MOVE, ATTACK
 from config import RIGHT, LEFT, UP, DOWN
 from config import RIGHT_MOVE, LEFT_MOVE, UP_MOVE, DOWN_MOVE
 from config import RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, DOWN_ATTACK
+from config import TEST
 from info import PlayerInfo,BulletInfo,ItemInfo
 from gameinfo import GameInfo
 from packet import ClientToServerPacket, ServerToClientPacket

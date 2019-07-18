@@ -1,4 +1,6 @@
 #mazeserverファイルに含まれるコードのテスト用ファイル
+from config import TEST
+
 from MazeServer import GameManager
 from MazeServer import PlayerInfoManager
 

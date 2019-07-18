@@ -5,6 +5,7 @@ import socket
 import select
 from packet import ServerToClientPacket, ClientToServerPacket
 from mazesocket import MazeServerSocketManager, MazeClientSocketManager
+from config import TEST
 import ast
 
 def send_to(sock, msg):

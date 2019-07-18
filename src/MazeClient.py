@@ -24,6 +24,9 @@ from config import RIGHT_MOVE, LEFT_MOVE, UP_MOVE, DOWN_MOVE
 from config import RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, DOWN_ATTACK
 from config import PACKET_TYPE, PLAYER_ID, PLAYER_NAME, PLAYER_COLOR, PLAYER_HP, PLAYER_POSI,BULLET_POSI,MAZE, PLAYER_INFO_LIST, BULLET_INFO_LIST, ITEM_INFO_LIST, TURN,TEXT,NEXT_COMMAND
 from config import CLIENT_TO_SERVER_PACKET, SERVER_TO_CLIENT_PACKET
+from config import WIN, LOSE, NORMAL
+from config import TEST
+
 ########################################################
 
 ##############################################################################################################
@@ -51,6 +54,8 @@ C_BUFSIZE = 4096
 #ctss.set_send_data("送りたい情報")
 #ctss.transmission()
 ############################################
+
+
 
 class MazeClient(object):
 
@@ -104,17 +109,45 @@ class MazeClient(object):
         if(self.game_info_data_ == None):
             print("ゲームの情報がないためGUIを作ることが出来ません")
         else:
-            print("迷路情報をを生成します。")
-            self.maze_field_ = None
-            self.maze_field_ = MazeField("",self.game_info_data_)
-            self.maze_field_.locate_bullet()
-            self.maze_field_.locate_player()
-            #mf.create_maze()
-            #mf.move_player()
-            #mf.attack_player()
-            self.maze_field_.create_GUI_v2(self.player_name_, self.player_color_)
-            print("取得したコマンド",self.maze_field_.get_next_command())
-            self.player_next_command_ = self.maze_field_.get_next_command()
+
+            ######ここで勝敗判定をするWIN -> 0, LOSE -> 1, NORMAL -> 2
+            game_flag = [True,False,False]
+            if(self.player_hp_ <= 0):
+                game_flag[WIN] = False
+                game_flag[LOSE] = True
+                game_flag[NORMAL] = False
+            ####自分が勝ったか判定
+            
+            if(game_flag[LOSE] != True):
+               player_info_dict_list = self.game_info_data_[PLAYER_INFO_LIST]
+               for player_dict in player_info_dict_list:
+                   print("aaaa",player_dict)
+                   if(player_dict[PLAYER_ID] == self.player_id_):
+                       continue
+                   if(player_dict[PLAYER_HP] > 0):
+                       #まだ勝っていない
+                       game_flag[WIN] = False
+                       game_flag[LOSE] = False
+                       game_flag[NORMAL] = True
+                       break
+            if(game_flag[WIN]):
+                print("あなたは勝ちました")
+                self.maze_field_.create_win_window(self.player_name_, self.player_color_)
+            elif(game_flag[LOSE]):
+                print("あなたは負けました")
+                self.maze_field_.create_lose_window(self.player_name_, self.player_color_)
+            else:
+                print("迷路情報をを生成します。")
+                self.maze_field_ = None
+                self.maze_field_ = MazeField("",self.game_info_data_)
+                self.maze_field_.locate_bullet()
+                self.maze_field_.locate_player()
+                #mf.create_maze()
+                #mf.move_player()
+                #mf.attack_player()
+                self.maze_field_.create_GUI_v2(self.player_name_, self.player_color_)
+                print("取得したコマンド",self.maze_field_.get_next_command())
+                self.player_next_command_ = self.maze_field_.get_next_command()
 
     def first_connect(self):
         '''
@@ -340,6 +373,17 @@ def test5():
         MC.create_gui()
         time.sleep(1)
 
+def ClientMain(player_name, host, port, backlog, bufsize):
+    MC = MazeClient(player_name,host, port, backlog, bufsize)
+    MC.send_data()
+    MC.create_gui()
+    time.sleep(1)
+    ##本来はGUIでコマンドを設定できるようにしないといけない
+    for turn in range(50):
+        print("次のコマンド",MC.player_next_command_)
+        MC.send_data()
+        MC.create_gui()
+        time.sleep(1)
 
 
 #########################TEST#####################
