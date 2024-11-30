@@ -13,7 +13,10 @@ from mazesocket import MazeClientSocketManager
 from mazefield import MazeField
 import threading
 
-########################################################
+素晴らしい
+#素晴らしい
+
+########################################################x
 #テストのため
 from config import HOST,PORT
 from config import MAZE_LIST
@@ -28,7 +31,7 @@ from config import CLIENT_TO_SERVER_PACKET, SERVER_TO_CLIENT_PACKET
 from config import WIN, LOSE, NORMAL
 from config import TEST
 
-########################################################
+########################################################qqq
 
 ##############################################################################################################
 
